@@ -149,7 +149,7 @@ var queryParams = '?' + encodeURIComponent('ServiceKey') + '=DDQEBDDCmlvZEuTO2bZ
 queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /* */
 queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('10'); /* */
 queryParams += '&' + encodeURIComponent('dataType') + '=' + encodeURIComponent('JSON'); /* */
-queryParams += '&' + encodeURIComponent('base_date') + '=' + encodeURIComponent('20210728'); /* */
+queryParams += '&' + encodeURIComponent('base_date') + '=' + encodeURIComponent('20210729'); /* */
 queryParams += '&' + encodeURIComponent('base_time') + '=' + encodeURIComponent('1200'); /* */
 queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent('55'); /* */
 queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent('127'); /* */
