@@ -1,7 +1,9 @@
-//import request from 'request';
+
 import { ApolloServer,gql } from 'apollo-server';
 import axios from 'axios';
-//import axios from 'axios';
+import mongoose from 'mongoose';
+import resolvers from './graphql/resolvers.js';
+import typeDefs from './graphql/typeDefs.js';
 // import express from 'express';
 // import router from express.Router();
 //var request=require('request');
@@ -31,20 +33,12 @@ var myaddr=addr+addr1+addr2+'&SIGUN_NM='+encodeURI('안성시');
 axios.get(myaddr).then(res => console.log(res.data['KitgdnCouout'][1]['row']))
 
 
-const typeDefs=gql`
-    type Query{
-        ping:String
-    }
-`;
-const resolvers={
-    Query:{
-        ping:()=>"pong",
-    },
-};
+
 
 const server=new ApolloServer({
     typeDefs,
     resolvers,
+    playground:true,
 });
 
 server.listen().then(({url})=>{
@@ -57,8 +51,11 @@ axios.get(`https://dapi.kakao.com/v2/local/search/address.json?query=${fullAddre
     headers: { Authorization: 'KakaoAK 1d3da700bd5dd5640d5a617d5a7b1410' },
 })
     .then(res => {
-        const location =res.data.documents[0];
-        console.log(location)
+        console.log('*****************************')
+        const location_x=res.data.documents[0].x;
+        const location_y =res.data.documents[0].y;
+        console.log(location_x)
+        console.log(location_y)
 
 
         // setLocationObj({
@@ -149,14 +146,28 @@ var queryParams = '?' + encodeURIComponent('ServiceKey') + '=DDQEBDDCmlvZEuTO2bZ
 queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /* */
 queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('10'); /* */
 queryParams += '&' + encodeURIComponent('dataType') + '=' + encodeURIComponent('JSON'); /* */
-queryParams += '&' + encodeURIComponent('base_date') + '=' + encodeURIComponent('20210729'); /* */
+queryParams += '&' + encodeURIComponent('base_date') + '=' + encodeURIComponent('20210730'); /* */
 queryParams += '&' + encodeURIComponent('base_time') + '=' + encodeURIComponent('1200'); /* */
 queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent('55'); /* */
 queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent('127'); /* */
 
 axios.get(url+queryParams).then(res=>{
-    console.log('---------------------')
+    console.log('-------------------')
     console.log(res.data.response.body.items)
 }
     )
+
+//mongoose 연결
+mongoose.connect("mongodb://127.0.0.1:27017/garden",{
+    useUnifiedTopology:true,
+    useNewUrlParser:true,
+    useCreateIndex:true,
+    useFindAndModify:false,
+}).then(()=>{
+    console.log("Connected to MongoDB");
+})
+.catch((err)=>{
+    console.log(err);
+})
+
 //export default router
