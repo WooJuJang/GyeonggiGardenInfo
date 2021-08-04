@@ -146,7 +146,7 @@ var queryParams = '?' + encodeURIComponent('ServiceKey') + '=DDQEBDDCmlvZEuTO2bZ
 queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /* */
 queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('10'); /* */
 queryParams += '&' + encodeURIComponent('dataType') + '=' + encodeURIComponent('JSON'); /* */
-queryParams += '&' + encodeURIComponent('base_date') + '=' + encodeURIComponent('20210730'); /* */
+queryParams += '&' + encodeURIComponent('base_date') + '=' + encodeURIComponent('20210804'); /* */
 queryParams += '&' + encodeURIComponent('base_time') + '=' + encodeURIComponent('1200'); /* */
 queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent('55'); /* */
 queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent('127'); /* */
@@ -170,4 +170,15 @@ mongoose.connect("mongodb://127.0.0.1:27017/garden",{
     console.log(err);
 })
 
+
+
+
+var url = 'http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo';
+var queryParams = '?' + encodeURIComponent('ServiceKey') + '=DDQEBDDCmlvZEuTO2bZjjycsI3A%2Bb15YZAgKYj%2FNmFlju54lxuKi7LC2R7CIdY2U6%2F%2BvDblYu2AtmtxgLmNSRQ%3D%3D'; /* Service Key*/
+queryParams += '&' + encodeURIComponent('solYear') + '=' + encodeURIComponent('2021'); /* */
+queryParams += '&' + encodeURIComponent('solMonth') + '=' + encodeURIComponent('08'); /* */
+
+axios.get(url+queryParams).then(res=>{
+    console.log(res.data.response.body.items)
+})
 //export default router

@@ -6,19 +6,10 @@ import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from '@fullcalendar/interaction'
 import React from 'react'
 import styled from "@emotion/styled"
-
+import cors from 'cors';
 
 const localizer = momentLocalizer(moment)
-var url = 'http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo';
-var queryParams = '?' + encodeURIComponent('ServiceKey') + '=DDQEBDDCmlvZEuTO2bZjjycsI3A%2Bb15YZAgKYj%2FNmFlju54lxuKi7LC2R7CIdY2U6%2F%2BvDblYu2AtmtxgLmNSRQ%3D%3D'; /* Service Key*/
-queryParams += '&' + encodeURIComponent('solYear') + '=' + encodeURIComponent('2015'); /* */
-queryParams += '&' + encodeURIComponent('solMonth') + '=' + encodeURIComponent('09'); /* */
-var result=[];
-axios.get(queryParams).then(res => {
-    console.log(res.data);
-    result=res;
 
-}    )
 const test='2021-08-16';
 const tagtest='[data-date=\''+test+'\']{color:red;}';
 export const StyleWrapper=styled.div`
