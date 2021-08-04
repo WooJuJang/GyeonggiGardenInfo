@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import bcrypt from 'bcrypt';
 const UserInfoSchema= new mongoose.Schema({
     id:String,
     password:String,
@@ -21,5 +21,19 @@ const UserInfoSchema= new mongoose.Schema({
     
 
 })
-var UserInfo=mongoose.model('UserInfo',UserInfoSchema);
-export default UserInfo;
+/*Hashing password*/
+UserInfoSchema.pre('save',function(next){
+    const user=this;
+    const saltFactor=10;
+    bcrypt.genSalt(saltFactor,(err,salt)=>{
+        if(err) return next(err);
+    bcrypt.hash(user.password,salt,(err,hash)=>{
+        if(err) return next(err);
+        user.password=hash;
+        next();
+        });
+    });
+});
+
+var userinfo=mongoose.model('UserInfo',UserInfoSchema,'UserInfo');
+export default userinfo;

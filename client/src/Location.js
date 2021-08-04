@@ -1,9 +1,10 @@
-/*global kakao*/ 
+  /*global kakao*/ 
 import React, { useEffect } from 'react'
 
 
 
 const Location=()=>{
+
   useEffect(()=>{
     var container = document.getElementById('map');
     var options = {
@@ -22,8 +23,7 @@ const Location=()=>{
 
     return (
         <div>
-        <div id="map" style={{width:"500px", height:"400px"}}></div>
-       
+        <div id="map" style={{width:"500px", height:"400px"}}></div>     
         </div>
     )
 }
