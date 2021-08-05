@@ -1,14 +1,9 @@
-import { Calendar, momentLocalizer } from 'react-big-calendar'
-import moment from 'moment'
-import axios from 'axios';
 import FullCalendar, { isPropsEqual } from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from '@fullcalendar/interaction'
 import React from 'react'
 import styled from "@emotion/styled"
-import cors from 'cors';
 
-const localizer = momentLocalizer(moment)
 
 const test='2021-08-16';
 const tagtest='[data-date=\''+test+'\']{color:red;}';

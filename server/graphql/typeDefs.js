@@ -24,8 +24,8 @@ type User{
         findPassword(password:String!):Boolean!
     }
     type Mutation{
-        createUser(id:String!,password:String!,city:String!):User
-        login(id:String!,password:String!):Boolean!
+        signup(id:String!,password:String!,city:String!):User
+        signin(id:String!,password:String!):Boolean
     }
 `;
 export default typeDefs;

@@ -9,7 +9,7 @@ const resolvers={
         }
     },
     Mutation:{
-        createUser:async(_,args)=>{
+        signup:async(_,args)=>{
             const result=await userinfo.findOne({id:args.id});
                  if(result==null){
                      const newUser=new userinfo({
@@ -23,7 +23,7 @@ const resolvers={
                 return null;
             }
         },
-        login:(_,args)=>{
+        signin:(_,args)=>{
             var encodepassword=userinfo.findOne({id:args.id},'password',function(err,users){
                 if(err) return next(err);
                 const same=bcrypt.compareSync(args.password,users['password'])
