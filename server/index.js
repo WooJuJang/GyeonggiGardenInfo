@@ -30,7 +30,7 @@ var myaddr=addr+addr1+addr2+'&SIGUN_NM='+encodeURI('안성시');
 // })
 
 //경기텃밭정보api axios 통신
-axios.get(myaddr).then(res => console.log(res.data['KitgdnCouout'][1]['row']))
+//axios.get(myaddr).then(res => console.log(res.data['KitgdnCouout'][1]['row']))
 
 
 
@@ -52,10 +52,10 @@ axios.get(`https://dapi.kakao.com/v2/local/search/address.json?query=${fullAddre
 })
     .then(res => {
         console.log('*****************************')
-        const location_x=res.data.documents[0].x;
-        const location_y =res.data.documents[0].y;
-        console.log(location_x)
-        console.log(location_y)
+        // const location_x=res.data.documents[0].x;
+        // const location_y =res.data.documents[0].y;
+        // console.log(location_x)
+        // console.log(location_y)
 
 
         // setLocationObj({
@@ -137,7 +137,7 @@ axios.get(`https://dapi.kakao.com/v2/local/search/address.json?query=${fullAddre
         return rs;
     }
 var rs=dfs_xy_conv("toXY","37.44910833333333","126.90419722222222");
-console.log(rs.x,rs.y);
+//console.log(rs.x,rs.y);
 
 
 //기상청 단기예보 API 연결
@@ -152,8 +152,8 @@ queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent('55'); 
 queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent('127'); /* */
 
 axios.get(url+queryParams).then(res=>{
-    console.log('-------------------')
-    console.log(res.data.response.body.items)
+    //console.log('-------------------')
+    //console.log(res.data.response.body.items)
 }
     )
 
@@ -179,6 +179,6 @@ queryParams += '&' + encodeURIComponent('solYear') + '=' + encodeURIComponent('2
 queryParams += '&' + encodeURIComponent('solMonth') + '=' + encodeURIComponent('08'); /* */
 
 axios.get(url+queryParams).then(res=>{
-    console.log(res.data.response.body.items)
+    //console.log(res.data.response.body.items)
 })
 //export default router

@@ -1,86 +1,57 @@
-import React from 'react'
-import Styled from '@emotion/styled'
+import { useMutation, useQuery } from '@apollo/client'
+import React, { useState } from 'react'
+import { SigninStyleContainer } from '../../css/SigninStyleContainer'
+import {SIGNIN} from '../../Database/Graphql'
 
 const Login=({history})=>{
     const moveSignup=()=>{
         history.push("/signup")
     }
-    const SigninStyleContainer=Styled.div`
-        body{
-            width:100%;
-            height:100vh;
-            margin:0 auto;
-            background:gray;
+    const [loginInfo,setLoginInfo]=useState({
+        id:'',
+        password:'',
+    })
+    const onChangeLoginInfo=(e)=>{
+        if(e.target.name==='id'){
+            return setLoginInfo(loginInfo=>({...loginInfo,id:e.target.value}))
+        }else{
+            return setLoginInfo(loginInfo=>({...loginInfo,password:e.target.value}))
         }
-        .signin-form{
-            position:absolute;
-            width:30%;
-            height:60%;
-            left:35%;
-            top:20%;
-            bottom:0;
-            right:0;
-            display:flex;
-            background:white;
-            flex-direction: column;
-
-        }
-        .contents-form{
-            width:100%;
-            display: flex;
-            flex-direction: column;
-        }
-        .btn-form{
-            width:100%;
-            display: flex;
-            flex-direction: row;
-           
-        }
-        .signin{
-            font-family:Roboto;
-            font-style:normal;
-            font-weight:bold;
-            font-size:48px;
-            margin-bottom:10px;
-        }
-        .id{
-            margin-bottom:6px;
-            height:30px;
-        }
-        .pw{
-            margin-bottom:6px;
-            height:30px;
-        }
-        .signin-btn{
-            width:50%;
-            margin-right:3px;
-            height:30px;
-            background:#8CCB65;
-        }
-        .signup-btn{
-            width:50%;
-            margin-left:3px;
-            height:30px;
-            background:#8CCB65;
-        }
+    }
+    const [signin,{data,loading,err}]=useMutation(SIGNIN)
+    const onHandleLogin=async()=>{
+        signin({variables:{id:loginInfo.id,password:loginInfo.password,exist:false}}).then((res)=>{
+            if(res.data.signin===true){
+                history.push("/")
+            }else{
+                console.log("fail")
+                alert('Check your Id or PassWord :(')
+            }
+        })
+      
+    }
+        return(
+            <div>
+            <SigninStyleContainer>
+                
+            <div className='signin-full-form'>
+            <div className='signin-form'>
+                <div className='contents-form'>
+                    <label className='signin'>SignIn</label>
+                    <input className='id' name='id' value={loginInfo.id} onChange={onChangeLoginInfo} placeholder='아이디를 입력하세요' required></input>
+                    <input className='pw' name='password' value={loginInfo.password} onChange={onChangeLoginInfo} placeholder='패스워드를 입력하세요' required></input>
+                    </div>
+                    <div className='btn-form'>
+                    <button className='signin-btn' onClick={onHandleLogin}>SignIn</button>
+                    <button className='signup-btn' onClick={moveSignup}>SignUp</button>
+                    </div>
+                </div>
+            </div>
         
+    </SigninStyleContainer>
+    </div>
+        )
 
-    `
-    return (
-        <SigninStyleContainer>
-        <div className='signin-form'>
-            <div className='contents-form'>
-                <label className='signin'>SignIn</label>
-                <input className='id' placeholder='아이디를 입력하세요'></input>
-                <input className='pw' placeholder='패스워드를 입력하세요'></input>
-                </div>
-                <div className='btn-form'>
-                <button className='signin-btn'>SignIn</button>
-                <button className='signup-btn' onClick={moveSignup}>SignUp</button>
-                </div>
-        </div>
-        </SigninStyleContainer>
-    )
 }
 
 export default Login

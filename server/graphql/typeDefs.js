@@ -19,13 +19,14 @@ type User{
     watering:[String],
     weed:[String],
     weed_quantity:Int,
+    exist:Boolean,
 }
     type Query{
         findPassword(password:String!):Boolean!
     }
     type Mutation{
         signup(id:String!,password:String!,city:String!):User
-        signin(id:String!,password:String!):Boolean
+        signin(id:String!,password:String!):Boolean 
     }
 `;
 export default typeDefs;
