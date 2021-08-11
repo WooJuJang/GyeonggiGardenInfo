@@ -1,9 +1,19 @@
 import { useMutation, useQuery } from '@apollo/client'
-import React, { useState } from 'react'
+import axios from 'axios'
+import React, { useState,useEffect,useContext } from 'react'
 import { SigninStyleContainer } from '../../css/SigninStyleContainer'
 import {SIGNIN} from '../../Database/Graphql'
+import {Authcontext, AuthProvider} from '../Auth/GlobalStates'
+import {setCookies,getcookies} from '../Auth/Auth' 
+import decode_jwt from 'jwt-decode'
+import { Cookies, useCookies } from 'react-cookie';
+import {setCookie} from '../Auth/Cookis'
+
+const apiUrl='http://localhost:4000';
 
 const Login=({history})=>{
+
+
     const moveSignup=()=>{
         history.push("/signup")
     }
@@ -20,14 +30,21 @@ const Login=({history})=>{
     }
     const [signin,{data,loading,err}]=useMutation(SIGNIN)
     const onHandleLogin=async()=>{
-        signin({variables:{id:loginInfo.id,password:loginInfo.password,exist:false}}).then((res)=>{
-            if(res.data.signin===true){
-                history.push("/")
+        signin({variables:{id:loginInfo.id,password:loginInfo.password}}).then((res)=>{        
+            if(res.data.signin!==null){               
+                console.log(res)
+               
+                setCookie('token',res.data.signin,{
+                    path:"/",
+                })
+
+                history.push('/')
             }else{
                 console.log("fail")
                 alert('Check your Id or PassWord :(')
             }
         })
+
       
     }
         return(

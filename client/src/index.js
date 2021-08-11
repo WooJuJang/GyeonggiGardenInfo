@@ -5,14 +5,19 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { onError } from 'apollo-link-error'
 import { setContext } from "apollo-link-context";
 import {  createHttpLink } from '@apollo/client';
-
+import {CookiesProvider} from 'react-cookie';
+import { getCookie } from './Components/Auth/Cookis';
 import App from './App';
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
+
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('token');
+  const token = getCookie('token')
   // return the headers to the context so httpLink can read them
+  if(token===null){
+    
+  }
   return {
     headers: {
       ...headers,
@@ -23,6 +28,7 @@ const authLink = setContext((_, { headers }) => {
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000',
+  credentials:'same-origin'
 });
 
 const client = new ApolloClient({
@@ -34,9 +40,12 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <React.StrictMode>
+    <CookiesProvider>
     <ApolloProvider client={client}>
+
       <App />
     </ApolloProvider>
+    </CookiesProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

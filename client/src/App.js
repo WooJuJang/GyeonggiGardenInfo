@@ -1,10 +1,14 @@
 
 import {BrowserRouter,Route} from 'react-router-dom';
+import { AuthProvider } from './Components/Auth/GlobalStates';
 import Main from './Components/Main';
 import Signin from './Components/Signin/Signin';
 import Signup from './Components/Signin/Signup';
-function App() {
+import { useCookies } from 'react-cookie';
+import { setCookies } from './Components/Auth/Auth';
 
+
+function App() {
 
   return (
     <div className="App">

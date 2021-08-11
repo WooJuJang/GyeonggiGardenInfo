@@ -26,7 +26,7 @@ type User{
     }
     type Mutation{
         signup(id:String!,password:String!,city:String!):User
-        signin(id:String!,password:String!):Boolean 
+        signin(id:String!,password:String!):String 
     }
 `;
 export default typeDefs;

@@ -1,9 +1,10 @@
 import userinfo from '../schema/UserInfo.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
+import { UserInputError } from 'apollo-server-express';
 const compare = (args, users) => new Promise((resolve, rejcet) => {//async,await방식의 비동기함수로 만듬, 콜백함수는 잘 사용안함으로 이와같은 방식으로 바꿔서 사용해야함
     return bcrypt.compare(args.password,users['password'],(err,res)=>{
-        if(err) rejcet(err)
+        if(err) rejcet(err)//암호화시 단방향 양방향 차이점
         resolve(res)
     })
 })
@@ -18,7 +19,7 @@ const makejwttoken=(id)=>new Promise((resolve,rejcet)=>{
             expiresIn:"1d",
             issuer:"jwj",
         });
-        return token
+        resolve(token)
     
     // jwt token verify
     // try{
@@ -53,17 +54,23 @@ const resolvers={
             }
         },
         signin:async (_,args)=>{
-            const user = await userinfo.findOne({id:args.id},'password');
-            if(user){//findOne는 맞는값이 없으면 null,undefined를 리턴하지 않고 바로 에러를 던짐 따라서 조건문사용함
+            try{
+                const user = await userinfo.findOne({id:args.id},'id city password') ;
+                console.log(user)
+                
+                //findOne는 맞는값이 없으면 null,undefined를 리턴하지 않고 바로 에러를 던짐 따라서 조건문사용함
                 const compare_result=await compare(args, user);
-                await makejwttoken(args.id)
-                args.cookie("jwt","token",{
-                    httpOnly:true
-                })
-                return true
-            }else{
-                return false
+                if(compare_result===true){
+                    const token_result=await makejwttoken(args.id)
+                    return token_result
+                }else{
+                    return null
+                }
+
+            }catch{
+                return null
             }
+
             
         }
     }

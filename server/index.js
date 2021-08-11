@@ -1,14 +1,23 @@
 
-import { ApolloServer,gql } from 'apollo-server';
+import express from 'express'
+//import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, AuthenticationError } from 'apollo-server';
 import axios from 'axios';
 import mongoose from 'mongoose';
 import resolvers from './graphql/resolvers.js';
 import typeDefs from './graphql/typeDefs.js';
+import cors from 'cors';
+import jwt from 'jsonwebtoken';
+import express_jwt from 'express-jwt';
+import bodyParser from 'body-parser'
+import authUtil from './middleware/auth.js';
 // import express from 'express';
 // import router from express.Router();
 //var request=require('request');
 // const express=require('express');
 // var router=express.Router();
+
+
 
 //경기데이터드림_인증키_경기텃밭정보 사용
 const key='331d091f70164b18abe03042eed4e376';
@@ -34,16 +43,73 @@ var myaddr=addr+addr1+addr2+'&SIGUN_NM='+encodeURI('안성시');
 
 
 
-
+//apollo-server start
+const token=''
 const server=new ApolloServer({
+    cors:{
+        origin:'http://localhost:3000',
+        credentials:true
+    },
     typeDefs,
     resolvers,
     playground:true,
+    context:({req})=>{
+        if(!req.headers.authorization)
+            throw new AuthenticationError("missing token")
+        const token=req.headers.authorization
+        console.log(token)
+        
+        // if(!req.headers.authorization)
+        //     throw new AuthenticationError("missing token")
+        // const token=req.headers.authorization
+        // if(!token) throw new AuthenticationError("invalid token")
+        // return{token}
+
+    }
 });
+
+
+
 
 server.listen().then(({url})=>{
     console.log(`listening at ${url}`);
 })
+
+
+
+
+//middleware 사용
+//     const app = express();
+
+//     const corsOptions={
+//         origin:'http://localhost:3000',
+//         Credential:true
+//     }
+    
+//     // Additional middleware can be mounted at this point to run before Apollo.
+//     app.use(async(req,res,next)=>{
+//         const token=req.headers['authorization'];
+//         if(token!=="null"){
+//             try{
+//                 const currentUser=await jwt.verify(token,"secretKey")
+//                 req.currentUser=currentUser
+//             }catch(e){
+//                 console.error(e);
+//             }
+//         }
+//         next();
+//     });
+//     const server = new ApolloServer({
+//         typeDefs,
+//         resolvers,
+//         context:({req})=>({property,User,currentUser:req.currentUser})
+//       });
+//       await server.start()
+//     // Mount Apollo middleware here.
+//     server.applyMiddleware({ app, cors:corsOptions});
+// server.listen().then(({url})=>{
+//     console.log(`listening at ${url}`);
+// })
 
 //카카오 로컬 API연결
 const fullAddress=encodeURI('경기도 안성시 공도읍 진건중길14');
