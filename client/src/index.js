@@ -15,8 +15,10 @@ const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
   const token = getCookie('token')
   // return the headers to the context so httpLink can read them
+  console.log(token)
   if(token===null){
-    
+   console.log('token null') 
+   return null
   }
   return {
     headers: {
@@ -32,7 +34,6 @@ const httpLink = createHttpLink({
 });
 
 const client = new ApolloClient({
-  //uri: 'http://localhost:4000',
   cache: new InMemoryCache(),
   link: authLink.concat(httpLink)
 })

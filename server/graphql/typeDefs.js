@@ -22,7 +22,7 @@ type User{
     exist:Boolean,
 }
     type Query{
-        findPassword(password:String!):Boolean!
+        findUser:User
     }
     type Mutation{
         signup(id:String!,password:String!,city:String!):User

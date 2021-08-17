@@ -1,7 +1,7 @@
 import userinfo from '../schema/UserInfo.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
-import { UserInputError } from 'apollo-server-express';
+
 const compare = (args, users) => new Promise((resolve, rejcet) => {//async,await방식의 비동기함수로 만듬, 콜백함수는 잘 사용안함으로 이와같은 방식으로 바꿔서 사용해야함
     return bcrypt.compare(args.password,users['password'],(err,res)=>{
         if(err) rejcet(err)//암호화시 단방향 양방향 차이점
@@ -20,22 +20,25 @@ const makejwttoken=(id)=>new Promise((resolve,rejcet)=>{
             issuer:"jwj",
         });
         resolve(token)
-    
-    // jwt token verify
-    // try{
-    //     var check=jwt.verify(token,"secretKey")
-    //     if(check){
-    //         console.log("check " + check.token_id)
-    //     }
-    // }catch(e){
-    //     console.log(e)
-    // }
 })
 
 const resolvers={
     Query:{
-        findPassword:(_,{password})=>{
-            return userinfo.findOne({password});
+        findUser:async(_,__,context)=>{
+            
+            console.log('context : '+context.token_id)
+             const result=await userinfo.findOne({id:context.token_id},'id city')
+             const result_arr=[]
+             result_arr[0]=result.id
+             result_arr[1]=result.city
+             console.log(result_arr)
+             const newuser=new userinfo({
+                 id:result.id,
+                 city:result.city
+             })
+             console.log(newuser)
+            return newuser
+            
         }
     },
     Mutation:{
@@ -53,11 +56,10 @@ const resolvers={
                 return null;
             }
         },
-        signin:async (_,args)=>{
+        signin:async (_,args,context)=>{
             try{
                 const user = await userinfo.findOne({id:args.id},'id city password') ;
-                console.log(user)
-                
+                console.log('signin context: '+context.token_id)
                 //findOne는 맞는값이 없으면 null,undefined를 리턴하지 않고 바로 에러를 던짐 따라서 조건문사용함
                 const compare_result=await compare(args, user);
                 if(compare_result===true){
@@ -75,5 +77,4 @@ const resolvers={
         }
     }
 }
-
 export default resolvers

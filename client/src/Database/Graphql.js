@@ -14,3 +14,11 @@ export const SIGNIN=gql`
         signin(id:$id,password:$password)
     }
 `;
+export const FINDUSER=gql`
+    query findUser{
+        findUser{
+            id
+            city
+        }
+    }
+`;

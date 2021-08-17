@@ -1,15 +1,9 @@
-import { useMutation, useQuery } from '@apollo/client'
-import axios from 'axios'
-import React, { useState,useEffect,useContext } from 'react'
+import { useMutation} from '@apollo/client'
+import React, { useState } from 'react'
 import { SigninStyleContainer } from '../../css/SigninStyleContainer'
 import {SIGNIN} from '../../Database/Graphql'
-import {Authcontext, AuthProvider} from '../Auth/GlobalStates'
-import {setCookies,getcookies} from '../Auth/Auth' 
-import decode_jwt from 'jwt-decode'
-import { Cookies, useCookies } from 'react-cookie';
 import {setCookie} from '../Auth/Cookis'
 
-const apiUrl='http://localhost:4000';
 
 const Login=({history})=>{
 

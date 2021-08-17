@@ -1,22 +1,10 @@
 
-import express from 'express'
-//import { ApolloServer } from 'apollo-server-express';
-import { ApolloServer, AuthenticationError } from 'apollo-server';
+import { ApolloServer } from 'apollo-server';
 import axios from 'axios';
 import mongoose from 'mongoose';
 import resolvers from './graphql/resolvers.js';
 import typeDefs from './graphql/typeDefs.js';
-import cors from 'cors';
-import jwt from 'jsonwebtoken';
-import express_jwt from 'express-jwt';
-import bodyParser from 'body-parser'
-import authUtil from './middleware/auth.js';
-// import express from 'express';
-// import router from express.Router();
-//var request=require('request');
-// const express=require('express');
-// var router=express.Router();
-
+import {checkToken} from './middleware/auth.js';
 
 
 //경기데이터드림_인증키_경기텃밭정보 사용
@@ -27,20 +15,8 @@ const addr2='&Type=json&pIndex=1&pSize=5'
 
 var myaddr=addr+addr1+addr2+'&SIGUN_NM='+encodeURI('안성시');
 
-// let options={
-//     url:myaddr,
-//     method:'GET',
-// }
-//경기텃밭정보 request 통신
-// request(options,function(err,res,body){
-//     if(!err){
-//         console.log(body)
-//     }
-// })
-
 //경기텃밭정보api axios 통신
-//axios.get(myaddr).then(res => console.log(res.data['KitgdnCouout'][1]['row']))
-
+axios.get(myaddr).then(res => console.log(res.data['KitgdnCouout'][1]['row']))
 
 
 //apollo-server start
@@ -53,63 +29,25 @@ const server=new ApolloServer({
     typeDefs,
     resolvers,
     playground:true,
-    context:({req})=>{
-        if(!req.headers.authorization)
-            throw new AuthenticationError("missing token")
-        const token=req.headers.authorization
-        console.log(token)
-        
-        // if(!req.headers.authorization)
-        //     throw new AuthenticationError("missing token")
-        // const token=req.headers.authorization
-        // if(!token) throw new AuthenticationError("invalid token")
-        // return{token}
+    context:async({req})=>{
+        try{
+            const token=req.headers.authorization.substr(7)    
+            if (token){
+                    const user=await checkToken(token,"secretKey")
+                    return user
+            }
+        }catch(e){
+            console.log(e)
+            return null
+        }
 
+        return null
     }
 });
-
-
-
 
 server.listen().then(({url})=>{
     console.log(`listening at ${url}`);
 })
-
-
-
-
-//middleware 사용
-//     const app = express();
-
-//     const corsOptions={
-//         origin:'http://localhost:3000',
-//         Credential:true
-//     }
-    
-//     // Additional middleware can be mounted at this point to run before Apollo.
-//     app.use(async(req,res,next)=>{
-//         const token=req.headers['authorization'];
-//         if(token!=="null"){
-//             try{
-//                 const currentUser=await jwt.verify(token,"secretKey")
-//                 req.currentUser=currentUser
-//             }catch(e){
-//                 console.error(e);
-//             }
-//         }
-//         next();
-//     });
-//     const server = new ApolloServer({
-//         typeDefs,
-//         resolvers,
-//         context:({req})=>({property,User,currentUser:req.currentUser})
-//       });
-//       await server.start()
-//     // Mount Apollo middleware here.
-//     server.applyMiddleware({ app, cors:corsOptions});
-// server.listen().then(({url})=>{
-//     console.log(`listening at ${url}`);
-// })
 
 //카카오 로컬 API연결
 const fullAddress=encodeURI('경기도 안성시 공도읍 진건중길14');
@@ -118,24 +56,23 @@ axios.get(`https://dapi.kakao.com/v2/local/search/address.json?query=${fullAddre
 })
     .then(res => {
         console.log('*****************************')
-        // const location_x=res.data.documents[0].x;
-        // const location_y =res.data.documents[0].y;
-        // console.log(location_x)
-        // console.log(location_y)
+        const location_x=res.data.documents[0].x;
+        const location_y =res.data.documents[0].y;
+        console.log(location_x)
+        console.log(location_y)
 
 
-        // setLocationObj({
-        //     si:location.address.region_1depth_name,
-        //     gu:location.address.region_2depth_name,
-        //     dong:location.address.region_3depth_name,
-        //     locationX:location.address.x,
-        //     locationY:location.address.y,
-        // })
+        setLocationObj({
+            si:location.address.region_1depth_name,
+            gu:location.address.region_2depth_name,
+            dong:location.address.region_3depth_name,
+            locationX:location.address.x,
+            locationY:location.address.y,
+        })
     })
 
 //위경도 <->기상청 격자 변환 함수
     // LCC DFS 좌표변환을 위한 기초 자료
-    //
     var RE = 6371.00877; // 지구 반경(km)
     var GRID = 5.0; // 격자 간격(km)
     var SLAT1 = 30.0; // 투영 위도1(degree)
@@ -218,10 +155,8 @@ queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent('55'); 
 queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent('127'); /* */
 
 axios.get(url+queryParams).then(res=>{
-    //console.log('-------------------')
-    //console.log(res.data.response.body.items)
-}
-    )
+    console.log(res.data.response.body.items)
+})
 
 //mongoose 연결
 mongoose.connect("mongodb://127.0.0.1:27017/garden",{
@@ -236,15 +171,11 @@ mongoose.connect("mongodb://127.0.0.1:27017/garden",{
     console.log(err);
 })
 
-
-
-
 var url = 'http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo';
 var queryParams = '?' + encodeURIComponent('ServiceKey') + '=DDQEBDDCmlvZEuTO2bZjjycsI3A%2Bb15YZAgKYj%2FNmFlju54lxuKi7LC2R7CIdY2U6%2F%2BvDblYu2AtmtxgLmNSRQ%3D%3D'; /* Service Key*/
 queryParams += '&' + encodeURIComponent('solYear') + '=' + encodeURIComponent('2021'); /* */
 queryParams += '&' + encodeURIComponent('solMonth') + '=' + encodeURIComponent('08'); /* */
 
 axios.get(url+queryParams).then(res=>{
-    //console.log(res.data.response.body.items)
+    console.log(res.data.response.body.items)
 })
-//export default router

@@ -1,25 +1,19 @@
 import React from 'react'
-import Location from './Location'
-import MyCalendar  from './MyCalendar'
-import {Cookies} from 'react-cookie'
-import {instanceOf} from 'prop-types'
-import {getCookie,removeCookie} from './Auth/Cookis'
+import {MainStyledContainer} from '../css/MainStyledContainer'
+import Header from './Header'
 function Main({history}){
-    const moveLogin=()=>{
-        history.push("/signin")
-    }
-    const logout=()=>{
-        removeCookie('token')
-    }
     return(
-        <div>
-        <p>{`Bearer ${getCookie('token')}`}</p>
-        <button onClick={moveLogin}>SignIn</button>
-        <button onClick={logout}>Logout</button>
-            <Location/>
-            <MyCalendar/>
-        </div>
-    )
+        <MainStyledContainer>
+            <div className='main-form'>
+                <div className='blackbox'>
+                    <Header history={history} />
+                    <div className='main-text-form'>
+                    <label >Creating a healthy and prosperous world.</label>
+                    </div>
+                </div>
+            </div> 
+        </MainStyledContainer>
+    ) 
 }
 
 export default Main

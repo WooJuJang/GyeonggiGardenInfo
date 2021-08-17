@@ -1,12 +1,16 @@
+import jwt from 'jsonwebtoken';
 
+   export const checkToken=(token,secretkey)=>{
 
-const authUtil={
-    checkToken:async(req,res,next)=>{
-        var token=req.headers.token;
-        if(!token)
-            return 'No Token'
-        next();
+    return new Promise((resolve,reject)=>{
+        jwt.verify(token,secretkey,(error,decoded)=>{
+            if(error){
+                reject(error)
+            }
+            resolve(decoded)
+        })
     }
-}
 
-export default authUtil
+
+    )
+}
