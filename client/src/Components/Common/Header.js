@@ -1,5 +1,5 @@
 import React from 'react'
-import {getCookie,removeCookie} from './Auth/Cookis'
+import {getCookie,removeCookie} from '../Auth/Cookis'
 const Header=({history})=>{
     let fontvar=''
     const moveLogin=()=>{
@@ -7,7 +7,8 @@ const Header=({history})=>{
     }
     const logout=()=>{
         removeCookie('token')
-        history.push('/')
+        
+        window.location.replace("/")
        
     }
     const UserInfo=()=>{
@@ -17,10 +18,8 @@ const Header=({history})=>{
 
         try{
             history.push("/gardenlocation")
-            fontvar='bold'
-            console.log(fontvar)
         }catch(e){
-            
+            console.log(e)
         }
       
     }

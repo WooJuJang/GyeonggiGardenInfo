@@ -1,6 +1,6 @@
 import React from 'react'
 import {MainStyledContainer} from '../css/MainStyledContainer'
-import Header from './Header'
+import Header from './Common/Header'
 function Main({history}){
     return(
         <MainStyledContainer>

@@ -5,18 +5,7 @@ import mongoose from 'mongoose';
 import resolvers from './graphql/resolvers.js';
 import typeDefs from './graphql/typeDefs.js';
 import {checkToken} from './middleware/auth.js';
-
-
-//경기데이터드림_인증키_경기텃밭정보 사용
-const key='331d091f70164b18abe03042eed4e376';
-const addr='https://openapi.gg.go.kr/KitgdnCouout?';
-const addr1='KEY='+key;
-const addr2='&Type=json&pIndex=1&pSize=5'
-
-var myaddr=addr+addr1+addr2+'&SIGUN_NM='+encodeURI('안성시');
-
-//경기텃밭정보api axios 통신
-axios.get(myaddr).then(res => console.log(res.data['KitgdnCouout'][1]['row']))
+import {ApolloServerPluginLandingPageGraphQLPlayground} from 'apollo-server-core'
 
 
 //apollo-server start
@@ -28,10 +17,10 @@ const server=new ApolloServer({
     },
     typeDefs,
     resolvers,
-    playground:true,
+    plugins:[ApolloServerPluginLandingPageGraphQLPlayground(),],
     context:async({req})=>{
         try{
-            const token=req.headers.authorization.substr(7)    
+            const token=req.headers.authorization?req.headers.authorization.substr(7):'';  
             if (token){
                     const user=await checkToken(token,"secretKey")
                     return user
@@ -49,27 +38,7 @@ server.listen().then(({url})=>{
     console.log(`listening at ${url}`);
 })
 
-//카카오 로컬 API연결
-const fullAddress=encodeURI('경기도 안성시 공도읍 진건중길14');
-axios.get(`https://dapi.kakao.com/v2/local/search/address.json?query=${fullAddress}`, {
-    headers: { Authorization: 'KakaoAK 1d3da700bd5dd5640d5a617d5a7b1410' },
-})
-    .then(res => {
-        console.log('*****************************')
-        const location_x=res.data.documents[0].x;
-        const location_y =res.data.documents[0].y;
-        console.log(location_x)
-        console.log(location_y)
 
-
-        setLocationObj({
-            si:location.address.region_1depth_name,
-            gu:location.address.region_2depth_name,
-            dong:location.address.region_3depth_name,
-            locationX:location.address.x,
-            locationY:location.address.y,
-        })
-    })
 
 //위경도 <->기상청 격자 변환 함수
     // LCC DFS 좌표변환을 위한 기초 자료

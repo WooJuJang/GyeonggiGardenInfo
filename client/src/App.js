@@ -1,10 +1,10 @@
 
 import {BrowserRouter,Route} from 'react-router-dom';
-import GardenLocation from './Components/GardenLocation';
+import GardenLocation from './Components/GgGardenLocation/GardenLocation';
 import Main from './Components/Main';
-import Signin from './Components/Signin/Signin';
-import Signup from './Components/Signin/Signup';
-import UserInfo from './Components/UserInfo';
+import Signin from './Components/User/Signin';
+import Signup from './Components/User/Signup';
+import UserInfo from './Components/User/UserInfo';
 
 function App() {
 
