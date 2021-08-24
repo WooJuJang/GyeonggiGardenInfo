@@ -1,15 +1,11 @@
   /*global kakao*/ 
 import { useQuery } from '@apollo/client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { FINDLOGTLAT } from '../../Database/Graphql'
 
 export const Location=({address,logt,lat})=>{
 
-  const findLogtLat=useQuery(FINDLOGTLAT,{variables:{address:address}})
-  const [logtlat,setLogtLat]=useState({
-    setlogt:logt,
-    setlat:lat
-  })
+  const findLogtLat=useQuery(FINDLOGTLAT,{variables:{address:''}})
 
   const createmap=(_logt,_lat)=>{
     var container = document.getElementById('map');
@@ -28,25 +24,22 @@ export const Location=({address,logt,lat})=>{
 
   useEffect(()=>{
     if(logt===null || lat===null){
-      console.log(address)
       findLogtLat.refetch(FINDLOGTLAT,{variables:{address:address}})
-      setLogtLat({setlogt:findLogtLat[0],setlat:findLogtLat[1]})
       
     }else{
       createmap(logt,lat)
     }
-    }, [logt,lat])
+    }, [address,logt,lat,findLogtLat])
 
 useEffect(()=>{
   if(findLogtLat.loading===false && findLogtLat.data){
-    console.log('in!')
-    console.log(findLogtLat.data.findLogtLat[0])
     createmap(findLogtLat.data.findLogtLat[0],findLogtLat.data.findLogtLat[1])
+
   }
-},[findLogtLat.data])
+},[findLogtLat.data,findLogtLat.loading])
     return (
-        <div>
-        <div id="map" style={{width:"80%", height:"200px"}}></div>     
+        <div className="mapForm">
+        <div id="map" style={{width:"100%", height:"200px"}}></div>     
         </div>
     )
 }

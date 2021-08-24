@@ -10,18 +10,18 @@ const UserInfo=({history})=>{
         city:'',
         garden_name:'',
     })
-    if(userInfo.id==null){
+    if(userInfo.id===null){
         findUserInfo.refetch(FINDUSER)
     }
     useEffect(()=>{
-        if(findUserInfo.loading ===false && findUserInfo.data){
+        if(findUserInfo.loading === false && findUserInfo.data){
         setUserInfo({        
             id:findUserInfo.data.findUser.id,
             city:findUserInfo.data.findUser.city,
             garden_name:findUserInfo.data.findUser.garden_name
         })
     }
-    },[findUserInfo.data])
+    },[findUserInfo.data,findUserInfo.loading])
     const moveMain=()=>{
         history.goBack()
     }

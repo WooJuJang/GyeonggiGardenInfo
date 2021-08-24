@@ -15,8 +15,8 @@ export const RegistPopUpStyledContainer=Styled.div`
         outline: 0;
     }
     .RegistPopUp > section {
-        width: 35%;
-        height:60%;
+        width: 25%;
+        height:80%;
         max-width: 450px;
         margin:auto;
         border-radius: 4em;
@@ -36,7 +36,7 @@ export const RegistPopUpStyledContainer=Styled.div`
         text-align:left;
     }
     .innerForm{
-        padding-left:8%;
+        
         padding-top:10%;
     
     }
@@ -46,9 +46,20 @@ export const RegistPopUpStyledContainer=Styled.div`
         right:5%;
 
     }
-    .innterForm > footer{
-        position:absolute;
-        bottom:0;
-
+    .main{
+        padding-left:8%;
+        width:100%;
+        
+        margin-bottom:40%;
+       
+    }
+    .registBtn{
+        background-color:#8CCB65;
+    }
+    .kitgdn_nm{
+        font-weight:bold;
+    }
+    .main>.main_content{
+        margin-bottom:30%;
     }
 `

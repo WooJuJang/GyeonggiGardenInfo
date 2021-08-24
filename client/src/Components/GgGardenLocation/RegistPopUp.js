@@ -1,6 +1,6 @@
-import { useMutation, useQuery } from '@apollo/client';
-import React,{useState,useEffect} from 'react';
-import { FINDUSER, INSERTUSERGARDEN } from '../../Database/Graphql';
+import { useMutation } from '@apollo/client';
+import React from 'react';
+import {INSERTUSERGARDEN } from '../../Database/Graphql';
 
 const RegistPopUp=(props)=>{
     const{open,close,data}=props
@@ -18,13 +18,26 @@ const RegistPopUp=(props)=>{
                     <button onClick={close}>&times;</button>
                     </header>
                     <div className="main">
-                    <label>{data.KITGDN_NM}</label><br/>
-                    <label>{data.REFINE_LOTNO_ADDR}</label><br/>
-                    <label>{data.OPERT_MAINBD_NM}</label><br/>
-                    <label>부대시설: {data.SUBFACLT_CONT}</label><br/>
-                    <label>분양가격: {data.LOTOUT_PC_CONT}원</label><br/>
+                    <label className="kitgdn_nm">{data.KITGDN_NM}</label><br/>
+                    <label className="main_content">{data.REFINE_LOTNO_ADDR}</label><br/>
+                    <label className="main_content">{data.OPERT_MAINBD_NM}</label><br/>
+                    {data.SUBFACLT_CONT? <>
+                    <label className="main_content">부대시설: {data.SUBFACLT_CONT}</label><br/></>
+                    :<>
+                    <label className="main_content">부대시설: 데이터가 존재 하지 않습니다.</label><br/></>
+                     }
+                    
+                    {data.LOTOUT_PC_CONT?<>
+                                        <label className="main_content">
+                                        분양가격: {data.LOTOUT_PC_CONT}
+                                        </label><br/></>
+                    :   <>                 <label className="main_content">
+                    분양가격: 데이터가 존재 하지 않습니다.
+                    </label><br/></>
+                    }
+
                     </div>
-                    <footer><button onClick={regist}>신청하기</button></footer>
+                    <button onClick={regist} className="registBtn">신청하기</button>
                     
                 </div>
                 

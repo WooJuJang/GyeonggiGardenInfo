@@ -6,8 +6,10 @@ import { Location } from "../Common/Location";
 import {FINDGARDENSGNM,FINDGARDENDETAILINFO,FINDUSER} from '../../Database/Graphql'
 import { useQuery } from "@apollo/client";
 import RegistPopUp from "./RegistPopUp";
-import { getCookie, setCookie } from "../Auth/Cookis";
+import { getCookie} from "../Auth/Cookis";
 import { RegistPopUpStyledContainer } from "../../css/GgGardenLocation/RegistPopUpStyledContainer";
+import Posts from './Posts'
+import Pagination from './Pagination'
 
 const GardenLocation =({history})=>{
     const [renderingBtn,setRenderingBtn]=useState(true)
@@ -21,70 +23,66 @@ const GardenLocation =({history})=>{
         REFINE_WGS84_LOGT:'',
         REFINE_WGS84_LAT:''
     })
-    const [input_area,setInput_area]=useState('')
+    const [input_area,setInput_area]=useState(' ')
     const [gardenInfo,setGardenInfo]=useState([''])
-    const [gardenNmInfo,setGardenNmInfo]=useState([''])
+    const [gardenNmInfo,setGardenNmInfo]=useState([' '])
     const findGardenNm=useQuery(FINDGARDENSGNM,{variables:{area:input_area}})
 
     const [detailInfo,setDetailInfo]=useState('')
     const findGardenDetailInfo=useQuery(FINDGARDENDETAILINFO,{variables:{area:detailInfo}})
-    
+
     const onHandleChange=(e)=>{
         setInput_area(e.target.value)
     }
+    /* 지역이름 검색 및 지역 출력 */
     const onClickHandle=()=>{
-        
-       findGardenNm.refetch(FINDGARDENSGNM,{variables:{area:input_area}})
-       setRenderingBtn(!renderingBtn)
+        if(input_area!==""){
+            findGardenNm.refetch(FINDGARDENSGNM,{variables:{area:input_area}})
+            setRenderingBtn(!renderingBtn)
+        }
+
     }
     useEffect(()=>{
        
         if(findGardenNm.loading===false && findGardenNm.data){
             setGardenNmInfo(findGardenNm.data)
+            
         }
        
      },[renderingBtn])
-const onHandleSGNM=(e)=>{
-    setDetailInfo(e.target.innerText)
-    setGardenDetailInfo({
-        SG_NM:e.target.innerText
-    })
-    findGardenDetailInfo.refetch(FINDGARDENDETAILINFO,{variables:{area:detailInfo}})
-}
-useEffect(()=>{
-    if(findGardenDetailInfo.loading===false && findGardenDetailInfo.data){
-        setGardenInfo(findGardenDetailInfo.data)
+
+    /* 선택된 지역에 속한 농장 정보 출력 */
+    const onHandleSGNM=(e)=>{
+        setCurrentPage(1)
+        setDetailInfo(e.target.innerText)
+        setGardenDetailInfo({
+            SG_NM:e.target.innerText
+        })
+        
     }
-
-
-       
-},[findGardenDetailInfo.data])
-
-const onHandleInfo=(e)=>{
-    var garden_nm=e.target.innerText;
-    for(let i=0;i<gardenInfo.findGardenDetailInfo.length;i++){
-        if(gardenInfo.findGardenDetailInfo[i].KITGDN_NM===garden_nm){
-            setGardenDetailInfo(gardenDetailInfo=>({...gardenDetailInfo,
-                
-                OPERT_MAINBD_NM:gardenInfo.findGardenDetailInfo[i].OPERT_MAINBD_NM,
-                KITGDN_NM:gardenInfo.findGardenDetailInfo[i].KITGDN_NM,
-                SUBFACLT_CONT:gardenInfo.findGardenDetailInfo[i].SUBFACLT_CONT,
-                LOTOUT_PC_CONT:gardenInfo.findGardenDetailInfo[i].LOTOUT_PC_CONT,
-                REFINE_LOTNO_ADDR:gardenInfo.findGardenDetailInfo[i].REFINE_LOTNO_ADDR,
-                REFINE_WGS84_LOGT:gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LOGT,
-                REFINE_WGS84_LAT:gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LAT
-            }))
-           
+    useEffect(()=>{
+        if(gardenDetailInfo.SG_NM){
+            setLoading(true)
+            if(findGardenDetailInfo.loading===false && findGardenDetailInfo.data){
+                setGardenInfo(findGardenDetailInfo.data)
+                setPostsLength(findGardenDetailInfo.data.findGardenDetailInfo.length);
+                setLoading(false)
+            }
         }
-    }
-    console.log(gardenDetailInfo)
-}
+
+
+
+
+    },[gardenDetailInfo.SG_NM,findGardenDetailInfo.data,findGardenDetailInfo.loading])
+
 const [popupOpen,setPopUpOpen]=useState(false)
 const findUserInfo=useQuery(FINDUSER)
 const [userInfo,setUserInfo]=useState({
     id:'',
-    city:''
+    city:'',
+    garden_nm:''
 })
+
 useEffect(()=>{
     if(findUserInfo.loading ===false && findUserInfo.data){
     setUserInfo({        
@@ -117,6 +115,50 @@ const openPopUp=()=>{
 const closePopUp=()=>{
     setPopUpOpen(false)
 }
+/* 페이징에 필요한 코드 */
+
+
+const [postsLenth,setPostsLength]=useState(0);
+const [loading, setLoading] = useState(false);
+const [currentPage, setCurrentPage] = useState(1);
+const postsPerPage=3;
+const indexOfLast = currentPage * postsPerPage;
+const indexOfFirst = indexOfLast - postsPerPage;
+
+function currentPosts(tmp) {
+  let currentPosts = [];
+  if(tmp){
+    currentPosts = tmp.slice(indexOfFirst, indexOfLast);
+    return currentPosts;
+  }
+  return currentPosts;
+}
+var garden_nm='';
+const [pagenm,setPageNm]=useState(true)
+const getGardenNM=(text)=>{
+    
+    garden_nm=text;
+
+    for(let i=0;i<gardenInfo.findGardenDetailInfo.length;i++){
+        if(gardenInfo.findGardenDetailInfo[i].KITGDN_NM===garden_nm){
+            setGardenDetailInfo(gardenDetailInfo=>({...gardenDetailInfo,
+                
+                OPERT_MAINBD_NM:gardenInfo.findGardenDetailInfo[i].OPERT_MAINBD_NM,
+                KITGDN_NM:gardenInfo.findGardenDetailInfo[i].KITGDN_NM,
+                SUBFACLT_CONT:gardenInfo.findGardenDetailInfo[i].SUBFACLT_CONT,
+                LOTOUT_PC_CONT:gardenInfo.findGardenDetailInfo[i].LOTOUT_PC_CONT,
+                REFINE_LOTNO_ADDR:gardenInfo.findGardenDetailInfo[i].REFINE_LOTNO_ADDR,
+                REFINE_WGS84_LOGT:gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LOGT,
+                REFINE_WGS84_LAT:gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LAT
+            }))
+           
+        }
+    }
+}
+useEffect(()=>{
+    if(detailInfo)
+        setPageNm(!pagenm)
+},[detailInfo])
     return(
         <div>
             <HeaderStyledContainer garden_location_fontweight>
@@ -131,23 +173,28 @@ const closePopUp=()=>{
                         <input value={input_area} onChange={onHandleChange}></input>
                         <button onClick={onClickHandle}>Search</button>
                         <br/>
-                        {gardenNmInfo.findGardenSGNM && gardenNmInfo.findGardenSGNM.map((sg,index)=><li key={index} onClick={onHandleSGNM}>{sg}</li>)}
+                        <div className="item__nmlist">
+                        {gardenNmInfo.findGardenSGNM && gardenNmInfo.findGardenSGNM.map((sg,index)=><li key={index} className="item__nmlist__content" onClick={onHandleSGNM}>{sg}</li>)}
+                        </div>
                     </div>
+
                     <div className='item__info'>
-                {gardenInfo.findGardenDetailInfo &&gardenInfo.findGardenDetailInfo.map((elem,index)=>
-            <div key={index}>
-            <li onClick={onHandleInfo} >{elem.KITGDN_NM}</li>
-            <p>{elem.REFINE_LOTNO_ADDR}</p>
-            </div>
-        )}
+                        <Posts posts={currentPosts(gardenInfo.findGardenDetailInfo)} loading={loading} getGardenNM={getGardenNM}></Posts>
+                        <Pagination postsPerPage={postsPerPage} totalPosts={postsLenth} paginate={setCurrentPage} pagenm={pagenm}></Pagination>
                     </div>
-                    <div className='item__map'>
+
+                    <div className='item__map' style={{visibility:gardenDetailInfo.KITGDN_NM?"visible":"hidden"}}>
                        <Location address={gardenDetailInfo.REFINE_LOTNO_ADDR} logt={gardenDetailInfo.REFINE_WGS84_LOGT} lat={gardenDetailInfo.REFINE_WGS84_LAT}/>
                         <br/>
-                        <button onClick={openPopUp}>신청하기</button>
+                        텃밭 이름 : {gardenDetailInfo.KITGDN_NM}
+                        <br/>
+                        {gardenDetailInfo.LOTOUT_PC_CONT? <>분양 가격 : {gardenDetailInfo.LOTOUT_PC_CONT}</>:
+                        <>분양 가격 : 데이터가 존재 하지 않습니다.</>}
+                       
+                        <br/>
+                        <button onClick={openPopUp} className="registBtn">신청하기</button>
                         <RegistPopUpStyledContainer>
                         <RegistPopUp open={popupOpen} close={closePopUp} data={gardenDetailInfo}>
-
                         </RegistPopUp>
                         </RegistPopUpStyledContainer>
                     </div>

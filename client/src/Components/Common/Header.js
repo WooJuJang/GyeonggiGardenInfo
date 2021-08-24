@@ -1,7 +1,7 @@
 import React from 'react'
 import {getCookie,removeCookie} from '../Auth/Cookis'
 const Header=({history})=>{
-    let fontvar=''
+    
     const moveLogin=()=>{
         history.push("/signin")
     }

@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {ApolloClient,ApolloLink} from 'apollo-boost'
+import {ApolloClient} from 'apollo-boost'
 import { ApolloProvider } from '@apollo/react-hooks';
-import { onError } from 'apollo-link-error'
 import { setContext } from "apollo-link-context";
 import {  createHttpLink } from '@apollo/client';
 import {CookiesProvider} from 'react-cookie';
@@ -15,7 +14,7 @@ const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
   const token = getCookie('token')
   // return the headers to the context so httpLink can read them
-  console.log(token)
+  //console.log(token)
   if(token===null){
    console.log('token null') 
    return null

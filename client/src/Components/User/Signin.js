@@ -22,7 +22,7 @@ const Login=({history})=>{
             return setLoginInfo(loginInfo=>({...loginInfo,password:e.target.value}))
         }
     }
-    const [signin,{data,loading,err}]=useMutation(SIGNIN)
+    const [signin]=useMutation(SIGNIN)
     const onHandleLogin=async()=>{
         signin({variables:{id:loginInfo.id,password:loginInfo.password}}).then((res)=>{        
             if(res.data.signin!==null){               

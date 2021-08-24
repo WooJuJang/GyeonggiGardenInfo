@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {SIGNUP} from '../../Database/Graphql'
-import {useQuery,useMutation} from '@apollo/react-hooks'
+import {useMutation} from '@apollo/react-hooks'
 import {SignupStyleContainer} from '../../css/SigninStyleContainer'
 
 function Signup({history}){
@@ -19,7 +19,7 @@ function Signup({history}){
             return setUserInfo(userInfo=>({...userInfo,city:e.target.value}))
         }
     }
-    const [singup,{data,loading,error}]=useMutation(SIGNUP)
+    const [singup]=useMutation(SIGNUP)
     
     const onHandleSubmit=async(e)=>{
         e.preventDefault();
