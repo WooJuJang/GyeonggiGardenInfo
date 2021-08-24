@@ -22,9 +22,11 @@ const Login=({history})=>{
             return setLoginInfo(loginInfo=>({...loginInfo,password:e.target.value}))
         }
     }
-    const [signin]=useMutation(SIGNIN)
+    const [signin,{data,loading,error}]=useMutation(SIGNIN,{errorPolicy:'all'})
+    const [errors,setErrors]=useState([''])
     const onHandleLogin=async()=>{
-        signin({variables:{id:loginInfo.id,password:loginInfo.password}}).then((res)=>{        
+        signin({variables:{id:loginInfo.id,password:loginInfo.password}}).then((res)=>{
+           
             if(res.data.signin!==null){               
                 console.log(res)
                
@@ -35,12 +37,14 @@ const Login=({history})=>{
                 history.push('/')
             }else{
                 console.log("fail")
-                alert('Check your Id or PassWord :(')
+                
+                //alert('Check your Id or PassWord :(')
             }
+        }).catch((error)=>{
+            console.log(error.message)
         })
-
-      
     }
+
         return(
             <div>
             <SigninStyleContainer>
@@ -52,6 +56,10 @@ const Login=({history})=>{
                     <input className='id' name='id' value={loginInfo.id} onChange={onChangeLoginInfo} placeholder='아이디를 입력하세요' required></input>
                     <input className='pw' name='password' value={loginInfo.password} onChange={onChangeLoginInfo} placeholder='패스워드를 입력하세요' required></input>
                     </div>
+                    {error?<div>{error.message}</div>:<></>}
+
+
+
                     <div className='btn-form'>
                     <button className='signin-btn' onClick={onHandleLogin}>SignIn</button>
                     <button className='signup-btn' onClick={moveSignup}>SignUp</button>

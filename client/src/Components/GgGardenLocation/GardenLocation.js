@@ -19,13 +19,13 @@ const GardenLocation =({history})=>{
         KITGDN_NM:'',
         SUBFACLT_CONT:'',
         LOTOUT_PC_CONT:'',
-        REFINE_LOTNO_ADDR:'',
-        REFINE_WGS84_LOGT:'',
-        REFINE_WGS84_LAT:''
+        REFINE_LOTNO_ADDR:'경기도 안성시 공도읍 275-17',
+        REFINE_WGS84_LOGT:'127.2840722588',
+        REFINE_WGS84_LAT:'36.9987490608'
     })
-    const [input_area,setInput_area]=useState(' ')
+    const [input_area,setInput_area]=useState('')
     const [gardenInfo,setGardenInfo]=useState([''])
-    const [gardenNmInfo,setGardenNmInfo]=useState([' '])
+    const [gardenNmInfo,setGardenNmInfo]=useState([''])
     const findGardenNm=useQuery(FINDGARDENSGNM,{variables:{area:input_area}})
 
     const [detailInfo,setDetailInfo]=useState('')
@@ -56,8 +56,10 @@ const GardenLocation =({history})=>{
         setCurrentPage(1)
         setDetailInfo(e.target.innerText)
         setGardenDetailInfo({
-            SG_NM:e.target.innerText
+            SG_NM:e.target.innerText,
+            REFINE_LOTNO_ADDR:'',
         })
+        console.log(gardenDetailInfo)
         
     }
     useEffect(()=>{
@@ -157,7 +159,7 @@ const getGardenNM=(text)=>{
 }
 useEffect(()=>{
     if(detailInfo)
-        setPageNm(!pagenm)
+        setPageNm(pagenm=>!pagenm)
 },[detailInfo])
     return(
         <div>

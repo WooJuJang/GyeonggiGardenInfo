@@ -28,25 +28,29 @@ const UserInfo=({history})=>{
     return (
         
         <UserInfoStyledContainer>
-            <div className='userinfo-form'>
-                <div className='userinfo-form-box'>
-                    <div className='userinfo-form-box-grid'>
-                    <label className='item1'>사용자 정보</label>
-                    
-                    
-                    <label className='item'>사용자 아이디 </label>
-                    <label className='info-item'>{userInfo.id}</label>
-                
-                    <label className='item'>사용자 지역 </label>
-                    <label className='info-item'>{userInfo.city}</label>
-                    
-                    <label className='item'>신청 텃밭</label>    
-                    <label className='info-item'>{userInfo.garden_name}</label>
+            {findUserInfo.error?
+                    <div>error</div>
+                :
+                        <div className='userinfo-form'>
+                        <div className='userinfo-form-box'>
+                            <div className='userinfo-form-box-grid'>
+                            <label className='item1'>사용자 정보</label>
+                            
+                            
+                            <label className='item'>사용자 아이디 </label>
+                            <label className='info-item'>{userInfo.id}</label>
+                        
+                            <label className='item'>사용자 지역 </label>
+                            <label className='info-item'>{userInfo.city}</label>
+                            
+                            <label className='item'>신청 텃밭</label>    
+                            <label className='info-item'>{userInfo.garden_name}</label>
+        
+                            <button className='btn' onClick={moveMain}>OK</button>
+                            </div>
+                        </div>
+                    </div>}
 
-                    <button className='btn' onClick={moveMain}>OK</button>
-                    </div>
-                </div>
-            </div>
         </UserInfoStyledContainer>
       
     )

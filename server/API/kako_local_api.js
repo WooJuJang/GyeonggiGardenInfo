@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { Kakao_InvalidAddress } from '../Error/ErrorHandling.js';
 //카카오 로컬 API연결
 export const kakao_local_api=(address)=>new Promise((resolve,reject)=>{
     const fullAddress=encodeURI(address);
@@ -10,14 +10,12 @@ export const kakao_local_api=(address)=>new Promise((resolve,reject)=>{
         .then(res => {
                 const location_x=res.data.documents[0].x;
                 const location_y =res.data.documents[0].y;
-                console.log(location_x)
-                console.log(location_y)
                 setLogtLat.push(location_x)
                 setLogtLat.push(location_y)
                 resolve(setLogtLat)
         })
         .catch(err =>{
-            console.log(err.message)
+            reject(Kakao_InvalidAddress())
         })
    
 })

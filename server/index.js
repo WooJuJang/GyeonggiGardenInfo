@@ -12,7 +12,7 @@ import {ApolloServerPluginLandingPageGraphQLPlayground} from 'apollo-server-core
 const token=''
 const server=new ApolloServer({
     cors:{
-        origin:'http://localhost:3000',
+        origin:"http://localhost:3000",
         credentials:true
     },
     typeDefs,
@@ -123,9 +123,9 @@ queryParams += '&' + encodeURIComponent('base_time') + '=' + encodeURIComponent(
 queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent('55'); /* */
 queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent('127'); /* */
 
-axios.get(url+queryParams).then(res=>{
-    console.log(res.data.response.body.items)
-})
+// axios.get(url+queryParams).then(res=>{
+//     console.log(res.data.response.body.items)
+// })
 
 //mongoose 연결
 mongoose.connect("mongodb://127.0.0.1:27017/garden",{
@@ -145,6 +145,6 @@ var queryParams = '?' + encodeURIComponent('ServiceKey') + '=DDQEBDDCmlvZEuTO2bZ
 queryParams += '&' + encodeURIComponent('solYear') + '=' + encodeURIComponent('2021'); /* */
 queryParams += '&' + encodeURIComponent('solMonth') + '=' + encodeURIComponent('08'); /* */
 
-axios.get(url+queryParams).then(res=>{
-    console.log(res.data.response.body.items)
-})
+// axios.get(url+queryParams).then(res=>{
+//     console.log(res.data.response.body.items)
+// })

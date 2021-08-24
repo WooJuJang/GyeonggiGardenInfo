@@ -5,7 +5,7 @@ import { FINDLOGTLAT } from '../../Database/Graphql'
 
 export const Location=({address,logt,lat})=>{
 
-  const findLogtLat=useQuery(FINDLOGTLAT,{variables:{address:''}})
+  const findLogtLat=useQuery(FINDLOGTLAT,{variables:{address:address}})
 
   const createmap=(_logt,_lat)=>{
     var container = document.getElementById('map');
@@ -24,8 +24,11 @@ export const Location=({address,logt,lat})=>{
 
   useEffect(()=>{
     if(logt===null || lat===null){
-      findLogtLat.refetch(FINDLOGTLAT,{variables:{address:address}})
-      
+      findLogtLat.refetch(FINDLOGTLAT,{variables:{address:address}}).then((res)=>{
+        console.log(res)
+      }).catch((error)=>{
+        console.log(error.message)
+      })
     }else{
       createmap(logt,lat)
     }
@@ -39,7 +42,16 @@ useEffect(()=>{
 },[findLogtLat.data,findLogtLat.loading])
     return (
         <div className="mapForm">
-        <div id="map" style={{width:"100%", height:"200px"}}></div>     
+          {findLogtLat.error?
+          <div>
+            <div id="map" style={{width:"100%", height:"200px",display:"none"}}></div>     
+            <label>잘못된 주소로 지도를 만들 수 없습니다.</label>
+            </div>
+          : <div>
+          <div id="map" style={{width:"100%", height:"200px", display:"block"}}></div>   
+          </div>  
+          }
+       
         </div>
     )
 }

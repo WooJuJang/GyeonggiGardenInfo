@@ -52,7 +52,7 @@ export const GetGardenDetailInfo=(args)=>new Promise((resolve,reject)=>{
     axios.get(myaddr).then(res => {
         //console.log(res.data['KitgdnCouout'][1]['row'][0]['SIGUN_NM'])
         result=res.data['KitgdnCouout'][1]['row']
-        console.log(res.data['KitgdnCouout'][1]['row'])
+        //console.log(res.data['KitgdnCouout'][1]['row'])
     resolve(result)    
         
         
