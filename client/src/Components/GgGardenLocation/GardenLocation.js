@@ -97,7 +97,7 @@ useEffect(()=>{
 },[findUserInfo])
 
 const openPopUp=()=>{
-    if(getCookie('token')){
+    if(getCookie('accessToken')){
         findUserInfo.refetch(FINDUSER)
         if(!userInfo.garden_name){
             if(userInfo.city===gardenDetailInfo.SG_NM){

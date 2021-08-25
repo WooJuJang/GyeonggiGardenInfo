@@ -6,7 +6,7 @@ const Header=({history})=>{
         history.push("/signin")
     }
     const logout=()=>{
-        removeCookie('token')
+        removeCookie('accessToken')
         
         window.location.replace("/")
        
@@ -32,7 +32,7 @@ const Header=({history})=>{
             <label className='MoveMyGarden'>내 텃밭 보기&nbsp;&nbsp;|&nbsp;&nbsp;</label>
             <label className='MoveGardenCalendar'>텃밭 달력</label>
         </div>
-        {getCookie('token')?
+        {getCookie('accessToken')?
             <div className='btn'>
                 <button onClick={UserInfo}>UserInfo</button>
                 <button onClick={logout}>Logout</button>

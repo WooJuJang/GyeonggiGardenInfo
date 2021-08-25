@@ -51,7 +51,7 @@ type GardenInfo{
     }
     type Mutation{
         signup(id:String!,password:String!,city:String!):User
-        signin(id:String!,password:String!):String 
+        signin(id:String!,password:String!):[String] 
         insertUserGarden(garden_name:String!):Boolean
     }
 `;

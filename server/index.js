@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 import resolvers from './graphql/resolvers.js';
 import typeDefs from './graphql/typeDefs.js';
 import {checkToken} from './middleware/auth.js';
-import {ApolloServerPluginLandingPageGraphQLPlayground} from 'apollo-server-core'
+import {ApolloServerPluginLandingPageGraphQLPlayground, AuthenticationError} from 'apollo-server-core'
 
 
 //apollo-server start
@@ -18,12 +18,18 @@ const server=new ApolloServer({
     typeDefs,
     resolvers,
     plugins:[ApolloServerPluginLandingPageGraphQLPlayground(),],
+    AuthenticationError,
     context:async({req})=>{
         try{
             const token=req.headers.authorization?req.headers.authorization.substr(7):'';  
+            console.log("server token :"+token)
             if (token){
-                    const user=await checkToken(token,"secretKey")
-                    return user
+                const user=await checkToken(token,"secretKey")
+                console.log("verify token is : "+user)
+                if(user==="TOKEN_EXPIRED"){
+                    return "3"
+                }
+                return user
             }
         }catch(e){
             console.log(e)
