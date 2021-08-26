@@ -9,8 +9,8 @@ import { getCookie } from './Components/Auth/Cookis';
 import App from './App';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import {onError} from "apollo-link-error";
-import { graphql } from 'graphql';
-
+import { Observable } from 'apollo-link';
+import { logout } from './Components/Common/Header';
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
@@ -26,26 +26,54 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      authorization: token ? `Access ${token}` : "",
     }
   }
 });
 
-const errorLink=onError(({graphQLErrors,networkError})=>{
-  if(graphQLErrors){
-    console.log("graphQL Error: "+graphQLErrors)
-    graphQLErrors.map(({message,locations,path})=>{
-      console.log(message)
-      console.log(locations)
-      console.log(path)
-    })
-  }
-    
-  // graphQLErrors.forEach(({message,locations,path})=>
-  //   console.log(`[GraphQL error]: Message: ${message},Location: ${locations}, Path: ${path}`,),
-  //   );
-    if(networkError) console.log(`[Network error]: ${networkError}`);
-});
+const errorLink=onError(({graphQLErrors,networkError,operation,forward})=>{
+   if(graphQLErrors){
+     graphQLErrors.map(({message,locations,path})=>{
+       if(message==='token expired'){
+         const refreshToken=getCookie('refreshToken')
+         if(refreshToken){
+           const headers=operation.getContext().headers
+           operation.setContext({
+             headers:{
+               ...headers,
+               authorization:refreshToken?`Refresh${refreshToken}`:"",
+             }
+           })
+           const observable=new Observable(async(observer)=>{
+             try{
+              const subscriber = {
+                next: observer.next.bind(observer),
+                error: observer.error.bind(observer),
+                complete: observer.complete.bind(observer),
+              };
+              return forward(operation).subscribe(subscriber);
+             }catch(err){
+               console.log(err)
+             }
+
+           })
+           observable.subscribe((res)=>{
+             if(res.errors){
+               console.log(res.errors[0])
+               if(res.errors[0].message==='refresh token is expired'){
+                 console.log(res.errors.message)
+                 logout();
+               }
+             }
+           })
+         }
+       }
+     })
+   } 
+})
+
+
+   
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000',
@@ -55,7 +83,8 @@ const httpLink = createHttpLink({
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   //link: authLink.concat(httpLink)
-  link:from([errorLink,authLink,httpLink])
+  link:from([authLink,errorLink,httpLink])
+
 })
 
 

@@ -3,7 +3,7 @@ import {GetGardenDetailInfo, GetGardenSGNM} from '../API/garden_info_api.js'
 import { kakao_local_api } from '../API/kako_local_api.js';
 import {IDError,PasswordError,Token_Error} from '../Error/ErrorHandling.js';
 import { compare,makejwttoken } from '../middleware/auth.js';
-
+import { AuthenticationError} from 'apollo-server-core'
 
 
 
@@ -12,6 +12,7 @@ const resolvers={
         findUser:async(_,__,context)=>{
              const result=await userinfo.findOne({id:context.token_id},'id city garden_name')
              if(context.error){
+                 console.log(context.error)
                 return Token_Error(context.error);
              }
              const result_arr=[]
@@ -79,6 +80,7 @@ const resolvers={
                     const token_result=await makejwttoken(args.id)
                     console.log(token_result)
 
+                  
                     return token_result
                 }else{
                     PasswordError();

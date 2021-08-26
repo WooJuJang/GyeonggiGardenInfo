@@ -5,8 +5,8 @@ export const setCookie=async (name,value,option)=>{
     return cookies.set(name,value,{...option})
 }
 
-export const getCookie=(name)=>{
-    return cookies.get(name)
+export const getCookie= (name)=>{
+    return  cookies.get(name)
 }
 
 export const removeCookie=(name)=>{

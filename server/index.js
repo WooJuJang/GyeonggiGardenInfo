@@ -4,7 +4,7 @@ import axios from 'axios';
 import mongoose from 'mongoose';
 import resolvers from './graphql/resolvers.js';
 import typeDefs from './graphql/typeDefs.js';
-import {checkToken} from './middleware/auth.js';
+import {checkAccessToken,checkRefreshtoken} from './middleware/auth.js';
 import {ApolloServerPluginLandingPageGraphQLPlayground, AuthenticationError} from 'apollo-server-core'
 
 
@@ -21,15 +21,24 @@ const server=new ApolloServer({
     AuthenticationError,
     context:async({req})=>{
         try{
+            let token_type=req.headers.authorization?req.headers.authorization.substr(0,7):"";
+            
             const token=req.headers.authorization?req.headers.authorization.substr(7):'';  
-            console.log("server token :"+token)
+            
+           
             if (token){
-                const user=await checkToken(token,"secretKey")
-                console.log("verify token is : "+user)
-                if(user==="TOKEN_EXPIRED"){
-                    return "3"
+                if(token_type==="Access "){
+                    const user=await checkAccessToken(token,"secretKey")
+                    
+
+                    return user
+                }else if(token_type==="Refresh"){
+                  
+                    const user=await checkRefreshtoken(token,"secretKey")
+                    
+                    return user
                 }
-                return user
+
             }
         }catch(e){
             console.log(e)

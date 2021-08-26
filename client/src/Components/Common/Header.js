@@ -1,16 +1,18 @@
 import React from 'react'
 import {getCookie,removeCookie} from '../Auth/Cookis'
+
+export const logout=()=>{
+    removeCookie('accessToken')
+    removeCookie('refreshToken')
+    window.location.replace("/")
+   
+}
 const Header=({history})=>{
     
     const moveLogin=()=>{
         history.push("/signin")
     }
-    const logout=()=>{
-        removeCookie('accessToken')
-        
-        window.location.replace("/")
-       
-    }
+
     const UserInfo=()=>{
         history.push("/userinfo")
     }

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import token from '../schema/Token.js'
-
+import {AuthenticationError} from 'apollo-server-core'
 //    export const checkToken=(token,secretkey)=>{
 
 //     return new Promise((resolve,reject)=>{
@@ -24,14 +24,13 @@ import token from '../schema/Token.js'
 let errorObj={
     error:"",
 }
-export const checkToken=async(token,secretkey)=>{
+export const checkAccessToken=async(token,secretkey)=>{
     let decoded;
     try{
         decoded=jwt.verify(token,secretkey)
       
     }catch(err){
         if(err.message==='jwt expired'){
-            console.log(err.message)
             errorObj.error=err.message
             return(errorObj)
         }else{
@@ -42,7 +41,22 @@ export const checkToken=async(token,secretkey)=>{
     return decoded
     
 }
+export const checkRefreshtoken=async(refreshToken,secretkey)=>{
+    let decoded;
+    try{
+        decoded=jwt.verify(refreshToken,secretkey)
 
+
+    }catch(err){
+        if(err.message==='jwt expired'){
+            errorObj.error='refresh token is expired'
+            return errorObj
+        }
+      
+        
+    }
+    return decoded
+}
 
 export const compare = (args, users) => new Promise((resolve, rejcet) => {//async,await방식의 비동기함수로 만듬, 콜백함수는 잘 사용안함으로 이와같은 방식으로 바꿔서 사용해야함
     return bcrypt.compare(args.password,users['password'],(err,res)=>{
@@ -52,7 +66,11 @@ export const compare = (args, users) => new Promise((resolve, rejcet) => {//asyn
 })
 export const makejwttoken=async(id)=>new Promise((resolve,rejcet)=>{
     var tokens=[]
-    const refreshToken=jwt.sign({},"secretKey",{
+    const refreshToken=jwt.sign({
+        token_id:id
+    },
+    "secretKey",
+    {
         subject:"user_refresh_token",
         expiresIn:'10s',
         issuer:"jwj"
@@ -74,5 +92,6 @@ export const makejwttoken=async(id)=>new Promise((resolve,rejcet)=>{
         });
        tokens.push(accessToken)
        tokens.push(refreshToken)
+       console.log(tokens)
     resolve(tokens)
 })
