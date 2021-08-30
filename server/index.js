@@ -21,21 +21,27 @@ const server=new ApolloServer({
     AuthenticationError,
     context:async({req})=>{
         try{
-            let token_type=req.headers.authorization?req.headers.authorization.substr(0,7):"";
+            // const Token=req.headers.authorization.split(',')
+            // console.log(Token[0])
+            // console.log(Token[1])
+
+            let token_type=req.headers.authorization?req.headers.authorization.split(' ')[0]:"";
             
-            const token=req.headers.authorization?req.headers.authorization.substr(7):'';  
+            const token=req.headers.authorization?req.headers.authorization.split(' ')[1]:'';  
             
            
             if (token){
-                if(token_type==="Access "){
+                if(token_type==="Access"){
+                    console.log("Access")
+                    console.log(token)
                     const user=await checkAccessToken(token,"secretKey")
-                    
+                  
 
                     return user
                 }else if(token_type==="Refresh"){
-                  
+                    console.log("Refresh token is : "+token)
                     const user=await checkRefreshtoken(token,"secretKey")
-                    
+                   
                     return user
                 }
 

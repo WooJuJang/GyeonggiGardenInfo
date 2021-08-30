@@ -12,10 +12,17 @@ export const Kakao_InvalidAddress=()=>{
 }
 export const Token_Error=(error)=>{
     console.log(error)
-    if(error === 'jwt expired' ){
-        return new AuthenticationError("token expired")
+    if(error === 'access token is expired' ){
+        return new AuthenticationError("access token is expired")
     }else if(error==='refresh token is expired'){
         return new AuthenticationError('refresh token is expired')
     }
     return new AuthenticationError(error)
+}
+
+export const Make_New_AccessToken=(token)=>{
+    console.log("make new accessToken is : "+token)
+    
+    return new Error(token)
+    
 }

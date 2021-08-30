@@ -24,6 +24,9 @@ import {AuthenticationError} from 'apollo-server-core'
 let errorObj={
     error:"",
 }
+let tokenObj={
+    token:"",
+}
 export const checkAccessToken=async(token,secretkey)=>{
     let decoded;
     try{
@@ -31,7 +34,7 @@ export const checkAccessToken=async(token,secretkey)=>{
       
     }catch(err){
         if(err.message==='jwt expired'){
-            errorObj.error=err.message
+            errorObj.error="access token is expired"
             return(errorObj)
         }else{
             errorObj.error=err.message
@@ -45,7 +48,20 @@ export const checkRefreshtoken=async(refreshToken,secretkey)=>{
     let decoded;
     try{
         decoded=jwt.verify(refreshToken,secretkey)
-
+        
+        const accessToken=jwt.sign(
+            {
+                token_id:decoded.token_id
+            },
+            "secretKey",
+            {
+                subject:"user_access_token",
+                expiresIn:"5s",
+                issuer:"jwj",
+            });
+        tokenObj.token=accessToken
+        
+        return tokenObj
 
     }catch(err){
         if(err.message==='jwt expired'){
@@ -55,12 +71,12 @@ export const checkRefreshtoken=async(refreshToken,secretkey)=>{
       
         
     }
-    return decoded
+  
 }
 
 export const compare = (args, users) => new Promise((resolve, rejcet) => {//async,await방식의 비동기함수로 만듬, 콜백함수는 잘 사용안함으로 이와같은 방식으로 바꿔서 사용해야함
     return bcrypt.compare(args.password,users['password'],(err,res)=>{
-        if(err) rejcet(err)//암호화시 단방향 양방향 차이점
+        if(err) rejcet(err)
         resolve(res)
     })
 })
@@ -72,7 +88,7 @@ export const makejwttoken=async(id)=>new Promise((resolve,rejcet)=>{
     "secretKey",
     {
         subject:"user_refresh_token",
-        expiresIn:'10s',
+        expiresIn:'1h',
         issuer:"jwj"
     })
     const newToken=new token({
@@ -92,6 +108,6 @@ export const makejwttoken=async(id)=>new Promise((resolve,rejcet)=>{
         });
        tokens.push(accessToken)
        tokens.push(refreshToken)
-       console.log(tokens)
+    
     resolve(tokens)
 })
