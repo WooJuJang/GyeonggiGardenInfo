@@ -2,8 +2,11 @@ import React from 'react'
 import {MainStyledContainer} from '../css/MainStyledContainer'
 import Header from './Common/Header'
 function Main({history}){
+
     return(
+        
         <MainStyledContainer>
+           
             <div className='main-form'>
                 <div className='blackbox'>
                     <Header history={history} />
@@ -13,6 +16,7 @@ function Main({history}){
                 </div>
             </div> 
         </MainStyledContainer>
+      
     ) 
 }
 

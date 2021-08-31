@@ -64,3 +64,9 @@ export const INSERTUSERGARDEN=gql`
         insertUserGarden(garden_name:$garden_name)
     }
 `;
+
+export const LOGOUT=gql`
+    mutation logout($id:String!){
+        logout(id:$id)
+    }
+`;

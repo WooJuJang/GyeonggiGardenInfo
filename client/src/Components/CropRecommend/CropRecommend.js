@@ -1,24 +1,33 @@
 import React from 'react'
 import Header from '../Common/Header'
 import { HeaderStyledContainer } from '../../css/HeaderStyledContainer'
+import { CropReccomendStyledContainer } from '../../css/CropRecommend/CropRecomendStyledContainer'
 const croprecommend=({history})=>{
+    const moveCrops=(data)=>{
+        console.log(data)
+        history.push({pathname:"/crops",state:data})
+    }
     return(
         <div>
         <HeaderStyledContainer crop_recommend_fontweight>
         <Header history={history}/>
         </HeaderStyledContainer>
-
+            <CropReccomendStyledContainer>
             <div className="main">
-                <div className="spring">
-
+                <div className="spring" >
+                    <label className="spring-text" onClick={()=>moveCrops('spring')} >봄.</label>
+                    
                 </div>
-                <div className="summer">
-
+                <div className="summer" onClick={()=>moveCrops('summer')}>
+                    <label className="summer-text">여름.</label>
+                    
                 </div>
-                <div className="fall">
-
+                <div className="fall" onClick={()=>moveCrops('fall')}>
+                    <label className="fall-text">가을.</label>
+                    
                 </div>
             </div>
+            </CropReccomendStyledContainer>
         </div>
     )
 }

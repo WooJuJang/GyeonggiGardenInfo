@@ -43,16 +43,23 @@ type GardenInfo{
     REFINE_WGS84_LOGT:String,
 
 }
+
+type Token{
+    id:String,
+    token:String,
+}
     type Query{
         findUser:User
         findGardenSGNM(area:String!):[String]
         findGardenDetailInfo(area:String!):[GardenInfo]
         findLogtLat(address:String!):[Float]
+        findToken(id:String!):String
     }
     type Mutation{
         signup(id:String!,password:String!,city:String!):User
         signin(id:String!,password:String!):[String] 
         insertUserGarden(garden_name:String!):Boolean
+        logout(id:String!):Boolean
     }
 `;
 export default typeDefs;

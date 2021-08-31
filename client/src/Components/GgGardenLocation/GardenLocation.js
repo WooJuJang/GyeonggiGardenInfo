@@ -44,12 +44,12 @@ const GardenLocation =({history})=>{
     }
     useEffect(()=>{
        
-        if(findGardenNm.loading===false && findGardenNm.data){
+        //if(findGardenNm.loading===false && findGardenNm.data){
             setGardenNmInfo(findGardenNm.data)
             
-        }
+        //}
        
-     },[renderingBtn])
+     },[renderingBtn,findGardenNm.data])
 
     /* 선택된 지역에 속한 농장 정보 출력 */
     const onHandleSGNM=(e)=>{

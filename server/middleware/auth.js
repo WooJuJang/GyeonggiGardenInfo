@@ -1,25 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import token from '../schema/Token.js'
-import {AuthenticationError} from 'apollo-server-core'
-//    export const checkToken=(token,secretkey)=>{
 
-//     return new Promise((resolve,reject)=>{
-//         jwt.verify(token,secretkey,(error,decoded)=>{
-//             if(error){
-//                 if(error.message==='jwt expired'){
-//                     reject("TOKEN_EXPIRED")
-//                 }
-//                 reject(error)
-//             }
-            
-//             resolve(decoded)
-//         })
-//     }
-
-
-//     )
-// }
 
 let errorObj={
     error:"",
@@ -31,7 +13,7 @@ export const checkAccessToken=async(token,secretkey)=>{
     let decoded;
     try{
         decoded=jwt.verify(token,secretkey)
-      
+        
     }catch(err){
         if(err.message==='jwt expired'){
             errorObj.error="access token is expired"
@@ -47,23 +29,32 @@ export const checkAccessToken=async(token,secretkey)=>{
 export const checkRefreshtoken=async(refreshToken,secretkey)=>{
     let decoded;
     try{
+
         decoded=jwt.verify(refreshToken,secretkey)
         
-        const accessToken=jwt.sign(
-            {
-                token_id:decoded.token_id
-            },
-            "secretKey",
-            {
-                subject:"user_access_token",
-                expiresIn:"5s",
-                issuer:"jwj",
-            });
-        tokenObj.token=accessToken
-        
-        return tokenObj
+        const db_token=await token.findOne({id:decoded.token_id},'token')
+        if(db_token.token===refreshToken){
+            
+            const accessToken=jwt.sign(
+                {
+                    token_id:decoded.token_id
+                },
+                "secretKey",
+                {
+                    subject:"user_access_token",
+                    expiresIn:"1s",
+                    issuer:"jwj",
+                });
+            tokenObj.token=accessToken
+            
+            return tokenObj
+        }
+         errorObj.error='Invalid Token';
+         return errorObj
+
 
     }catch(err){
+       
         if(err.message==='jwt expired'){
             errorObj.error='refresh token is expired'
             return errorObj
@@ -103,7 +94,7 @@ export const makejwttoken=async(id)=>new Promise((resolve,rejcet)=>{
         "secretKey",
         {
             subject:"user_access_token",
-            expiresIn:"5s",
+            expiresIn:"1s",
             issuer:"jwj",
         });
        tokens.push(accessToken)

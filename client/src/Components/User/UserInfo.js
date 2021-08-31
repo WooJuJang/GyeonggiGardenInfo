@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client'
 import React, { useEffect, useState } from 'react'
 import { UserInfoStyledContainer } from '../../css/UserInfoStyledContainer'
 import { FINDUSER } from '../../Database/Graphql'
-import TokenError from '../Error/TokenError'
+
 
 const UserInfo = ({ history }) => {
     const findUserInfo = useQuery(FINDUSER, { errorPolicy: "all" })
@@ -12,9 +12,7 @@ const UserInfo = ({ history }) => {
         city: '',
         garden_name: '',
     })
-    console.log(userInfo.id)
     if (userInfo.id === '') {
-        console.log("userinfo")
         findUserInfo.refetch(FINDUSER)
     }
     useEffect(() => {

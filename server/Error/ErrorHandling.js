@@ -16,6 +16,8 @@ export const Token_Error=(error)=>{
         return new AuthenticationError("access token is expired")
     }else if(error==='refresh token is expired'){
         return new AuthenticationError('refresh token is expired')
+    }else if(error === "Invalid Token"){
+        return new AuthenticationError('Invalid Token')
     }
     return new AuthenticationError(error)
 }

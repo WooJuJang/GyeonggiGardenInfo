@@ -3,7 +3,8 @@ import { GetGardenDetailInfo, GetGardenSGNM } from '../API/garden_info_api.js'
 import { kakao_local_api } from '../API/kako_local_api.js';
 import { IDError, Make_New_AccessToken, PasswordError, Token_Error } from '../Error/ErrorHandling.js';
 import { compare, makejwttoken } from '../middleware/auth.js';
-import { AuthenticationError } from 'apollo-server-core'
+import token from '../schema/Token.js';
+
 
 
 
@@ -17,12 +18,14 @@ const resolvers = {
             } else if (context.error === "refresh token is expired") {
                
                 return Token_Error(context.error)
-            }else if(context.token) {
+            }else if(context.error === "Invalid Token"){
+                return Token_Error(context.error)
+            }
+            else if(context.token) {
              
                 return Make_New_AccessToken(context.token)
             }
-
-
+            console.log("i am in")
             const result = await userinfo.findOne({ id: context.token_id }, 'id city garden_name')
             const result_arr = []
             result_arr[0] = result.id
@@ -101,6 +104,10 @@ const resolvers = {
             return false
 
 
+        },
+        logout: async(_,args)=>{
+                await token.deleteOne({id:args.id})
+            return true
         }
     }
 }

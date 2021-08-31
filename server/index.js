@@ -1,6 +1,5 @@
 
 import { ApolloServer } from 'apollo-server';
-import axios from 'axios';
 import mongoose from 'mongoose';
 import resolvers from './graphql/resolvers.js';
 import typeDefs from './graphql/typeDefs.js';
@@ -21,10 +20,6 @@ const server=new ApolloServer({
     AuthenticationError,
     context:async({req})=>{
         try{
-            // const Token=req.headers.authorization.split(',')
-            // console.log(Token[0])
-            // console.log(Token[1])
-
             let token_type=req.headers.authorization?req.headers.authorization.split(' ')[0]:"";
             
             const token=req.headers.authorization?req.headers.authorization.split(' ')[1]:'';  
@@ -32,14 +27,11 @@ const server=new ApolloServer({
            
             if (token){
                 if(token_type==="Access"){
-                    console.log("Access")
-                    console.log(token)
                     const user=await checkAccessToken(token,"secretKey")
                   
 
                     return user
                 }else if(token_type==="Refresh"){
-                    console.log("Refresh token is : "+token)
                     const user=await checkRefreshtoken(token,"secretKey")
                    
                     return user

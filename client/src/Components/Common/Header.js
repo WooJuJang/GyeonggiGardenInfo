@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {getCookie,removeCookie} from '../Auth/Cookis'
+import {LOGOUT} from "../../Database/Graphql"
+import { useMutation } from '@apollo/client'
+import UserInfoContext, { UserInfoConsumer } from '../../UserInfoContext'
 
-export const logout=()=>{
-    removeCookie('accessToken')
-    removeCookie('refreshToken')
-    window.location.replace("/")
-   
-}
+
+
+
 const Header=({history})=>{
-    
+    const [logout]=useMutation(LOGOUT)
+    const contextValue=useContext(UserInfoContext)
     const moveLogin=()=>{
         history.push("/signin")
     }
@@ -34,6 +35,19 @@ const Header=({history})=>{
         }
       
     }
+
+    const Logout=()=>{
+    
+    
+        removeCookie('accessToken')
+        removeCookie('refreshToken')
+       
+       console.log(logout({variables:{id: contextValue.state.id}}))
+        //window.location.replace("/")
+       
+    }
+
+
     return(
     <div className='header-form'>
         <div className='menu'>      
@@ -42,15 +56,17 @@ const Header=({history})=>{
             <label className='MoveMyGarden'>내 텃밭 보기&nbsp;&nbsp;|&nbsp;&nbsp;</label>
             <label className='MoveGardenCalendar'>텃밭 달력</label>
         </div>
+  
         {getCookie('accessToken')?
             <div className='btn'>
                 <button onClick={UserInfo}>UserInfo</button>
-                <button onClick={logout}>Logout</button>
+                <button onClick={Logout}>Logout</button>
             </div>
     :<div className='btn'>
         <button onClick={moveLogin}>SignIn</button>
     </div>
     }
+   
     </div>)
 }
 export default Header

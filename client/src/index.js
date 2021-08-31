@@ -10,12 +10,10 @@ import App from './App';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from "apollo-link-error";
 import { Observable } from 'apollo-link';
-import { logout } from './Components/Common/Header';
+import Header from './Components/Common/Header';
 
 const authLink = setContext((_, { headers }) => {
-// var Token=[];
-//   Token.push(getCookie('accessToken'))
-//   Token.push(getCookie('refreshToken'))
+
   const accessToken=getCookie('accessToken')
   if (accessToken === null) {
     console.log('token null')
@@ -30,13 +28,14 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
+
   console.log("ERROR")
   console.log("before forward: "+getCookie('accessToken'))
   if (networkError) {
     console.log("networkError!")
   }
   if (graphQLErrors) {
-    graphQLErrors.map(({ message, locations, path }) => {
+    graphQLErrors.forEach(({ message, locations, path }) => {
       console.log(message)
       if (message === 'access token is expired') {
         console.log("access token is expired")
@@ -69,16 +68,28 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
             }
 
           })
-          //refreshObservable.subscribe(x=>console.log(x))
+
           var temp_token='';
           refreshObservable.subscribe(x => {
+            console.log(x)
            temp_token=x.errors[0].message
-           setCookie('accessToken',temp_token,{path:"/",})
-           window.location.reload();
+           if(temp_token==='refresh token is expired'){
+              Header.Logout();
+           }else if(temp_token==='access token is expired'){
+
+           }else if(temp_token==='Invalid Token'){
+             alert("Invalid Token")
+             Header.Logout();
+           }else{
+            setCookie('accessToken',temp_token,{path:"/",})
+            window.location.reload();
+           }
+           
+          
           })
         }
-      } else if(message === 'refresh token is expired' ){
-        <logout/>
+      } else if(message === 'UserInfo Undefinded' ){
+        Header.Logout();
       }
 
 
