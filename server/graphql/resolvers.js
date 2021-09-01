@@ -4,6 +4,7 @@ import { kakao_local_api } from '../API/kako_local_api.js';
 import { IDError, Make_New_AccessToken, PasswordError, Token_Error } from '../Error/ErrorHandling.js';
 import { compare, makejwttoken } from '../middleware/auth.js';
 import token from '../schema/Token.js';
+import { spring,summer,fall } from '../schema/Crops.js';
 
 
 
@@ -63,6 +64,18 @@ const resolvers = {
             const setLogtLat = await kakao_local_api(args.address);
             console.log(setLogtLat)
             return setLogtLat
+        },
+        findSeason:async(_,args)=>{
+            var seasonInfo;
+            if(args.season==='spring'){
+                seasonInfo=await spring.find({})
+            }else if(args.season==='summer'){
+                seasonInfo=await summer.find({})
+            }else if(args.season==='fall'){
+                seasonInfo=await fall.find({})
+            }
+
+            return seasonInfo
         }
     },
     Mutation: {

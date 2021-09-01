@@ -43,10 +43,21 @@ type GardenInfo{
     REFINE_WGS84_LOGT:String,
 
 }
-
 type Token{
     id:String,
     token:String,
+}
+type Crops{
+    crops:String,
+    belong:String,
+    interval:Int,
+    fixture:Boolean,
+    water:Int,
+    plant:Int,
+    explain:String,
+    harvest:String,
+    harvestable_crops:Boolean,
+    image:String,
 }
     type Query{
         findUser:User
@@ -54,6 +65,7 @@ type Token{
         findGardenDetailInfo(area:String!):[GardenInfo]
         findLogtLat(address:String!):[Float]
         findToken(id:String!):String
+        findSeason(season:String!):[Crops]
     }
     type Mutation{
         signup(id:String!,password:String!,city:String!):User

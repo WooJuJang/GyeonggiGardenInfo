@@ -4,7 +4,6 @@ import { HeaderStyledContainer } from '../../css/HeaderStyledContainer'
 import { CropReccomendStyledContainer } from '../../css/CropRecommend/CropRecomendStyledContainer'
 const croprecommend=({history})=>{
     const moveCrops=(data)=>{
-        console.log(data)
         history.push({pathname:"/crops",state:data})
     }
     return(
@@ -14,8 +13,8 @@ const croprecommend=({history})=>{
         </HeaderStyledContainer>
             <CropReccomendStyledContainer>
             <div className="main">
-                <div className="spring" >
-                    <label className="spring-text" onClick={()=>moveCrops('spring')} >봄.</label>
+                <div className="spring" onClick={()=>moveCrops('spring')}>
+                    <label className="spring-text"  >봄.</label>
                     
                 </div>
                 <div className="summer" onClick={()=>moveCrops('summer')}>

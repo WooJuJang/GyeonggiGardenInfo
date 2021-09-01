@@ -70,3 +70,20 @@ export const LOGOUT=gql`
         logout(id:$id)
     }
 `;
+
+export const FINDSEASON=gql`
+    query findSeason($season:String!){
+        findSeason(season:$season){
+            crops
+            belong
+            interval
+            fixture
+            water
+            plant
+            explain
+            harvest
+            harvestable_crops
+            image
+        }
+    }
+`;
