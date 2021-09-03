@@ -1,5 +1,5 @@
 import React from 'react'
-import Header from '../Common/Header'
+import {Header} from '../Common/Header'
 import { HeaderStyledContainer } from '../../css/HeaderStyledContainer'
 import { CropReccomendStyledContainer } from '../../css/CropRecommend/CropRecomendStyledContainer'
 const croprecommend=({history})=>{

@@ -7,23 +7,24 @@ import Main from './Components/Main';
 import Signin from './Components/User/Signin';
 import Signup from './Components/User/Signup';
 import UserInfo from './Components/User/UserInfo';
-import { UserInfoProvider } from './UserInfoContext';
+import TokenError from './Components/Error/TokenError';
+
+
+
 
 function App() {
-
   return (
     <div className="App">
-      <UserInfoProvider>
           <BrowserRouter>
             <Route path="/" exact component={Main}/>
             <Route path="/signin" component={Signin}/>
             <Route path="/signup" component={Signup}/>
             <Route path="/userinfo" component={UserInfo}/>
+            <Route path="/tokenerror" component={TokenError}/>
             <Route path="/gardenlocation" component={GardenLocation}/>
             <Route path="/croprecommend" component={CropRecommend}/>
             <Route path="/crops" component={Crops}/>
           </BrowserRouter>
-      </UserInfoProvider>
     </div>
   );
 }

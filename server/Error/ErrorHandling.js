@@ -1,7 +1,9 @@
-import { AuthenticationError} from 'apollo-server-core'
+import { AuthenticationError, UserInputError} from 'apollo-server-core'
 
 export const IDError=()=>{
-    throw new Error("ID does not exist.")
+    
+    throw new Error("ID does not exist.",400)
+    //throw new UserInputError('ID does not exist.')
     
 }
 export const PasswordError=()=>{

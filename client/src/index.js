@@ -10,7 +10,7 @@ import App from './App';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from "apollo-link-error";
 import { Observable } from 'apollo-link';
-import Header from './Components/Common/Header';
+import { StateProvider } from './UserInfoContext';
 
 const authLink = setContext((_, { headers }) => {
 
@@ -27,18 +27,16 @@ const authLink = setContext((_, { headers }) => {
   }
 });
 
+
 const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
 
-  console.log("ERROR")
-  console.log("before forward: "+getCookie('accessToken'))
+
   if (networkError) {
     console.log("networkError!")
   }
   if (graphQLErrors) {
     graphQLErrors.forEach(({ message, locations, path }) => {
-      console.log(message)
       if (message === 'access token is expired') {
-        console.log("access token is expired")
         const refreshToken = getCookie('refreshToken')
         
         if (refreshToken) {
@@ -71,15 +69,12 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
 
           var temp_token='';
           refreshObservable.subscribe(x => {
-            console.log(x)
            temp_token=x.errors[0].message
            if(temp_token==='refresh token is expired'){
-              Header.Logout();
+            window.location.replace("/tokenerror")
            }else if(temp_token==='access token is expired'){
-
            }else if(temp_token==='Invalid Token'){
-             alert("Invalid Token")
-             Header.Logout();
+            window.location.replace("/tokenerror")
            }else{
             setCookie('accessToken',temp_token,{path:"/",})
             window.location.reload();
@@ -88,9 +83,7 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
           
           })
         }
-      } else if(message === 'UserInfo Undefinded' ){
-        Header.Logout();
-      }
+      } 
 
 
     })
@@ -115,12 +108,14 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <React.StrictMode>
+          <StateProvider>
     <CookiesProvider>
       <ApolloProvider client={client}>
 
         <App />
       </ApolloProvider>
     </CookiesProvider>
+    </StateProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

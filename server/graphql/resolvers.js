@@ -26,7 +26,7 @@ const resolvers = {
              
                 return Make_New_AccessToken(context.token)
             }
-            console.log("i am in")
+            
             const result = await userinfo.findOne({ id: context.token_id }, 'id city garden_name')
             const result_arr = []
             result_arr[0] = result.id

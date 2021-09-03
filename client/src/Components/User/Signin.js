@@ -6,8 +6,9 @@ import {setCookie} from '../Auth/Cookis'
 import {UserInfoContext} from '../../UserInfoContext'
 
 const Login=({history})=>{
+    const contextValue=useContext(UserInfoContext)
 
-
+    const [userinfoid,setUserInfoId]=useState("")
     const moveSignup=()=>{
         history.push("/signup")
     }
@@ -22,33 +23,31 @@ const Login=({history})=>{
             return setLoginInfo(loginInfo=>({...loginInfo,password:e.target.value}))
         }
     }
-    const [signin,{error}]=useMutation(SIGNIN,{errorPolicy:'all'})
-    const contextValue=useContext(UserInfoContext)
-    
+    const [signin,{error}]=useMutation(SIGNIN,{errorPolicy:'all', onCompleted:  (data) => {
+                 setCookie('accessToken',data.signin[0],{
+                    path:"/",
+                })
+                 setCookie('refreshToken',data.signin[1],{
+                    path:"/",
+                })
+                console.log(" ------ 111", contextValue)
+                contextValue.dispatch({type:'INSERT_USER',id:loginInfo.id})
+                //contextValue.actions.setUserInfo(loginInfo.id)
+
+                
+
+                history.push('/')
+    }})
+    let tokens;
     const OnHandleLogin=async()=>{
-        
-        let tokens;
         try{
             tokens=await signin({variables:{id:loginInfo.id,password:loginInfo.password}})
-            if(tokens.data){
-                console.log(tokens)
-                await setCookie('accessToken',tokens.data.signin[0],{
-                    path:"/",
-                })
-                await setCookie('refreshToken',tokens.data.signin[1],{
-                    path:"/",
-                })
-                contextValue.actions.setUserInfo(loginInfo.id)
-                history.push('/')
-            }
         }catch(err){
             console.log(err.message)
         }
-        
         return tokens;
-        
-    
     }
+    console.log("contextValue",contextValue)
 
         return(
             <div>
@@ -63,15 +62,18 @@ const Login=({history})=>{
                     </div>
                     {error?<div>{error.message}</div>:<></>}
                     <div className='btn-form'>
+
                     <button className='signin-btn' onClick={OnHandleLogin}>SignIn</button>
                     <button className='signup-btn' onClick={moveSignup}>SignUp</button>
                     </div>
                 </div>
             </div>
-        
+
     </SigninStyleContainer>
+
     </div>
         )
+ 
 
 }
 

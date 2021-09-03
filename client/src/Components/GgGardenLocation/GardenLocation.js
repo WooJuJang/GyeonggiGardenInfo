@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { HeaderStyledContainer } from "../../css/HeaderStyledContainer";
-import Header from "../Common/Header";
+import {Header} from "../Common/Header";
 import {GardenLocationStyledContainter} from "../../css/GardenLocationStyledContainter";
 import { Location } from "../Common/Location";
 import {FINDGARDENSGNM,FINDGARDENDETAILINFO,FINDUSER} from '../../Database/Graphql'
@@ -44,12 +44,12 @@ const GardenLocation =({history})=>{
     }
     useEffect(()=>{
        
-        //if(findGardenNm.loading===false && findGardenNm.data){
+        if(findGardenNm.loading===false && findGardenNm.data){
             setGardenNmInfo(findGardenNm.data)
             
-        //}
+        }
        
-     },[renderingBtn,findGardenNm.data])
+     },[renderingBtn])
 
     /* 선택된 지역에 속한 농장 정보 출력 */
     const onHandleSGNM=(e)=>{

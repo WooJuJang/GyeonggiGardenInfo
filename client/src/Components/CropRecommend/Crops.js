@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../Common/Header'
+import {Header} from '../Common/Header'
 import { HeaderStyledContainer } from '../../css/HeaderStyledContainer'
 import { useQuery } from '@apollo/client';
 import { FINDSEASON } from '../../Database/Graphql';
