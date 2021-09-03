@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import {getCookie,removeCookie} from '../Auth/Cookis'
-import {FINDSEASON, LOGOUT, SIGNIN} from "../../Database/Graphql"
-import {useMutation, useQuery} from '@apollo/react-hooks'
-import {UserInfoContext , UserInfoConsumer } from '../../UserInfoContext'
+import { LOGOUT} from "../../Database/Graphql"
+import {useMutation} from '@apollo/react-hooks'
+import {UserInfoContext } from '../../UserInfoContext'
 
 
 
@@ -14,6 +14,7 @@ export const Header=({history})=>{
         removeCookie('accessToken')
         removeCookie('refreshToken')
         removeRefreshToken(LOGOUT,{variables:{id:state.id}})
+        dispatch({type:'REMOVE_USER'})
         window.location.replace("/")
     }
 

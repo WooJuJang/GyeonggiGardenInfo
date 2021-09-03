@@ -36,7 +36,7 @@ const Crops = ({ history }) => {
             harvestable_crops: cropsInfo.data.findSeason[0].harvestable_crops,
             image:cropsInfo.data.findSeason[0].image,
         })
-   },[cropsInfo.data])
+   },[cropsInfo])
     const SelectedCropInfo = (e) => {
         let cropname = e.target.innerText.split("|")[0]
         for (let i = 0; i < cropsInfo.data.findSeason.length; i++) {

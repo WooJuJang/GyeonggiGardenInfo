@@ -1,5 +1,4 @@
 import Styled from '@emotion/styled'
-import {css} from 'styled-components'
 
 export const CropStyledContainer=Styled.div`
 

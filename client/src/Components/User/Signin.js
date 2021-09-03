@@ -8,7 +8,7 @@ import {UserInfoContext} from '../../UserInfoContext'
 const Login=({history})=>{
     const contextValue=useContext(UserInfoContext)
 
-    const [userinfoid,setUserInfoId]=useState("")
+  
     const moveSignup=()=>{
         history.push("/signup")
     }

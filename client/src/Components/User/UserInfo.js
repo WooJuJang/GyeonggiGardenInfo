@@ -5,7 +5,10 @@ import { FINDUSER } from '../../Database/Graphql'
 import {UserInfoContext} from '../../UserInfoContext'
 
 const UserInfo = ({ history }) => {
- 
+    const {state}=useContext(UserInfoContext)
+    if(state.id===''){
+        history.push('/signin');
+    }
     const findUserInfo = useQuery(FINDUSER, { errorPolicy: "all" })
     
     const [userInfo, setUserInfo] = useState({

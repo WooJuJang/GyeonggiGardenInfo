@@ -18,12 +18,21 @@ const StateProvider=({children})=>{
         return{
           id:action.id
         }
+      case 'REMOVE_USER':
+        setCookie('id','',{
+          path:"/",
+        })
+        console.log(getCookie('id'))
+        return{
+          id:''
+        }
       default:
         throw new Error();
 
     };
   })
   if(!state){
+    console.log(getCookie('id'))
     state={
       id:getCookie('id')}
   }

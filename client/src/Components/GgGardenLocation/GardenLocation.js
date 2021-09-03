@@ -4,7 +4,7 @@ import {Header} from "../Common/Header";
 import {GardenLocationStyledContainter} from "../../css/GardenLocationStyledContainter";
 import { Location } from "../Common/Location";
 import {FINDGARDENSGNM,FINDGARDENDETAILINFO,FINDUSER} from '../../Database/Graphql'
-import { useQuery } from "@apollo/client";
+import { useQuery,useLazyQuery } from "@apollo/client";
 import RegistPopUp from "./RegistPopUp";
 import { getCookie} from "../Auth/Cookis";
 import { RegistPopUpStyledContainer } from "../../css/GgGardenLocation/RegistPopUpStyledContainer";
@@ -26,7 +26,7 @@ const GardenLocation =({history})=>{
     const [input_area,setInput_area]=useState('')
     const [gardenInfo,setGardenInfo]=useState([''])
     const [gardenNmInfo,setGardenNmInfo]=useState([''])
-    const findGardenNm=useQuery(FINDGARDENSGNM,{variables:{area:input_area}})
+    const [findGardenNm,{data,error}]=useLazyQuery(FINDGARDENSGNM,{onCompleted:data=>setGardenNmInfo(data)})
 
     const [detailInfo,setDetailInfo]=useState('')
     const findGardenDetailInfo=useQuery(FINDGARDENDETAILINFO,{variables:{area:detailInfo}})
@@ -34,22 +34,14 @@ const GardenLocation =({history})=>{
     const onHandleChange=(e)=>{
         setInput_area(e.target.value)
     }
+
     /* 지역이름 검색 및 지역 출력 */
     const onClickHandle=()=>{
         if(input_area!==""){
-            findGardenNm.refetch(FINDGARDENSGNM,{variables:{area:input_area}})
-            setRenderingBtn(!renderingBtn)
+            findGardenNm({variables:{area:input_area}})
         }
 
     }
-    useEffect(()=>{
-       
-        if(findGardenNm.loading===false && findGardenNm.data){
-            setGardenNmInfo(findGardenNm.data)
-            
-        }
-       
-     },[renderingBtn])
 
     /* 선택된 지역에 속한 농장 정보 출력 */
     const onHandleSGNM=(e)=>{
@@ -58,9 +50,7 @@ const GardenLocation =({history})=>{
         setGardenDetailInfo({
             SG_NM:e.target.innerText,
             REFINE_LOTNO_ADDR:'',
-        })
-        console.log(gardenDetailInfo)
-        
+        })  
     }
     useEffect(()=>{
         if(gardenDetailInfo.SG_NM){

@@ -14,8 +14,9 @@ const TokenError =() =>{
         
         removeCookie('accessToken')
         removeCookie('refreshToken')
-        console.log(state.id)
+
         removeRefreshToken(LOGOUT,{variables:{id:state.id}})
+        dispatch({type:'REMOVE_USER'})
         history.push(route)
     }
  return(
