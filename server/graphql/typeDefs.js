@@ -59,6 +59,13 @@ type Crops{
     harvestable_crops:Boolean,
     image:String,
 }
+type UserPlantInfo{
+    key:String,
+    user_crops:String,
+    plant_date:[String],
+    harvest_date:[String],
+    remove_date:[String]
+}
     type Query{
         findUser:User
         findGardenSGNM(area:String!):[String]
@@ -66,12 +73,18 @@ type Crops{
         findLogtLat(address:String!):[Float]
         findToken(id:String!):String
         findSeason(season:String!):[Crops]
+        findUserPlantInfo(key:String!):[UserPlantInfo]
     }
     type Mutation{
         signup(id:String!,password:String!,city:String!):User
         signin(id:String!,password:String!):[String] 
         insertUserGarden(garden_name:String!):Boolean
         logout(id:String!):Boolean
+        insertUserCrops(key:String!,user_crops:String!,plant_date:String!):UserPlantInfo
+        insertHarvestDate(key:String!,user_crops:String!,harvest_date:String!):UserPlantInfo
+        insertRemoveDate(key:String!,user_crops:String!,remove_date:String!):UserPlantInfo
+
     }
 `;
 export default typeDefs;
+

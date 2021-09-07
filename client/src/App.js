@@ -8,6 +8,7 @@ import Signin from './Components/User/Signin';
 import Signup from './Components/User/Signup';
 import UserInfo from './Components/User/UserInfo';
 import TokenError from './Components/Error/TokenError';
+import GardenCalendar from './Components/GardenCalendar/GardenCalendar';
 
 
 
@@ -24,6 +25,7 @@ function App() {
             <Route path="/gardenlocation" component={GardenLocation}/>
             <Route path="/croprecommend" component={CropRecommend}/>
             <Route path="/crops" component={Crops}/>
+            <Route path="/gardencalendar" component={GardenCalendar}/>
           </BrowserRouter>
     </div>
   );

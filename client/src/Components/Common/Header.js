@@ -43,6 +43,15 @@ export const Header=({history})=>{
         }
       
     }
+    const MoveGardenCalendar=()=>{
+
+        try{
+            history.push("/gardencalendar")
+        }catch(e){
+            console.log(e)
+        }
+      
+    }
 
 
 
@@ -53,7 +62,7 @@ export const Header=({history})=>{
             <label onClick={MoveGardenLocation} className='MoveGardenLocation'>경기도 텃밭 위치&nbsp;&nbsp;|&nbsp;&nbsp;</label>
             <label onClick={MoveCropRecommend} className='MoveCropRecommend'>텃밭 작물 추천&nbsp;&nbsp;|&nbsp;&nbsp;</label>
             <label className='MoveMyGarden'>내 텃밭 보기&nbsp;&nbsp;|&nbsp;&nbsp;</label>
-            <label className='MoveGardenCalendar'>텃밭 달력</label>
+            <label onClick={MoveGardenCalendar} className='MoveGardenCalendar'>텃밭 달력</label>
         </div>
   
         {getCookie('accessToken')?

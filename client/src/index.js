@@ -99,7 +99,13 @@ const httpLink = createHttpLink({
 });
 
 const client = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    // typePolicies:{
+    //   UserPlantInfo:{
+    //     keyFields: ['user_crops'],
+    //   },
+    // }
+  }),
   //link: authLink.concat(httpLink)
   link: from([authLink, errorLink, httpLink])
 

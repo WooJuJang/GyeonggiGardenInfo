@@ -12,7 +12,7 @@ import Posts from './Posts'
 import Pagination from './Pagination'
 
 const GardenLocation =({history})=>{
-    const [renderingBtn,setRenderingBtn]=useState(true)
+
     const [gardenDetailInfo,setGardenDetailInfo]=useState({
         SG_NM:'',
         OPERT_MAINBD_NM:'',
@@ -26,7 +26,7 @@ const GardenLocation =({history})=>{
     const [input_area,setInput_area]=useState('')
     const [gardenInfo,setGardenInfo]=useState([''])
     const [gardenNmInfo,setGardenNmInfo]=useState([''])
-    const [findGardenNm,{data,error}]=useLazyQuery(FINDGARDENSGNM,{onCompleted:data=>setGardenNmInfo(data)})
+    const [findGardenNm]=useLazyQuery(FINDGARDENSGNM,{onCompleted:data=>setGardenNmInfo(data)})
 
     const [detailInfo,setDetailInfo]=useState('')
     const findGardenDetailInfo=useQuery(FINDGARDENDETAILINFO,{variables:{area:detailInfo}})

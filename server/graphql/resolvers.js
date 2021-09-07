@@ -5,7 +5,7 @@ import { IDError, Make_New_AccessToken, PasswordError, Token_Error } from '../Er
 import { compare, makejwttoken } from '../middleware/auth.js';
 import token from '../schema/Token.js';
 import { spring,summer,fall } from '../schema/Crops.js';
-
+import userplantinfo from '../schema/UserPlantInfo.js';
 
 
 
@@ -76,6 +76,9 @@ const resolvers = {
             }
 
             return seasonInfo
+        },
+        findUserPlantInfo:async(_,args)=>{
+            return await userplantinfo.find({key:args.key}) 
         }
     },
     Mutation: {
@@ -121,7 +124,20 @@ const resolvers = {
         logout: async(_,args)=>{
                 await token.deleteOne({id:args.id})
             return true
+        },
+        insertUserCrops:async(_,args)=>{
+            return await userplantinfo.findOneAndUpdate({key:args.key,user_crops:args.user_crops},{$push:{plant_date:args.plant_date}},{upsert:true,new:true})
+
+        },
+        insertHarvestDate:async(_,args)=>{
+            return await userplantinfo.findOneAndUpdate({key:args.key,user_crops:args.user_crops},{$push:{harvest_date:args.harvest_date}},{upsert:true,new:true})
+
+        },
+        insertRemoveDate:async(_,args)=>{
+             return await userplantinfo.findOneAndUpdate({key:args.key,user_crops:args.user_crops},{$push:{remove_date:args.remove_date}},{upsert:true,new:true})
+
         }
+
     }
 }
 export default resolvers
