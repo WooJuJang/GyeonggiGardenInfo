@@ -6,6 +6,7 @@ import { compare, makejwttoken } from '../middleware/auth.js';
 import token from '../schema/Token.js';
 import { spring,summer,fall } from '../schema/Crops.js';
 import userplantinfo from '../schema/UserPlantInfo.js';
+import getHoliday from '../API/holiday.js';
 
 
 
@@ -79,6 +80,12 @@ const resolvers = {
         },
         findUserPlantInfo:async(_,args)=>{
             return await userplantinfo.find({key:args.key}) 
+        },
+        findUserManageInfo:async(_,args)=>{
+            return await userinfo.findOne({id:args.id},'fertilizer watering weed fixture_install')
+        },
+        findHoliday:async(_,args)=>{
+            return getHoliday(args.year)
         }
     },
     Mutation: {
@@ -126,16 +133,26 @@ const resolvers = {
             return true
         },
         insertUserCrops:async(_,args)=>{
-            return await userplantinfo.findOneAndUpdate({key:args.key,user_crops:args.user_crops},{$push:{plant_date:args.plant_date}},{upsert:true,new:true})
+            return await userplantinfo.findOneAndUpdate({key:args.key,user_crops:args.user_crops},{$addToSet:{plant_date:args.plant_date}},{upsert:true,new:true})
 
         },
         insertHarvestDate:async(_,args)=>{
-            return await userplantinfo.findOneAndUpdate({key:args.key,user_crops:args.user_crops},{$push:{harvest_date:args.harvest_date}},{upsert:true,new:true})
+            return await userplantinfo.findOneAndUpdate({key:args.key,user_crops:args.user_crops},{$addToSet:{harvest_date:args.harvest_date}},{upsert:true,new:true})
 
         },
         insertRemoveDate:async(_,args)=>{
-             return await userplantinfo.findOneAndUpdate({key:args.key,user_crops:args.user_crops},{$push:{remove_date:args.remove_date}},{upsert:true,new:true})
+             return await userplantinfo.findOneAndUpdate({key:args.key,user_crops:args.user_crops},{$addToSet:{remove_date:args.remove_date}},{upsert:true,new:true})
 
+        },
+        insertManageDate:async(_,args)=>{
+            await userinfo.findOneAndUpdate({id:args.id},
+                {$addToSet:{fertilizer:args.fertilizer,watering:args.watering,weed:args.weed,fixture_install:args.fixture_install},},
+                {upsert:true,new:true,multi:true})
+                
+            return await userinfo.findOneAndUpdate({id:args.id},
+                {$pull:{fertilizer:"",watering:"",weed:"",fixture_install:""}},
+                {new:true,multi:true})
+                
         }
 
     }

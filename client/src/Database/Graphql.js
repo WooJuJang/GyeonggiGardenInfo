@@ -101,7 +101,7 @@ export const FINDUSERPLANTINFO=gql`
 `;
 
 export const INSERTUSERCROPS=gql`
-    mutation insertUserCrops($key:String!,$user_crops:String,$plant_date:String!){
+    mutation insertUserCrops($key:String!,$user_crops:String!,$plant_date:String!){
         insertUserCrops(key:$key,user_crops:$user_crops,plant_date:$plant_date){
             key
             user_crops
@@ -113,7 +113,7 @@ export const INSERTUSERCROPS=gql`
 `;
 
 export const INSERTHARVESTDATE=gql`
-    mutation insertHarvestDate($key:String!,$user_crops:String,$harvest_date:String!){
+    mutation insertHarvestDate($key:String!,$user_crops:String!,$harvest_date:String!){
         insertHarvestDate(key:$key,user_crops:$user_crops,harvest_date:$harvest_date){
             key
             user_crops
@@ -125,13 +125,44 @@ export const INSERTHARVESTDATE=gql`
 `;
 
 export const INSERTREMOVEDATE=gql`
-    mutation insertRemoveDate($key:String!,$user_crops:String,$remove_date:String!){
+    mutation insertRemoveDate($key:String!,$user_crops:String!,$remove_date:String!){
         insertRemoveDate(key:$key,user_crops:$user_crops,remove_date:$remove_date){
             key
             user_crops
             plant_date
             harvest_date
             remove_date           
+        }
+    }
+`;
+
+export const FINDMANAGEINFO=gql`
+    query findUserManageInfo($id:String!){
+        findUserManageInfo(id:$id){
+            fertilizer
+            watering
+            weed
+            fixture_install
+        }
+    }
+`;
+
+export const INSERTMANAGEDATE=gql`
+    mutation insertManageDate($id:String!,$fertilizer:String,$watering:String,$weed:String,$fixture_install:String){
+        insertManageDate(id:$id,fertilizer:$fertilizer,watering:$watering,weed:$weed,fixture_install:$fixture_install){
+            fertilizer
+            watering
+            weed
+            fixture_install
+        }
+    }
+`;
+
+export const FINDHOLIDAY=gql`
+    query findHoliday($year:String!){
+        findHoliday(year:$year){
+            dateName
+            locdate
         }
     }
 `;

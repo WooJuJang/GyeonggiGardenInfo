@@ -6,7 +6,7 @@ const UserInfoSchema= new mongoose.Schema({
     area:String,
     city:String,
     fertilizer:[String],
-    fixture_install:Boolean,
+    fixture_install:[String],
     garden_latitude:Number,
     garden_longitude:Number,
     garden_name:String,

@@ -7,7 +7,7 @@ type User{
     area:String,
     city:String!,
     fertilizer:[String],
-    fixture_install:Boolean,
+    fixture_install:[String],
     garden_latitude:Float,
     garden_longitude:Float,
     garden_name:String,
@@ -66,6 +66,10 @@ type UserPlantInfo{
     harvest_date:[String],
     remove_date:[String]
 }
+type Holiday{
+    dateName:String,
+    locdate:Int,
+}
     type Query{
         findUser:User
         findGardenSGNM(area:String!):[String]
@@ -74,6 +78,8 @@ type UserPlantInfo{
         findToken(id:String!):String
         findSeason(season:String!):[Crops]
         findUserPlantInfo(key:String!):[UserPlantInfo]
+        findUserManageInfo(id:String!):User
+        findHoliday(year:String!):[Holiday]
     }
     type Mutation{
         signup(id:String!,password:String!,city:String!):User
@@ -83,7 +89,7 @@ type UserPlantInfo{
         insertUserCrops(key:String!,user_crops:String!,plant_date:String!):UserPlantInfo
         insertHarvestDate(key:String!,user_crops:String!,harvest_date:String!):UserPlantInfo
         insertRemoveDate(key:String!,user_crops:String!,remove_date:String!):UserPlantInfo
-
+        insertManageDate(id:String!,fertilizer:String,watering:String,weed:String,fixture_install:String):User
     }
 `;
 export default typeDefs;
