@@ -6,6 +6,7 @@ import {setCookie} from '../Auth/Cookis'
 import {UserInfoContext} from '../../UserInfoContext'
 
 const Login=({history})=>{
+    
     const contextValue=useContext(UserInfoContext)
 
   
@@ -24,30 +25,28 @@ const Login=({history})=>{
         }
     }
     const [signin,{error}]=useMutation(SIGNIN,{errorPolicy:'all', onCompleted:  (data) => {
-                 setCookie('accessToken',data.signin[0],{
-                    path:"/",
-                })
-                 setCookie('refreshToken',data.signin[1],{
+        console.log(data)
+        
+                 setCookie('refreshToken',data.signin,{
                     path:"/",
                 })
                 
                 contextValue.dispatch({type:'INSERT_USER',id:loginInfo.id})
-                //contextValue.actions.setUserInfo(loginInfo.id)
-
-                
-
                 history.push('/')
     }})
     let tokens;
     const OnHandleLogin=async()=>{
         try{
             tokens=await signin({variables:{id:loginInfo.id,password:loginInfo.password}})
+       
         }catch(err){
             console.log(err.message)
         }
+        console.log("tokens is ",tokens)
         return tokens;
     }
     
+
 
         return(
             <div>

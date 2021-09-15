@@ -5,6 +5,7 @@ import { FINDUSER } from '../../Database/Graphql'
 import {UserInfoContext} from '../../UserInfoContext'
 
 const UserInfo = ({ history }) => {
+    console.log('userinfo')
     const {state}=useContext(UserInfoContext)
     if(state.id===''){
         history.push('/signin');
@@ -20,6 +21,7 @@ const UserInfo = ({ history }) => {
         findUserInfo.refetch(FINDUSER)
     }
     useEffect(() => {
+        console.log('finduserinfo change')
         if (findUserInfo.loading === false && findUserInfo.data.findUser?.id) {
             setUserInfo({
                 id: findUserInfo.data.findUser.id,

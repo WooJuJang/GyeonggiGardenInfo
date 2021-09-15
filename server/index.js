@@ -5,7 +5,6 @@ import resolvers from './graphql/resolvers.js';
 import typeDefs from './graphql/typeDefs.js';
 import {checkAccessToken,checkRefreshtoken} from './middleware/auth.js';
 import {ApolloServerPluginLandingPageGraphQLPlayground, AuthenticationError} from 'apollo-server-core';
-import getHoliday from './API/holiday.js';
 
 //apollo-server start
 const token=''
@@ -50,10 +49,6 @@ const server=new ApolloServer({
 server.listen().then(({url})=>{
     console.log(`listening at ${url}`);
 })
-
-
-
-getHoliday('2021','09');
 
 
 //mongoose 연결

@@ -42,7 +42,7 @@ export const checkRefreshtoken=async(refreshToken,secretkey)=>{
                 "secretKey",
                 {
                     subject:"user_access_token",
-                    expiresIn:"1m",
+                    expiresIn:"5s",
                     issuer:"jwj",
                 });
             tokenObj.token=accessToken
@@ -72,14 +72,14 @@ export const compare = (args, users) => new Promise((resolve, rejcet) => {//asyn
     })
 })
 export const makejwttoken=async(id)=>new Promise((resolve,rejcet)=>{
-    var tokens=[]
+  
     const refreshToken=jwt.sign({
         token_id:id
     },
     "secretKey",
     {
         subject:"user_refresh_token",
-        expiresIn:'1h',
+        expiresIn:'1m',
         issuer:"jwj"
     })
     const newToken=new token({
@@ -87,18 +87,6 @@ export const makejwttoken=async(id)=>new Promise((resolve,rejcet)=>{
         token:refreshToken,
     })
      newToken.save();
-    const accessToken=jwt.sign(
-        {
-            token_id:id
-        },
-        "secretKey",
-        {
-            subject:"user_access_token",
-            expiresIn:"1m",
-            issuer:"jwj",
-        });
-       tokens.push(accessToken)
-       tokens.push(refreshToken)
     
-    resolve(tokens)
+    resolve(refreshToken)
 })

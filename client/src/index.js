@@ -1,42 +1,39 @@
-import React from 'react';
+import React ,{useContext} from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloClient, from } from 'apollo-boost'
 import { ApolloProvider } from '@apollo/react-hooks';
 import { setContext } from "apollo-link-context";
 import { createHttpLink } from '@apollo/client';
 import { CookiesProvider } from 'react-cookie';
-import { getCookie, setCookie } from './Components/Auth/Cookis';
+import { getCookie, removeCookie, setCookie } from './Components/Auth/Cookis';
 import App from './App';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from "apollo-link-error";
 import { Observable } from 'apollo-link';
 import { StateProvider } from './UserInfoContext';
+import { UserInfoContext } from './UserInfoContext';
 
+let accessToken;
 const authLink = setContext((_, { headers }) => {
-
-  const accessToken=getCookie('accessToken')
-  if (accessToken === null) {
-    console.log('token null')
-    return null
-  }
+  const refreshToken=getCookie('refreshToken')
+  console.log(accessToken)
   return {
     headers: {
       ...headers,
-      authorization: accessToken ? `Access ${accessToken}` : "",
+      authorization: accessToken ? `Access ${accessToken}` : refreshToken?`Refresh ${refreshToken}`:"",
     }
   }
 });
 
 
 const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
-
-
   if (networkError) {
     console.log("networkError!")
   }
   if (graphQLErrors) {
     graphQLErrors.forEach(({ message, locations, path }) => {
-      if (message === 'access token is expired') {
+       if (message === 'access token is expired') {
+         console.log(message)
         const refreshToken = getCookie('refreshToken')
         
         if (refreshToken) {
@@ -75,17 +72,16 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
            }else if(temp_token==='access token is expired'){
            }else if(temp_token==='Invalid Token'){
             window.location.replace("/tokenerror")
-           }else{
-            setCookie('accessToken',temp_token,{path:"/",})
+           }
+           else{
+            accessToken=temp_token
             window.location.reload();
            }
-           
-          
           })
         }
-      } 
-
-
+       } else{
+        accessToken=message
+       }
     })
   }
 })

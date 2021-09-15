@@ -11,7 +11,6 @@ export const Header=({history})=>{
     const [removeRefreshToken]=useMutation(LOGOUT,{variables:{id:state.id}})
 
     const logout=()=>{
-        removeCookie('accessToken')
         removeCookie('refreshToken')
         removeRefreshToken(LOGOUT,{variables:{id:state.id}})
         dispatch({type:'REMOVE_USER'})
@@ -65,7 +64,7 @@ export const Header=({history})=>{
             <label onClick={MoveGardenCalendar} className='MoveGardenCalendar'>텃밭 달력</label>
         </div>
   
-        {getCookie('accessToken')?
+        {getCookie('refreshToken')?
             <div className='btn'>
                 <button onClick={UserInfo}>UserInfo</button>
                 <button onClick={logout}>Logout</button>

@@ -3,7 +3,7 @@ import { getCookie, setCookie } from './Components/Auth/Cookis';
 
 
 
-let initialState = {id:''};
+let initialState = {id:'',accessToken:''};
 const UserInfoContext = createContext(initialState);
 const {Provider}=UserInfoContext
 

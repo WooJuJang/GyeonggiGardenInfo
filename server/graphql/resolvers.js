@@ -113,7 +113,7 @@ const resolvers = {
             const compare_result = await compare(args, user);
             if (compare_result === true) {
                 const token_result = await makejwttoken(args.id)
-                console.log(token_result)
+                console.log("refreshToken is ",token_result)
 
 
                 return token_result
