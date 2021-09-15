@@ -1,4 +1,4 @@
-import FullCalendar from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { globalLocales } from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from '@fullcalendar/interaction'
 import React, { useContext, useEffect, useState } from 'react'
@@ -106,10 +106,9 @@ const MyCalendar = () => {
     }
 
     //사용자 작물관리 정보 중복삭제 및 같은 날짜로 작업 묶기 
-console.log(eventarray)
-console.log(organize_eventarray)
+
         eventarray?.map((data)=>{
-            console.log(data)
+           
             let titlearray=[];
             eventarray.map((a)=>{
                 if(a.date===data.date){
@@ -120,10 +119,10 @@ console.log(organize_eventarray)
                 return titlearray
             })
             //console.log(organize_eventarray)
-            console.log(titlearray)
+            
             setOrganizeEventarray((organize_eventarray)=>[...organize_eventarray,{title:titlearray,date:data.date,color:'green'}])
         })
-        console.log(organize_eventarray)
+       
             // console.log([...new Set(organize_eventarray.map(JSON.stringify))].map(JSON.parse))
             setOrganizeEventarray((organize_eventarray)=>[...new Set(organize_eventarray.map(JSON.stringify))].map(JSON.parse))
 
@@ -132,7 +131,6 @@ console.log(organize_eventarray)
   
 
 useEffect(()=>{
-    console.log("useEffect")
     setOrganizeEventarray([])
     if(findHoliday.loading===false && findHoliday?.data){
         findHoliday.data.findHoliday.map((data)=>{
@@ -141,7 +139,7 @@ useEffect(()=>{
             //setOrganizeEventarray((organize_eventarray)=>[...organize_eventarray,{title:[data.dateName],date:date.substr(0,4)+'-'+date.substr(4,2)+'-'+date.substr(6,2),color:'red'}])
         })
         plantManageInfo();
-        console.log(organize_eventarray)
+        
        
     }
    
@@ -159,6 +157,7 @@ useEffect(()=>{
         setManagementList('none')
         setHarvestList('none')
         setRemoveList('none')
+        
         setSelectFullDate(dateStr)
         setSelectDate(dateStr.split('-')[2])
         setDay(daylist[String(fulldate).split(' ')[0]])
@@ -169,31 +168,34 @@ useEffect(()=>{
         setHarvestContentList('')
         setRemoveContentList('')
         setManagementContentList('')
+        setCheckboxStatus([])
     }
 
     const formatEventArray=(dateStr)=>{
-        console.log("format event array")
-        console.log(organize_eventarray)
         reset();
+        
         const events=organize_eventarray.filter((data)=>{
             if(data.date.includes(dateStr)){
                 return data
             }
         })
-        if(events[0]?.color==='green'){
-            events[0]?.title.map((data)=>{
-                const work=data.substr(data.length-2,2);
-                if(work==='심기'){
-                    setPlantContentList((plant_content_list)=>[...plant_content_list,data])
-                }else if(work==='수확'){
-                    setHarvestContentList((harvest_content_list)=>[...harvest_content_list,data])
-                }else if(work==='제거'){
-                    setRemoveContentList((remove_content_list)=>[...remove_content_list,data])
-                }else{
-                    setManagementContentList((managemen_content_list)=>[...managemen_content_list,data])
-                }
-            })
-        }
+        events.map((event_data)=>{
+            if(event_data?.color==='green'){
+                event_data?.title.map((data)=>{
+                    const work=data.substr(data.length-2,2);
+                    if(work==='심기'){
+                        setPlantContentList((plant_content_list)=>[...plant_content_list,data])
+                    }else if(work==='수확'){
+                        setHarvestContentList((harvest_content_list)=>[...harvest_content_list,data])
+                    }else if(work==='제거'){
+                        setRemoveContentList((remove_content_list)=>[...remove_content_list,data])
+                    }else{
+                        setManagementContentList((managemen_content_list)=>[...managemen_content_list,data])
+                    }
+                })
+            }
+        })
+
 
     }
     //작물관리창 display변경 함수
@@ -465,6 +467,7 @@ useEffect(()=>{
             initialView="dayGridMonth"
             events={
                 organize_eventarray
+
             }
         />
         </div>

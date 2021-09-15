@@ -89,7 +89,7 @@ export const GardenCalendarStyledContainer=styled.div`
     }
     .plant-input{
         flex-shrink:0;
-        width:110px;
+        width:150px;
     }
     .plant-input-add-btn{
         flex-grow:1;
