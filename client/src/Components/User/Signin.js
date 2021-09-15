@@ -30,7 +30,7 @@ const Login=({history})=>{
                  setCookie('refreshToken',data.signin[1],{
                     path:"/",
                 })
-                console.log(" ------ 111", contextValue)
+                
                 contextValue.dispatch({type:'INSERT_USER',id:loginInfo.id})
                 //contextValue.actions.setUserInfo(loginInfo.id)
 
@@ -47,7 +47,7 @@ const Login=({history})=>{
         }
         return tokens;
     }
-    console.log("contextValue",contextValue)
+    
 
         return(
             <div>

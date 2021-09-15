@@ -1,4 +1,4 @@
-import FullCalendar, { globalLocales } from '@fullcalendar/react' // must go before plugins
+import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from '@fullcalendar/interaction'
 import React, { useContext, useEffect, useState } from 'react'
@@ -47,18 +47,6 @@ const MyCalendar = () => {
    //공휴일
    const findHoliday=useQuery(FINDHOLIDAY,{variables:{year:String(today.getFullYear())}})
    let  holiday=[];
-//    useEffect(()=>{
-//        console.log("holiday loading")
-//     if(findHoliday.loading===false && findHoliday?.data){
-//         findHoliday.data.findHoliday.map((data)=>{
-//             let date=String(data.locdate)
-//             holiday.push({title:[data.dateName],date:date.substr(0,4)+'-'+date.substr(4,2)+'-'+date.substr(6,2),color:'red'})
-//             //setOrganizeEventarray((organize_eventarray)=>[...organize_eventarray,{title:[data.dateName],date:date.substr(0,4)+'-'+date.substr(4,2)+'-'+date.substr(6,2),color:'red'}])
-//         })
-//         console.log(holiday)
-//         console.log('holiday loading end')
-//     }
-//    },[findHoliday])
   
     //사용자 작물관리 정보 출력
   const [organize_eventarray,setOrganizeEventarray]=useState([]);
@@ -66,8 +54,7 @@ const MyCalendar = () => {
     setHarvestableCropsArray([])
     
     holiday?.map((data)=>{
-        //setOrganizeEventarray((organize_eventarray)=>[...organize_eventarray,data])
-        setOrganizeEventarray((organize_eventarray)=>[...organize_eventarray,data])
+       return setOrganizeEventarray((organize_eventarray)=>[...organize_eventarray,data])
     })
 
     
@@ -90,17 +77,19 @@ const MyCalendar = () => {
         if(!data.remove_date[0]){
             return setHarvestableCropsArray((harvestable_crops_array)=>[...harvestable_crops_array,data.user_crops])
         }
+        return false
     })
 
     const usermanageinfo=userManageInfo.data?.findUserManageInfo
     if(usermanageinfo){
-        for(var prop in usermanageinfo){
+        for(let prop in usermanageinfo){
             if(prop!=='__typename'){
                 if(usermanageinfo[prop]){
                     usermanageinfo[prop].map((day)=>{
                         return eventarray.push({title:manage_list[prop],date:day})
                     })
                 }
+                
             }
         } 
     }
@@ -118,31 +107,39 @@ const MyCalendar = () => {
                 }
                 return titlearray
             })
-            //console.log(organize_eventarray)
             
-            setOrganizeEventarray((organize_eventarray)=>[...organize_eventarray,{title:titlearray,date:data.date,color:'green'}])
+            return setOrganizeEventarray((organize_eventarray)=>[...organize_eventarray,{title:titlearray,date:data.date,color:'green'}])
         })
        
-            // console.log([...new Set(organize_eventarray.map(JSON.stringify))].map(JSON.parse))
             setOrganizeEventarray((organize_eventarray)=>[...new Set(organize_eventarray.map(JSON.stringify))].map(JSON.parse))
 
         return organize_eventarray
   }
   
+// useEffect(()=>{
+//     if(findHoliday.loading===false && findHoliday?.data){
+//         findHoliday.data.findHoliday.map((data)=>{
+//             let date=String(data.locdate)
+//             return holiday.push({title:[data.dateName],date:date.substr(0,4)+'-'+date.substr(4,2)+'-'+date.substr(6,2),color:'red'})
+//         })
+//         plantManageInfo();
+//     }
+// },[findHoliday])
+
+// useEffect(()=>{
+//     setOrganizeEventarray([])
+
+// },[userPlantInfo,userManageInfo,plantManageInfo])
 
 useEffect(()=>{
-    setOrganizeEventarray([])
+    
     if(findHoliday.loading===false && findHoliday?.data){
         findHoliday.data.findHoliday.map((data)=>{
             let date=String(data.locdate)
-            holiday.push({title:[data.dateName],date:date.substr(0,4)+'-'+date.substr(4,2)+'-'+date.substr(6,2),color:'red'})
-            //setOrganizeEventarray((organize_eventarray)=>[...organize_eventarray,{title:[data.dateName],date:date.substr(0,4)+'-'+date.substr(4,2)+'-'+date.substr(6,2),color:'red'}])
+            return holiday.push({title:[data.dateName],date:date.substr(0,4)+'-'+date.substr(4,2)+'-'+date.substr(6,2),color:'red'})
         })
         plantManageInfo();
-        
-       
     }
-   
 },[userPlantInfo,userManageInfo,findHoliday])
 
 
@@ -177,7 +174,10 @@ useEffect(()=>{
         const events=organize_eventarray.filter((data)=>{
             if(data.date.includes(dateStr)){
                 return data
+            }else{
+                return false
             }
+            
         })
         events.map((event_data)=>{
             if(event_data?.color==='green'){
@@ -192,8 +192,10 @@ useEffect(()=>{
                     }else{
                         setManagementContentList((managemen_content_list)=>[...managemen_content_list,data])
                     }
+                    return false
                 })
             }
+            return false
         })
 
 

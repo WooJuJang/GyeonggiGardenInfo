@@ -11,6 +11,16 @@ export const HeaderStyledContainer=Styled.div`
     float:center;
     padding-left:8%;
 }
+label{
+    &:hover{
+        cursor:pointer;
+    }
+}
+button{
+    &:hover{
+        cursor:pointer;
+    }
+}
 .btn{
     width:10%; 
     display:inline-block;

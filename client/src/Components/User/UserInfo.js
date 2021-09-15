@@ -31,7 +31,7 @@ const UserInfo = ({ history }) => {
         if(findUserInfo.error){
             console.log(findUserInfo.error)
         }
-        console.log(findUserInfo.error);
+        
     }, [findUserInfo])
     const moveMain = () => {
         history.goBack()

@@ -9,7 +9,7 @@ const {Provider}=UserInfoContext
 
 const StateProvider=({children})=>{
   let [state,dispatch]=useReducer((state,action)=>{
-    console.log(state)
+   
     switch(action.type){
       case 'INSERT_USER':
         setCookie('id',action.id,{
@@ -22,7 +22,7 @@ const StateProvider=({children})=>{
         setCookie('id','',{
           path:"/",
         })
-        console.log(getCookie('id'))
+       
         return{
           id:''
         }
@@ -32,7 +32,7 @@ const StateProvider=({children})=>{
     };
   })
   if(!state){
-    console.log(getCookie('id'))
+    
     state={
       id:getCookie('id')}
   }
