@@ -25,7 +25,7 @@ const resolvers = {
             }
             else if(context.token) {
              
-                return Make_New_AccessToken(context.token)
+                return Make_New_AccessToken(context)
             }
             
             const result = await userinfo.findOne({ id: context.token_id }, 'id city garden_name')
@@ -79,7 +79,7 @@ const resolvers = {
             return seasonInfo
         },
         findUserPlantInfo:async(_,args)=>{
-            return await userplantinfo.find({key:args.key}) 
+            return await userplantinfo.find({id:args.id}) 
         },
         findUserManageInfo:async(_,args)=>{
             return await userinfo.findOne({id:args.id},'fertilizer watering weed fixture_install')
@@ -133,25 +133,25 @@ const resolvers = {
             return true
         },
         insertUserCrops:async(_,args)=>{
-            return await userplantinfo.findOneAndUpdate({key:args.key,user_crops:args.user_crops},{$addToSet:{plant_date:args.plant_date}},{upsert:true,new:true})
+            return await userplantinfo.findOneAndUpdate({id:args.id,user_crops:args.user_crops},{$addToSet:{plant_date:args.plant_date}},{upsert:true,new:true,strict:false})
 
         },
         insertHarvestDate:async(_,args)=>{
-            return await userplantinfo.findOneAndUpdate({key:args.key,user_crops:args.user_crops},{$addToSet:{harvest_date:args.harvest_date}},{upsert:true,new:true})
+            return await userplantinfo.findOneAndUpdate({id:args.id,user_crops:args.user_crops},{$addToSet:{harvest_date:args.harvest_date}},{upsert:true,new:true,strict:false})
 
         },
         insertRemoveDate:async(_,args)=>{
-             return await userplantinfo.findOneAndUpdate({key:args.key,user_crops:args.user_crops},{$addToSet:{remove_date:args.remove_date}},{upsert:true,new:true})
+             return await userplantinfo.findOneAndUpdate({id:args.id,user_crops:args.user_crops},{$addToSet:{remove_date:args.remove_date}},{upsert:true,new:true,strict:false})
 
         },
         insertManageDate:async(_,args)=>{
             await userinfo.findOneAndUpdate({id:args.id},
                 {$addToSet:{fertilizer:args.fertilizer,watering:args.watering,weed:args.weed,fixture_install:args.fixture_install},},
-                {upsert:true,new:true,multi:true})
+                {upsert:true,new:true,multi:true,strict:false})
                 
             return await userinfo.findOneAndUpdate({id:args.id},
                 {$pull:{fertilizer:"",watering:"",weed:"",fixture_install:""}},
-                {new:true,multi:true})
+                {new:true,multi:true,strict:false})
                 
         }
 

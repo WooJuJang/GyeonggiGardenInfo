@@ -11,7 +11,7 @@ export const Location=({address,logt,lat})=>{
       
       var container = document.getElementById('map');
       var options = {
-        center: new window.kakao.maps.LatLng(parseFloat(_lat),parseFloat(_logt)),
+        center: new kakao.maps.LatLng(parseFloat(_lat),parseFloat(_logt)),
         level: 3
       };
   

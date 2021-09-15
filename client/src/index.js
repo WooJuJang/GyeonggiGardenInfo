@@ -1,17 +1,14 @@
 import React ,{useContext} from 'react';
 import ReactDOM from 'react-dom';
-import { ApolloClient, from } from 'apollo-boost'
 import { ApolloProvider } from '@apollo/react-hooks';
 import { setContext } from "apollo-link-context";
-import { createHttpLink } from '@apollo/client';
+import { ApolloClient,InMemoryCache,createHttpLink,from } from '@apollo/client';
 import { CookiesProvider } from 'react-cookie';
 import { getCookie, removeCookie, setCookie } from './Components/Auth/Cookis';
 import App from './App';
-import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from "apollo-link-error";
 import { Observable } from 'apollo-link';
 import { StateProvider } from './UserInfoContext';
-import { UserInfoContext } from './UserInfoContext';
 
 let accessToken;
 const authLink = setContext((_, { headers }) => {
@@ -79,8 +76,18 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
            }
           })
         }
-       } else{
-        accessToken=message
+       } else if(message==='잘못된 주소입니다.'){
+          console.log('check address')
+       }else{
+         
+         if(message.split(',')[0]==='accessToken'){
+           console.log(message.split(',')[1])
+          accessToken=message.split(',')[1]
+         }else{
+            console.log(message)
+         
+         }
+        
        }
     })
   }

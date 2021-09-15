@@ -7,6 +7,7 @@ let errorObj={
     error:"",
 }
 let tokenObj={
+    type:"accessToken",
     token:"",
 }
 export const checkAccessToken=async(token,secretkey)=>{
@@ -42,7 +43,7 @@ export const checkRefreshtoken=async(refreshToken,secretkey)=>{
                 "secretKey",
                 {
                     subject:"user_access_token",
-                    expiresIn:"5s",
+                    expiresIn:"1m",
                     issuer:"jwj",
                 });
             tokenObj.token=accessToken
@@ -79,7 +80,7 @@ export const makejwttoken=async(id)=>new Promise((resolve,rejcet)=>{
     "secretKey",
     {
         subject:"user_refresh_token",
-        expiresIn:'1m',
+        expiresIn:'1h',
         issuer:"jwj"
     })
     const newToken=new token({

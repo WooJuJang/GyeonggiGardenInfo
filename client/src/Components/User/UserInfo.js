@@ -5,12 +5,13 @@ import { FINDUSER } from '../../Database/Graphql'
 import {UserInfoContext} from '../../UserInfoContext'
 
 const UserInfo = ({ history }) => {
-    console.log('userinfo')
+    
     const {state}=useContext(UserInfoContext)
+    console.log('userinfo',state.id)
     if(state.id===''){
         history.push('/signin');
     }
-    const findUserInfo = useQuery(FINDUSER, { errorPolicy: "all" })
+    const findUserInfo = useQuery(FINDUSER,{variables:{id:state.id}},{ errorPolicy: "all" })
     
     const [userInfo, setUserInfo] = useState({
         id: '',
@@ -22,7 +23,7 @@ const UserInfo = ({ history }) => {
     }
     useEffect(() => {
         console.log('finduserinfo change')
-        if (findUserInfo.loading === false && findUserInfo.data.findUser?.id) {
+        if (findUserInfo.loading === false && findUserInfo.data?.findUser?.id) {
             setUserInfo({
                 id: findUserInfo.data.findUser.id,
                 city: findUserInfo.data.findUser.city,
@@ -32,6 +33,7 @@ const UserInfo = ({ history }) => {
         }
         if(findUserInfo.error){
             console.log(findUserInfo.error)
+           
         }
         
     }, [findUserInfo])

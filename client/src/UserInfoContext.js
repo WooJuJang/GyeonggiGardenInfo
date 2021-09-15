@@ -1,9 +1,7 @@
 import React,{createContext,useReducer } from 'react';
 import { getCookie, setCookie } from './Components/Auth/Cookis';
 
-
-
-let initialState = {id:'',accessToken:''};
+let initialState = {id:''};
 const UserInfoContext = createContext(initialState);
 const {Provider}=UserInfoContext
 

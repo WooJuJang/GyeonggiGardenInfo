@@ -12,8 +12,9 @@ import { UserInfoContext } from '../../UserInfoContext';
 const MyCalendar = () => {
     const {state}=useContext(UserInfoContext)
     const today=new Date();
-    const userPlantInfo=useQuery(FINDUSERPLANTINFO,{variables:{key:state.id}},{fetchPolicy:'network-only'})
+    const userPlantInfo=useQuery(FINDUSERPLANTINFO,{variables:{id:state.id}})
     const userManageInfo=useQuery(FINDMANAGEINFO,{variables:{id:state.id}},{fetchPolicy:'network-only'})
+   console.log(userPlantInfo)
     const daylist={
         Mon:'Monday',
         Tue:'Tuesday',
@@ -115,24 +116,9 @@ const MyCalendar = () => {
 
         return organize_eventarray
   }
-  
-// useEffect(()=>{
-//     if(findHoliday.loading===false && findHoliday?.data){
-//         findHoliday.data.findHoliday.map((data)=>{
-//             let date=String(data.locdate)
-//             return holiday.push({title:[data.dateName],date:date.substr(0,4)+'-'+date.substr(4,2)+'-'+date.substr(6,2),color:'red'})
-//         })
-//         plantManageInfo();
-//     }
-// },[findHoliday])
-
-// useEffect(()=>{
-//     setOrganizeEventarray([])
-
-// },[userPlantInfo,userManageInfo,plantManageInfo])
 
 useEffect(()=>{
-    
+    setOrganizeEventarray([])
     if(findHoliday.loading===false && findHoliday?.data){
         findHoliday.data.findHoliday.map((data)=>{
             let date=String(data.locdate)
@@ -254,7 +240,7 @@ useEffect(()=>{
         {refetchQueries:[
             {
                 query:FINDUSERPLANTINFO,
-                variables:{key:state.id}
+                variables:{id:state.id}
             }
         ],awaitRefetchQueries:true
         ,onCompleted:(data)=>formatEventArray(select_full_date),
@@ -265,7 +251,7 @@ useEffect(()=>{
         {refetchQueries:[
             {
                 query:FINDUSERPLANTINFO,
-                variables:{key:state.id}
+                variables:{id:state.id}
             }
         ],awaitRefetchQueries:true
         ,onCompleted:(data)=>formatEventArray(select_full_date),
@@ -275,7 +261,7 @@ useEffect(()=>{
         {refetchQueries:[
             {
                 query:FINDUSERPLANTINFO,
-                variables:{key:state.id}
+                variables:{id:state.id}
             }
         ],awaitRefetchQueries:true
         ,onCompleted:(data)=>formatEventArray(select_full_date),
@@ -294,16 +280,16 @@ useEffect(()=>{
     }
     const onClickPlant=()=>{
         
-        insertUserCrops({variables:{key:state.id,user_crops:input_plant,plant_date:select_full_date}})
+        insertUserCrops({variables:{id:state.id,user_crops:input_plant,plant_date:select_full_date}})
         setInputPlant('')
     }
     const onClickHarvest=()=>{
         
-        insertHarvestDate({variables:{key:state.id,user_crops:plant_input_status,harvest_date:select_full_date}})
+        insertHarvestDate({variables:{id:state.id,user_crops:plant_input_status,harvest_date:select_full_date}})
     }
     const onClickRemove=()=>{
     
-        insertRemoveDate({variables:{key:state.id,user_crops:plant_input_status,remove_date:select_full_date}})
+        insertRemoveDate({variables:{id:state.id,user_crops:plant_input_status,remove_date:select_full_date}})
     }
     const onHandleClickRadioButton=(radioBtnName)=>{
         setPlantInputStatus(radioBtnName)

@@ -24,9 +24,12 @@ export const Token_Error=(error)=>{
     return new AuthenticationError(error)
 }
 
-export const Make_New_AccessToken=(token)=>{
-    console.log("make new accessToken is : "+token)
-    
-    return new Error(token)
+export const Make_New_AccessToken=(context)=>{
+    console.log("make new accessToken is : "+context.token+context.type)
+    console.log(context)
+    let context_error=[];
+    context_error.push(context.type)
+    context_error.push(context.token)
+    return new Error(context_error)
     
 }

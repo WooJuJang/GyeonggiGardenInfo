@@ -60,7 +60,7 @@ type Crops{
     image:String,
 }
 type UserPlantInfo{
-    key:String,
+    id:String,
     user_crops:String,
     plant_date:[String],
     harvest_date:[String],
@@ -77,7 +77,7 @@ type Holiday{
         findLogtLat(address:String!):[Float]
         findToken(id:String!):String
         findSeason(season:String!):[Crops]
-        findUserPlantInfo(key:String!):[UserPlantInfo]
+        findUserPlantInfo(id:String!):[UserPlantInfo]
         findUserManageInfo(id:String!):User
         findHoliday(year:String!):[Holiday]
     }
@@ -86,9 +86,9 @@ type Holiday{
         signin(id:String!,password:String!):String
         insertUserGarden(garden_name:String!):Boolean
         logout(id:String!):Boolean
-        insertUserCrops(key:String!,user_crops:String!,plant_date:String!):UserPlantInfo
-        insertHarvestDate(key:String!,user_crops:String!,harvest_date:String!):UserPlantInfo
-        insertRemoveDate(key:String!,user_crops:String!,remove_date:String!):UserPlantInfo
+        insertUserCrops(id:String!,user_crops:String!,plant_date:String!):UserPlantInfo
+        insertHarvestDate(id:String!,user_crops:String!,harvest_date:String!):UserPlantInfo
+        insertRemoveDate(id:String!,user_crops:String!,remove_date:String!):UserPlantInfo
         insertManageDate(id:String!,fertilizer:String,watering:String,weed:String,fixture_install:String):User
     }
 `;

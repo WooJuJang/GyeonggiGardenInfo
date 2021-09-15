@@ -89,9 +89,9 @@ export const FINDSEASON=gql`
 `;
 
 export const FINDUSERPLANTINFO=gql`
-    query findUserPlantInfo($key:String!){
-        findUserPlantInfo(key:$key){
-            key
+    query findUserPlantInfo($id:String!){
+        findUserPlantInfo(id:$id){
+            id
             user_crops 
             plant_date
             harvest_date
@@ -101,9 +101,9 @@ export const FINDUSERPLANTINFO=gql`
 `;
 
 export const INSERTUSERCROPS=gql`
-    mutation insertUserCrops($key:String!,$user_crops:String!,$plant_date:String!){
-        insertUserCrops(key:$key,user_crops:$user_crops,plant_date:$plant_date){
-            key
+    mutation insertUserCrops($id:String!,$user_crops:String!,$plant_date:String!){
+        insertUserCrops(id:$id,user_crops:$user_crops,plant_date:$plant_date){
+            id
             user_crops
             plant_date
             harvest_date
@@ -113,9 +113,9 @@ export const INSERTUSERCROPS=gql`
 `;
 
 export const INSERTHARVESTDATE=gql`
-    mutation insertHarvestDate($key:String!,$user_crops:String!,$harvest_date:String!){
-        insertHarvestDate(key:$key,user_crops:$user_crops,harvest_date:$harvest_date){
-            key
+    mutation insertHarvestDate($id:String!,$user_crops:String!,$harvest_date:String!){
+        insertHarvestDate(id:$id,user_crops:$user_crops,harvest_date:$harvest_date){
+            id
             user_crops
             plant_date
             harvest_date
@@ -125,9 +125,9 @@ export const INSERTHARVESTDATE=gql`
 `;
 
 export const INSERTREMOVEDATE=gql`
-    mutation insertRemoveDate($key:String!,$user_crops:String!,$remove_date:String!){
-        insertRemoveDate(key:$key,user_crops:$user_crops,remove_date:$remove_date){
-            key
+    mutation insertRemoveDate($id:String!,$user_crops:String!,$remove_date:String!){
+        insertRemoveDate(id:$id,user_crops:$user_crops,remove_date:$remove_date){
+            id
             user_crops
             plant_date
             harvest_date
