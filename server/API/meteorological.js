@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+const meteorological=async(lat,long,date,time)=>{
 //위경도 <->기상청 격자 변환 함수
     // LCC DFS 좌표변환을 위한 기초 자료
     var RE = 6371.00877; // 지구 반경(km)
@@ -68,9 +69,7 @@ import axios from 'axios';
         }
         return rs;
     }
-var rs=dfs_xy_conv("toXY","37.44910833333333","126.90419722222222");
-console.log(rs.x,rs.y);
-export default rs
+var rs=dfs_xy_conv("toXY",lat,long);
 
 //기상청 단기예보 API 연결
 var url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst';
@@ -78,12 +77,13 @@ var queryParams = '?' + encodeURIComponent('ServiceKey') + '=DDQEBDDCmlvZEuTO2bZ
 queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /* */
 queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('10'); /* */
 queryParams += '&' + encodeURIComponent('dataType') + '=' + encodeURIComponent('JSON'); /* */
-queryParams += '&' + encodeURIComponent('base_date') + '=' + encodeURIComponent('20210914'); /* */
-queryParams += '&' + encodeURIComponent('base_time') + '=' + encodeURIComponent('0600'); /* */
+queryParams += '&' + encodeURIComponent('base_date') + '=' + encodeURIComponent(date); /* */
+queryParams += '&' + encodeURIComponent('base_time') + '=' + encodeURIComponent(time); /* */
 queryParams += '&' + encodeURIComponent('nx') + '=' + encodeURIComponent(rs.x); /* */
 queryParams += '&' + encodeURIComponent('ny') + '=' + encodeURIComponent(rs.y); /* */
 
-axios.get(url+queryParams).then(res=>{
-    console.log(res.data.response.body.items)
-})
+const res=await axios.get(url+queryParams)
+ return res.data.response.body.items.item
+}
 
+export default meteorological

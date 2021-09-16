@@ -9,6 +9,7 @@ import Signup from './Components/User/Signup';
 import UserInfo from './Components/User/UserInfo';
 import TokenError from './Components/Error/TokenError';
 import GardenCalendar from './Components/GardenCalendar/GardenCalendar';
+import MyGarden from './Components/MyGarden/MyGarden';
 
 
 
@@ -26,6 +27,7 @@ function App() {
             <Route path="/croprecommend" component={CropRecommend}/>
             <Route path="/crops" component={Crops}/>
             <Route path="/gardencalendar" component={GardenCalendar}/>
+            <Route path="/mygarden" component={MyGarden}/>
           </BrowserRouter>
     </div>
   );

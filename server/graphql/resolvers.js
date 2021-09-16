@@ -7,6 +7,7 @@ import token from '../schema/Token.js';
 import { spring,summer,fall } from '../schema/Crops.js';
 import userplantinfo from '../schema/UserPlantInfo.js';
 import getHoliday from '../API/holiday.js';
+import meteorological from '../API/meteorological.js';
 
 
 
@@ -37,7 +38,6 @@ const resolvers = {
                 city: result.city,
                 garden_name: result.garden_name
             })
-            console.log(newuser)
             return newuser
 
         },
@@ -63,7 +63,6 @@ const resolvers = {
         },
         findLogtLat: async (_, args) => {
             const setLogtLat = await kakao_local_api(args.address);
-            console.log(setLogtLat)
             return setLogtLat
         },
         findSeason:async(_,args)=>{
@@ -86,6 +85,9 @@ const resolvers = {
         },
         findHoliday:async(_,args)=>{
             return getHoliday(args.year)
+        },
+        findForecast:async(_,args)=>{
+            return await meteorological(args.lat,args.long,args.date,args.time);
         }
     },
     Mutation: {
@@ -113,9 +115,6 @@ const resolvers = {
             const compare_result = await compare(args, user);
             if (compare_result === true) {
                 const token_result = await makejwttoken(args.id)
-                console.log("refreshToken is ",token_result)
-
-
                 return token_result
             } else {
                 PasswordError();

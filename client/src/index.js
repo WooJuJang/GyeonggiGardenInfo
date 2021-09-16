@@ -1,10 +1,10 @@
-import React ,{useContext} from 'react';
+import React  from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { setContext } from "apollo-link-context";
 import { ApolloClient,InMemoryCache,createHttpLink,from } from '@apollo/client';
 import { CookiesProvider } from 'react-cookie';
-import { getCookie, removeCookie, setCookie } from './Components/Auth/Cookis';
+import { getCookie} from './Components/Auth/Cookis';
 import App from './App';
 import { onError } from "apollo-link-error";
 import { Observable } from 'apollo-link';

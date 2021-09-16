@@ -5,7 +5,7 @@ import resolvers from './graphql/resolvers.js';
 import typeDefs from './graphql/typeDefs.js';
 import {checkAccessToken,checkRefreshtoken} from './middleware/auth.js';
 import {ApolloServerPluginLandingPageGraphQLPlayground, AuthenticationError} from 'apollo-server-core';
-
+import meteorological from './API/meteorological.js';
 //apollo-server start
 const token=''
 const server=new ApolloServer({
@@ -49,8 +49,6 @@ const server=new ApolloServer({
 server.listen().then(({url})=>{
     console.log(`listening at ${url}`);
 })
-
-
 //mongoose 연결
 mongoose.connect("mongodb://127.0.0.1:27017/garden",{
     useUnifiedTopology:true,

@@ -70,6 +70,10 @@ type Holiday{
     dateName:String,
     locdate:Int,
 }
+type Forecast{
+    category:String,
+    obsrValue:String,
+}
     type Query{
         findUser:User
         findGardenSGNM(area:String!):[String]
@@ -80,6 +84,7 @@ type Holiday{
         findUserPlantInfo(id:String!):[UserPlantInfo]
         findUserManageInfo(id:String!):User
         findHoliday(year:String!):[Holiday]
+        findForecast(date:String!,time:String!,lat:Float!,long:Float!):[Forecast]
     }
     type Mutation{
         signup(id:String!,password:String!,city:String!):User
