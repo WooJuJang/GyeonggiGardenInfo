@@ -123,8 +123,8 @@ const resolvers = {
 
         },
         insertUserGarden: async (_, args, context) => {
-            let doc = await userinfo.findOneAndUpdate({ id: context.token_id }, { garden_name: args.garden_name })
-            return false
+            await userinfo.findOneAndUpdate({ id: context.token_id }, { garden_name: args.garden_name, garden_latitude:args.garden_latitude,garden_longitude:args.garden_longitude})
+            return true
 
 
         },

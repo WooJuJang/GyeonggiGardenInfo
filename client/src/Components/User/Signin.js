@@ -42,7 +42,6 @@ const Login=({history})=>{
         }catch(err){
             console.log(err.message)
         }
-        console.log("tokens is ",tokens)
         return tokens;
     }
     

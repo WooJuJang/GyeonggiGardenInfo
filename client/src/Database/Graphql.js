@@ -60,8 +60,8 @@ export const FINDUSER=gql`
 `;
 
 export const INSERTUSERGARDEN=gql`
-    mutation insertUserGarden($garden_name:String!){
-        insertUserGarden(garden_name:$garden_name)
+    mutation insertUserGarden($garden_name:String!,$garden_latitude:Float,$garden_longitude:Float){
+        insertUserGarden(garden_name:$garden_name,garden_latitude:$garden_latitude,garden_longitude:$garden_longitude)
     }
 `;
 

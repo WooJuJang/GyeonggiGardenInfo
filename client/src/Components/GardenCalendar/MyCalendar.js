@@ -14,7 +14,7 @@ const MyCalendar = () => {
     const today=new Date();
     const userPlantInfo=useQuery(FINDUSERPLANTINFO,{variables:{id:state.id}})
     const userManageInfo=useQuery(FINDMANAGEINFO,{variables:{id:state.id}},{fetchPolicy:'network-only'})
-   console.log(userPlantInfo)
+
     const daylist={
         Mon:'Monday',
         Tue:'Tuesday',
@@ -53,12 +53,10 @@ const MyCalendar = () => {
   const [organize_eventarray,setOrganizeEventarray]=useState([]);
   const plantManageInfo=()=>{
     setHarvestableCropsArray([])
-    
     holiday?.map((data)=>{
        return setOrganizeEventarray((organize_eventarray)=>[...organize_eventarray,data])
     })
 
-    
     userPlantInfo.data?.findUserPlantInfo.map((data)=>{
         if(data.plant_date){
             data.plant_date.map((plant_day)=>{
@@ -96,7 +94,6 @@ const MyCalendar = () => {
     }
 
     //사용자 작물관리 정보 중복삭제 및 같은 날짜로 작업 묶기 
-
         eventarray?.map((data)=>{
            
             let titlearray=[];
@@ -128,9 +125,7 @@ useEffect(()=>{
     }
 },[userPlantInfo,userManageInfo,findHoliday])
 
-
     //날짜 클릭 이벤트
-   
     const [selectDate,setSelectDate]=useState(today.getDate())
     const [select_full_date,setSelectFullDate]=useState('')
     const [day,setDay]=useState(daylist[String(today).split(' ')[0]])
@@ -314,8 +309,6 @@ useEffect(()=>{
     insertManageDate({variables:{id:state.id,fertilizer:select_full_date_list['fertilizer'],watering:select_full_date_list['watering'],weed:select_full_date_list['weed'],fixture_install:select_full_date_list['fixture_install']}})
    }
 
-
-   
     return(
         <GardenCalendarStyledContainer plantlist={plantlist} managementlist={managementlist} harvestlist={harvestlist} removelist={removelist}>
         <div className='main-form'>

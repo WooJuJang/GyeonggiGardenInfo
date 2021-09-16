@@ -3,6 +3,7 @@ import {getCookie,removeCookie} from '../Auth/Cookis'
 import { LOGOUT} from "../../Database/Graphql"
 import {useMutation} from '@apollo/react-hooks'
 import {UserInfoContext } from '../../UserInfoContext'
+import { HeaderStyledContainer } from '../../css/HeaderStyledContainer'
 
 
 
@@ -43,13 +44,15 @@ export const Header=({history})=>{
       
     }
     const MoveGardenCalendar=()=>{
-
-        try{
-            history.push("/gardencalendar")
-        }catch(e){
-            console.log(e)
+        if(state.id){
+            try{
+                history.push("/gardencalendar")
+            }catch(e){
+                console.log(e)
+            }
+        }else{
+            alert('로그인이 필요한 서비스입니다.');
         }
-      
     }
 
 
@@ -57,10 +60,11 @@ export const Header=({history})=>{
 
     return(
     <div className='header-form'>
+        
         <div className='menu'>      
-            <label onClick={MoveGardenLocation} className='MoveGardenLocation'>경기도 텃밭 위치&nbsp;&nbsp;|&nbsp;&nbsp;</label>
-            <label onClick={MoveCropRecommend} className='MoveCropRecommend'>텃밭 작물 추천&nbsp;&nbsp;|&nbsp;&nbsp;</label>
-            <label className='MoveMyGarden'>내 텃밭 보기&nbsp;&nbsp;|&nbsp;&nbsp;</label>
+            <label onClick={MoveGardenLocation} className='MoveGardenLocation'>경기도 텃밭 위치</label><label>&nbsp;&nbsp;|&nbsp;&nbsp;</label>
+            <label onClick={MoveCropRecommend} className='MoveCropRecommend'>텃밭 작물 추천</label><label>&nbsp;&nbsp;|&nbsp;&nbsp;</label>
+            <label className='MoveMyGarden'>내 텃밭 보기</label><label>&nbsp;&nbsp;|&nbsp;&nbsp;</label>
             <label onClick={MoveGardenCalendar} className='MoveGardenCalendar'>텃밭 달력</label>
         </div>
   
@@ -70,9 +74,9 @@ export const Header=({history})=>{
                 <button onClick={logout}>Logout</button>
             </div>
     :<div className='btn'>
-        <button onClick={moveLogin}>SignIn</button>
+        <label onClick={moveLogin}>SignIn</label>
     </div>
     }
-   
+  
     </div>)
 }

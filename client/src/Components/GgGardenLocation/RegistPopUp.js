@@ -4,9 +4,11 @@ import {INSERTUSERGARDEN } from '../../Database/Graphql';
 
 const RegistPopUp=(props)=>{
     const{open,close,data}=props
-    const [insertUserGarden]=useMutation(INSERTUSERGARDEN,{variables:{garden_name:''}})
+    const [insertUserGarden]=useMutation(INSERTUSERGARDEN,{onCompleted:()=>{
+        close();
+    }})
     const regist=()=>{
-        insertUserGarden({variables:{garden_name:data.KITGDN_NM}})
+        insertUserGarden({variables:{garden_name:data.KITGDN_NM,garden_latitude:parseFloat(data.REFINE_WGS84_LAT),garden_longitude:parseFloat(data.REFINE_WGS84_LOGT)}})
     }
     return(
     <div className={open?"RegistPopUp":"PopUP"}>

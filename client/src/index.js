@@ -13,7 +13,6 @@ import { StateProvider } from './UserInfoContext';
 let accessToken;
 const authLink = setContext((_, { headers }) => {
   const refreshToken=getCookie('refreshToken')
-  console.log(accessToken)
   return {
     headers: {
       ...headers,
@@ -81,7 +80,6 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
        }else{
          
          if(message.split(',')[0]==='accessToken'){
-           console.log(message.split(',')[1])
           accessToken=message.split(',')[1]
          }else{
             console.log(message)

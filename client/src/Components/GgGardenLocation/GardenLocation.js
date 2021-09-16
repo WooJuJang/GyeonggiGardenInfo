@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { HeaderStyledContainer } from "../../css/HeaderStyledContainer";
 import {Header} from "../Common/Header";
 import {GardenLocationStyledContainter} from "../../css/GardenLocationStyledContainter";
@@ -10,6 +10,7 @@ import { getCookie} from "../Auth/Cookis";
 import { RegistPopUpStyledContainer } from "../../css/GgGardenLocation/RegistPopUpStyledContainer";
 import Posts from './Posts'
 import Pagination from './Pagination'
+import { UserInfoContext } from "../../UserInfoContext";
 
 const GardenLocation =({history})=>{
 
@@ -30,6 +31,8 @@ const GardenLocation =({history})=>{
 
     const [detailInfo,setDetailInfo]=useState('')
     const findGardenDetailInfo=useQuery(FINDGARDENDETAILINFO,{variables:{area:detailInfo}})
+
+    const {state}=useContext(UserInfoContext)
 
     const onHandleChange=(e)=>{
         setInput_area(e.target.value)
@@ -153,7 +156,7 @@ useEffect(()=>{
 },[detailInfo])
     return(
         <div>
-            <HeaderStyledContainer garden_location_fontweight>
+            <HeaderStyledContainer garden_location_fontweight state={state.id}>
             <Header history={history}/>
             </HeaderStyledContainer>
             <GardenLocationStyledContainter>

@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {Header} from '../Common/Header'
 import { HeaderStyledContainer } from '../../css/HeaderStyledContainer'
 import { CropReccomendStyledContainer } from '../../css/CropRecommend/CropRecomendStyledContainer'
-const croprecommend=({history})=>{
+import { UserInfoContext } from '../../UserInfoContext'
+const Croprecommend=({history})=>{
+    const {state}=useContext(UserInfoContext)
     const moveCrops=(data)=>{
         history.push({pathname:"/crops",state:data})
     }
     return(
         <div>
-        <HeaderStyledContainer crop_recommend_fontweight>
+        <HeaderStyledContainer crop_recommend_fontweight state={state.id}>
         <Header history={history}/>
         </HeaderStyledContainer>
             <CropReccomendStyledContainer>
@@ -30,4 +32,4 @@ const croprecommend=({history})=>{
         </div>
     )
 }
-export default croprecommend
+export default Croprecommend

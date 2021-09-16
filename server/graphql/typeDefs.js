@@ -84,7 +84,7 @@ type Holiday{
     type Mutation{
         signup(id:String!,password:String!,city:String!):User
         signin(id:String!,password:String!):String
-        insertUserGarden(garden_name:String!):Boolean
+        insertUserGarden(garden_name:String!,garden_latitude:Float,garden_longitude:Float):Boolean
         logout(id:String!):Boolean
         insertUserCrops(id:String!,user_crops:String!,plant_date:String!):UserPlantInfo
         insertHarvestDate(id:String!,user_crops:String!,harvest_date:String!):UserPlantInfo
