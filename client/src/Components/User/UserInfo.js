@@ -11,7 +11,7 @@ const UserInfo = ({ history }) => {
     if(state.id===''){
         history.push('/signin');
     }
-    const findUserInfo = useQuery(FINDUSER,{variables:{id:state.id}},{ errorPolicy: "all" })
+    const findUserInfo = useQuery(FINDUSER,{ errorPolicy: "all" })
     
     const [userInfo, setUserInfo] = useState({
         id: '',

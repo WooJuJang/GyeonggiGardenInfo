@@ -24,25 +24,21 @@ const Login=({history})=>{
             return setLoginInfo(loginInfo=>({...loginInfo,password:e.target.value}))
         }
     }
-    const [signin,{error}]=useMutation(SIGNIN,{errorPolicy:'all', onCompleted:  (data) => {
-        console.log(data)
-        
-                 setCookie('refreshToken',data.signin,{
+    const [signin,{error}]=useMutation(SIGNIN,{errorPolicy:'all', onCompleted:  (data) => {     
+        setCookie('refreshToken',data.signin,{
                     path:"/",
                 })
                 
                 contextValue.dispatch({type:'INSERT_USER',id:loginInfo.id})
-                history.push('/')
+                console.log(error)
+                
     }})
-    let tokens;
     const OnHandleLogin=async()=>{
-        try{
-            tokens=await signin({variables:{id:loginInfo.id,password:loginInfo.password}})
-       
-        }catch(err){
-            console.log(err.message)
-        }
-        return tokens;
+
+            const login_data=await signin({variables:{id:loginInfo.id,password:loginInfo.password}})
+            if(!login_data.errors){
+                history.push('/')
+            }
     }
     
 

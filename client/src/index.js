@@ -77,12 +77,15 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
         }
        } else if(message==='잘못된 주소입니다.'){
           console.log('check address')
-       }else{
+       }else if(message==='refresh token is expired'){
+        window.location.replace("/tokenerror")
+       }
+       else{
          
          if(message.split(',')[0]==='accessToken'){
           accessToken=message.split(',')[1]
          }else{
-            console.log(message)
+           return message
          
          }
         

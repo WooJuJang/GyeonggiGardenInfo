@@ -10,7 +10,6 @@ import getHoliday from '../API/holiday.js';
 import meteorological from '../API/meteorological.js';
 
 
-
 const resolvers = {
     Query: {
         findUser: async (_, __, context) => {
@@ -28,17 +27,18 @@ const resolvers = {
              
                 return Make_New_AccessToken(context)
             }
+
             
-            const result = await userinfo.findOne({ id: context.token_id }, 'id city garden_name')
-            const result_arr = []
-            result_arr[0] = result.id
-            result_arr[1] = result.city
-            const newuser = new userinfo({
-                id: result.id,
-                city: result.city,
-                garden_name: result.garden_name
-            })
-            return newuser
+            return await userinfo.findOne({ id: context.token_id })
+            // const result_arr = []
+            // result_arr[0] = result.id
+            // result_arr[1] = result.city
+            // const newuser = new userinfo({
+            //     id: result.id,
+            //     city: result.city,
+            //     garden_name: result.garden_name
+            // })
+            //return newuser
 
         },
         findGardenSGNM: async (_, args) => {

@@ -21,7 +21,7 @@ export const MainStyledContainer=Styled.div`
         font-size:2.7em;
         font-weight:bold;
         color:white;
-        margin-left:23%;
+        margin-left:27%;
         margin-top:20%;
     }
     .header-form{

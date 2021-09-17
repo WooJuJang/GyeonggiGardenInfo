@@ -55,6 +55,11 @@ export const FINDUSER=gql`
             id
             city
             garden_name
+            garden_latitude
+            garden_longitude
+            moisture
+            nutrition
+            weed_quantity
         }
     }
 `;
@@ -163,6 +168,15 @@ export const FINDHOLIDAY=gql`
         findHoliday(year:$year){
             dateName
             locdate
+        }
+    }
+`;
+
+export const FINDFORECAST=gql`
+    query findForecast($date:String!,$time:String!,$lat:Float!,$long:Float!){
+        findForecast(date:$date,time:$time,lat:$lat,long:$long){
+            category
+            obsrValue
         }
     }
 `;
