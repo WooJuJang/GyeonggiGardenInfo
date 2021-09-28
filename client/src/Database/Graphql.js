@@ -60,13 +60,16 @@ export const FINDUSER=gql`
             moisture
             nutrition
             weed_quantity
+            watering
+            fertilizer
+            weed
         }
     }
 `;
 
 export const INSERTUSERGARDEN=gql`
-    mutation insertUserGarden($garden_name:String!,$garden_latitude:Float,$garden_longitude:Float){
-        insertUserGarden(garden_name:$garden_name,garden_latitude:$garden_latitude,garden_longitude:$garden_longitude)
+    mutation insertUserGarden($garden_name:String!,$garden_latitude:Float,$garden_longitude:Float,$moisture:Int!,$nutrition:Int!,$weed_quantity:Int!){
+        insertUserGarden(garden_name:$garden_name,garden_latitude:$garden_latitude,garden_longitude:$garden_longitude,moisture:$moisture,nutrition:$nutrition,weed_quantity:$weed_quantity)
     }
 `;
 
@@ -177,6 +180,29 @@ export const FINDFORECAST=gql`
         findForecast(date:$date,time:$time,lat:$lat,long:$long){
             category
             obsrValue
+        }
+    }
+`;
+
+export const INSERTMOISTURE=gql`
+    mutation insertMoisture($id:String!,$moisture:Int!){
+        insertMoisture(id:$id,moisture:$moisture){
+            moisture
+        }
+    }
+`;
+
+export const INSERTWEEDQUANTITY=gql`
+    mutation insertWeedQuantity($id:String!,$weed_quantity:Float!){
+        insertWeedQuantity(id:$id,weed_quantity:$weed_quantity){
+            weed_quantity
+        }
+    }
+`;
+export const INSERTNUTRITION=gql`
+    mutation insertNutrition($id:String!,$nutrition:Float){
+        insertNutrition(id:$id,nutrition:$nutrition){
+            nutrition
         }
     }
 `;

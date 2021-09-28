@@ -1,13 +1,11 @@
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from '@fullcalendar/interaction'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { GardenCalendarStyledContainer } from '../../css/GardenCalendar/GardenCalendarStyledContainer';
 import { useMutation, useQuery } from '@apollo/client';
 import {  FINDUSERPLANTINFO,INSERTUSERCROPS,INSERTHARVESTDATE,INSERTREMOVEDATE,FINDMANAGEINFO ,INSERTMANAGEDATE,FINDHOLIDAY} from '../../Database/Graphql';
 import { UserInfoContext } from '../../UserInfoContext';
-
-
 
 const MyCalendar = () => {
     const {state}=useContext(UserInfoContext)
@@ -24,7 +22,7 @@ const MyCalendar = () => {
         Sat:'Saturday',
         Sun:'Sunday',
     }
-
+    
     //작물관리 창 변수
     const [plantlist,setPlantList]=useState('none');
     const [managementlist,setManagementList]=useState('none');
@@ -47,36 +45,32 @@ const MyCalendar = () => {
     }
    //공휴일
    const findHoliday=useQuery(FINDHOLIDAY,{variables:{year:String(today.getFullYear())}})
-   let  holiday=[];
   
     //사용자 작물관리 정보 출력
   const [organize_eventarray,setOrganizeEventarray]=useState([]);
   const plantManageInfo=()=>{
     setHarvestableCropsArray([])
-    holiday?.map((data)=>{
-       return setOrganizeEventarray((organize_eventarray)=>[...organize_eventarray,data])
-    })
 
-    userPlantInfo.data?.findUserPlantInfo.map((data)=>{
+    userPlantInfo.data?.findUserPlantInfo.forEach((data)=>{
         if(data.plant_date){
-            data.plant_date.map((plant_day)=>{
-                return eventarray.push({title:data.user_crops+'심기',date:plant_day})
+            data.plant_date.forEach((plant_day)=>{
+                 eventarray.push({title:data.user_crops+'심기',date:plant_day})
             })
         }
         if(data.harvest_date){
-            data.harvest_date.map((harvest_day)=>{
-                return eventarray.push({title:data.user_crops+'수확',date:harvest_day})    
+            data.harvest_date.forEach((harvest_day)=>{
+                 eventarray.push({title:data.user_crops+'수확',date:harvest_day})    
             })
         }
         if(data.remove_date){
-            data.remove_date.map((remove_day)=>{
-                return eventarray.push({title:data.user_crops+'제거',date:remove_day})    
+            data.remove_date.forEach((remove_day)=>{
+                 eventarray.push({title:data.user_crops+'제거',date:remove_day})    
             })
         }
         if(!data.remove_date[0]){
-            return setHarvestableCropsArray((harvestable_crops_array)=>[...harvestable_crops_array,data.user_crops])
+             setHarvestableCropsArray((harvestable_crops_array)=>[...harvestable_crops_array,data.user_crops])
         }
-        return false
+
     })
 
     const usermanageinfo=userManageInfo.data?.findUserManageInfo
@@ -84,8 +78,8 @@ const MyCalendar = () => {
         for(let prop in usermanageinfo){
             if(prop!=='__typename'){
                 if(usermanageinfo[prop]){
-                    usermanageinfo[prop].map((day)=>{
-                        return eventarray.push({title:manage_list[prop],date:day})
+                    usermanageinfo[prop].forEach((day)=>{
+                        eventarray.push({title:manage_list[prop],date:day})
                     })
                 }
                 
@@ -94,19 +88,18 @@ const MyCalendar = () => {
     }
 
     //사용자 작물관리 정보 중복삭제 및 같은 날짜로 작업 묶기 
-        eventarray?.map((data)=>{
+        eventarray?.forEach((data)=>{
            
             let titlearray=[];
-            eventarray.map((a)=>{
+            eventarray.forEach((a)=>{
                 if(a.date===data.date){
                     
                     titlearray.push(a.title)
                     
                 }
-                return titlearray
             })
             
-            return setOrganizeEventarray((organize_eventarray)=>[...organize_eventarray,{title:titlearray,date:data.date,color:'green'}])
+            setOrganizeEventarray((organize_eventarray)=>[...organize_eventarray,{title:titlearray,date:data.date,color:'green'}])
         })
        
             setOrganizeEventarray((organize_eventarray)=>[...new Set(organize_eventarray.map(JSON.stringify))].map(JSON.parse))
@@ -114,12 +107,13 @@ const MyCalendar = () => {
         return organize_eventarray
   }
 
+
 useEffect(()=>{
     setOrganizeEventarray([])
     if(findHoliday.loading===false && findHoliday?.data){
-        findHoliday.data.findHoliday.map((data)=>{
+        findHoliday.data.findHoliday.forEach((data)=>{
             let date=String(data.locdate)
-            return holiday.push({title:[data.dateName],date:date.substr(0,4)+'-'+date.substr(4,2)+'-'+date.substr(6,2),color:'red'})
+            setOrganizeEventarray(holiday=>[...holiday,{title:[data.dateName],date:date.substr(0,4)+'-'+date.substr(4,2)+'-'+date.substr(6,2),color:'red'}])
         })
         plantManageInfo();
     }
@@ -274,7 +268,6 @@ useEffect(()=>{
         setInputPlant(e.target.value)
     }
     const onClickPlant=()=>{
-        
         insertUserCrops({variables:{id:state.id,user_crops:input_plant,plant_date:select_full_date}})
         setInputPlant('')
     }

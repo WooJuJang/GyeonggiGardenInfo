@@ -21,6 +21,7 @@ const resolvers = {
                
                 return Token_Error(context.error)
             }else if(context.error === "Invalid Token"){
+                console.log("finduser?")
                 return Token_Error(context.error)
             }
             else if(context.token) {
@@ -84,7 +85,7 @@ const resolvers = {
             return await userinfo.findOne({id:args.id},'fertilizer watering weed fixture_install')
         },
         findHoliday:async(_,args)=>{
-            return getHoliday(args.year)
+            return await getHoliday(args.year)
         },
         findForecast:async(_,args)=>{
             return await meteorological(args.lat,args.long,args.date,args.time);
@@ -122,13 +123,11 @@ const resolvers = {
 
         },
         insertUserGarden: async (_, args, context) => {
-            await userinfo.findOneAndUpdate({ id: context.token_id }, { garden_name: args.garden_name, garden_latitude:args.garden_latitude,garden_longitude:args.garden_longitude})
+            await userinfo.findOneAndUpdate({ id: context.token_id }, { garden_name: args.garden_name, garden_latitude:args.garden_latitude,garden_longitude:args.garden_longitude,moisture:args.moisture,nutrition:args.nutrition,weed_quantity:args.weed_quantity})
             return true
-
-
         },
         logout: async(_,args)=>{
-                await token.deleteOne({id:args.id})
+            await token.deleteMany({id:args.id})
             return true
         },
         insertUserCrops:async(_,args)=>{
@@ -152,6 +151,15 @@ const resolvers = {
                 {$pull:{fertilizer:"",watering:"",weed:"",fixture_install:""}},
                 {new:true,multi:true,strict:false})
                 
+        },
+        insertMoisture:async(_,args)=>{
+            return await userinfo.findOneAndUpdate({id:args.id},{moisture:args.moisture},{new:true})
+        },
+        insertWeedQuantity:async(_,args)=>{
+            return await userinfo.findOneAndUpdate({id:args.id},{weed_quantity:args.weed_quantity},{new:true})
+        },
+        insertNutrition:async(_,args)=>{
+            return await userinfo.findOneAndUpdate({id:args.id},{nutrition:args.nutrition},{new:true})
         }
 
     }

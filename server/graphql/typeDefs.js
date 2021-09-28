@@ -13,12 +13,12 @@ type User{
     garden_name:String,
     garden_type:Int,   
     moisture:Int,
-    nutrition:Int,
+    nutrition:Float,
     plastic:Boolean,
     user_use_location:String,
     watering:[String],
     weed:[String],
-    weed_quantity:Int,
+    weed_quantity:Float,
     exist:Boolean,
 }
 type GardenInfo{
@@ -89,12 +89,15 @@ type Forecast{
     type Mutation{
         signup(id:String!,password:String!,city:String!):User
         signin(id:String!,password:String!):String
-        insertUserGarden(garden_name:String!,garden_latitude:Float,garden_longitude:Float):Boolean
+        insertUserGarden(garden_name:String!,garden_latitude:Float,garden_longitude:Float,moisture:Int!,nutrition:Int!,weed_quantity:Int!):Boolean
         logout(id:String!):Boolean
         insertUserCrops(id:String!,user_crops:String!,plant_date:String!):UserPlantInfo
         insertHarvestDate(id:String!,user_crops:String!,harvest_date:String!):UserPlantInfo
         insertRemoveDate(id:String!,user_crops:String!,remove_date:String!):UserPlantInfo
         insertManageDate(id:String!,fertilizer:String,watering:String,weed:String,fixture_install:String):User
+        insertMoisture(id:String!,moisture:Int!):User
+        insertWeedQuantity(id:String!,weed_quantity:Float!):User
+        insertNutrition(id:String!,nutrition:Float):User
     }
 `;
 export default typeDefs;

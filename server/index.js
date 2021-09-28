@@ -20,19 +20,14 @@ const server=new ApolloServer({
     context:async({req})=>{
         try{
             let token_type=req.headers.authorization?req.headers.authorization.split(' ')[0]:"";
-            
             const token=req.headers.authorization?req.headers.authorization.split(' ')[1]:'';  
             
-           
             if (token){
                 if(token_type==="Access"){
                     const user=await checkAccessToken(token,"secretKey")
-                  
-
                     return user
                 }else if(token_type==="Refresh"){
                     const user=await checkRefreshtoken(token,"secretKey")
-                   
                     return user
                 }
 
@@ -41,7 +36,6 @@ const server=new ApolloServer({
             console.log(e)
             return null
         }
-
         return null
     }
 });

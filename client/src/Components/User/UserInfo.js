@@ -7,7 +7,6 @@ import {UserInfoContext} from '../../UserInfoContext'
 const UserInfo = ({ history }) => {
     
     const {state}=useContext(UserInfoContext)
-    console.log('userinfo',state.id)
     if(state.id===''){
         history.push('/signin');
     }
@@ -22,7 +21,6 @@ const UserInfo = ({ history }) => {
         findUserInfo.refetch(FINDUSER)
     }
     useEffect(() => {
-        console.log('finduserinfo change')
         if (findUserInfo.loading === false && findUserInfo.data?.findUser?.id) {
             setUserInfo({
                 id: findUserInfo.data.findUser.id,
@@ -30,10 +28,6 @@ const UserInfo = ({ history }) => {
                 garden_name: findUserInfo.data.findUser.garden_name
             })
 
-        }
-        if(findUserInfo.error){
-            console.log(findUserInfo.error)
-           
         }
         
     }, [findUserInfo])

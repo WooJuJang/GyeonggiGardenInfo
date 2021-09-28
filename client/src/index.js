@@ -67,6 +67,7 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
             window.location.replace("/tokenerror")
            }else if(temp_token==='access token is expired'){
            }else if(temp_token==='Invalid Token'){
+             console.log("in")
             window.location.replace("/tokenerror")
            }
            else{
@@ -79,12 +80,17 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
           console.log('check address')
        }else if(message==='refresh token is expired'){
         window.location.replace("/tokenerror")
+       }else if(message==='Invalid Token'){
+        console.log("in")
+        window.location.replace("/tokenerror")
        }
        else{
          
          if(message.split(',')[0]==='accessToken'){
+           console.log("1")
           accessToken=message.split(',')[1]
          }else{
+           console.log("2")
            return message
          
          }

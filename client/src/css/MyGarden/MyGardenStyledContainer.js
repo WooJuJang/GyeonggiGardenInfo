@@ -39,4 +39,23 @@ export const MyGardenStyledContainer=Styled.div`
     .temp{
         font-size:30px;
     }
+    .statistics-form{
+        margin-top:6%;
+        display:grid;
+        grid-template-columns:repeat(5,1fr);
+        justify-items:center;
+        align-items:center;
+    }
+    .moisture-chart-name{
+        font-size:20px;
+        margin-left:25%;
+    }
+    .nutrition-chart-name{
+        font-size:20px;
+        margin-left:23%;
+    }
+    .weed_quantity-chart-name{
+        font-size:20px;
+        margin-left:25%;
+    }
 `;

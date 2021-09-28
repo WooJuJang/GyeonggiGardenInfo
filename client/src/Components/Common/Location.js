@@ -33,7 +33,10 @@ export const Location=({address,logt,lat})=>{
         console.log(error.message)
       })
     }else{
-      createmap(logt,lat)
+      kakao.maps.load(()=>{
+        createmap(logt,lat)
+      })
+      
     }
     }, [address,logt,lat,findLogtLat])
 

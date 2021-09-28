@@ -6,7 +6,7 @@ import {Header} from './Common/Header'
 
 function Main({history}){
     const {state}=useContext(UserInfoContext)
-    console.log(state)
+    
     return( 
         <MainStyledContainer>
             <div className='main-form'>

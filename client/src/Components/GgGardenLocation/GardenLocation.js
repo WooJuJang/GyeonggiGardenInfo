@@ -79,7 +79,8 @@ const [userInfo,setUserInfo]=useState({
 })
 
 useEffect(()=>{
-    if(findUserInfo.loading ===false && findUserInfo.data){
+
+    if(findUserInfo?.loading ===false && findUserInfo.data?.findUser){
     setUserInfo({        
         id:findUserInfo.data.findUser.id,
         city:findUserInfo.data.findUser.city,
@@ -96,6 +97,7 @@ const openPopUp=()=>{
             if(userInfo.city===gardenDetailInfo.SG_NM){
                 setPopUpOpen(true)
             }else{
+
                 alert('거주지가 다릅니다.')
             }
         }else{

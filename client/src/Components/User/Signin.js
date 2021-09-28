@@ -51,8 +51,8 @@ const Login=({history})=>{
             <div className='signin-form'>
                 <div className='contents-form'>
                     <label className='signin'>SignIn</label>
-                    <input className='id' name='id' value={loginInfo.id} onChange={onChangeLoginInfo} placeholder='아이디를 입력하세요' required></input>
-                    <input className='pw' name='password' value={loginInfo.password} onChange={onChangeLoginInfo} placeholder='패스워드를 입력하세요' required></input>
+                    <input className='id' name='id' value={loginInfo.id} onChange={onChangeLoginInfo} placeholder='아이디를 입력하세요' required autoComplete="off"></input>
+                    <input type="password" className='pw' name='password' value={loginInfo.password} onChange={onChangeLoginInfo} placeholder='패스워드를 입력하세요' required autoComplete="new-password"></input>
                     </div>
                     {error?<div>{error.message}</div>:<></>}
                     <div className='btn-form'>
