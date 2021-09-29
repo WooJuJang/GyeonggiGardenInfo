@@ -5,11 +5,15 @@ export const HeaderStyledContainer=Styled.div`
     width:100%;
     text-align:center;
     padding-top:3%;
+   
 }
 .menu{
     display:inline-block;
     float:center;
     padding-left:8%;
+    padding-top:8px;
+
+   
 }
 label{
     &:hover{
@@ -26,6 +30,9 @@ button{
     display:inline-block;
     float:right;
     font-weight:bold;
+    
+
+    
 }
 .MoveGardenLocation{
     font-weight:${props=>props.garden_location_fontweight? 'bold' : ''};
@@ -52,5 +59,25 @@ button{
         props.state?
         'black'
         :'gray'}
+}
+.userinfo-btn{
+    background-color:transparent;
+    outline:none;
+    border:none;
+    font-size:15px;
+    font-weight:bold;
+    color:white;
+    border-bottom:solid 1px white;
+  
+}
+.logout-btn{
+    background-color:transparent;
+    outline:none;
+    border:none;
+    margin-left:10px;
+    font-size:15px;
+    color:white;
+    font-weight:bold;
+    border-bottom:solid 1px white;
 }
 `

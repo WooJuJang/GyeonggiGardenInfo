@@ -18,7 +18,7 @@ const TimerProvider=({children})=>{
     },[value])
     const logout=useCallback(()=>{
         setIsIncrease(false)
-        setValue(10)
+        setValue(60*60)
       
         clearTimeout(tick)
         removeCookie('refreshToken')
@@ -41,7 +41,7 @@ const TimerProvider=({children})=>{
         switch(action.type){
             case 'TIMER_START':
                 setIsIncrease(true)
-                setValue(10)
+                setValue(60*60)
                 break;
             case 'TIMER_RESET':
                 logout();

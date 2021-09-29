@@ -7,7 +7,6 @@ import {UserInfoContext } from '../../UserInfoContext'
 
 export const Header=({history})=>{
 
-
     const {state,dispatch}=useContext(UserInfoContext);
     const [removeRefreshToken]=useMutation(LOGOUT,{variables:{id:state.id}})
 
@@ -86,8 +85,17 @@ export const Header=({history})=>{
   
         {getCookie('refreshToken')?
             <div className='btn'>
-                <button onClick={UserInfo}>UserInfo</button>
-                <button onClick={logout}>Logout</button>
+                <button onClick={UserInfo} className="userinfo-btn">{
+                    history.location.pathname==='/'?<label>userinfo</label>:
+                    <img src="images/userinfo.png" alt="userinfo" width="30px" height="30px"/>
+                }    
+                </button>
+                <button onClick={logout} className="logout-btn">
+                {
+                    history.location.pathname==='/'?<label>logout</label>:
+                    <img src="images/logout.png" alt="userinfo" width="30px" height="30px"/>
+                }
+                </button>
             </div>
     :<div className='btn'>
         <label onClick={moveLogin}>SignIn</label>
