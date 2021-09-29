@@ -9,6 +9,7 @@ import App from './App';
 import { onError } from "apollo-link-error";
 import { Observable } from 'apollo-link';
 import { StateProvider } from './UserInfoContext';
+import { TimerProvider } from './Components/Common/Timer';
 
 let accessToken;
 const authLink = setContext((_, { headers }) => {
@@ -87,10 +88,8 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
        else{
          
          if(message.split(',')[0]==='accessToken'){
-           console.log("1")
           accessToken=message.split(',')[1]
          }else{
-           console.log("2")
            return message
          
          }
@@ -127,8 +126,9 @@ ReactDOM.render(
           <StateProvider>
     <CookiesProvider>
       <ApolloProvider client={client}>
-
+      <TimerProvider>
         <App />
+        </TimerProvider>
       </ApolloProvider>
     </CookiesProvider>
     </StateProvider>

@@ -80,7 +80,7 @@ export const makejwttoken=async(id)=>new Promise((resolve,rejcet)=>{
     "secretKey",
     {
         subject:"user_refresh_token",
-        expiresIn:'10m',
+        expiresIn:'1h',
         issuer:"jwj"
     })
     const newToken=new token({

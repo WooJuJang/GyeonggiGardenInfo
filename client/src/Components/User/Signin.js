@@ -4,12 +4,14 @@ import { SigninStyleContainer } from '../../css/SigninStyleContainer'
 import {SIGNIN} from '../../Database/Graphql'
 import {setCookie} from '../Auth/Cookis'
 import {UserInfoContext} from '../../UserInfoContext'
+import { TimerContext } from '../Common/Timer'
 
 const Login=({history})=>{
-    
+   
     const contextValue=useContext(UserInfoContext)
+    const timer=useContext(TimerContext)
 
-  
+
     const moveSignup=()=>{
         history.push("/signup")
     }
@@ -28,28 +30,28 @@ const Login=({history})=>{
         setCookie('refreshToken',data.signin,{
                     path:"/",
                 })
-                
                 contextValue.dispatch({type:'INSERT_USER',id:loginInfo.id})
-                console.log(error)
                 
     }})
     const OnHandleLogin=async()=>{
 
             const login_data=await signin({variables:{id:loginInfo.id,password:loginInfo.password}})
+            timer.timerdispatch({type:'TIMER_START'})
             if(!login_data.errors){
                 history.push('/')
             }
     }
-    
+
 
 
         return(
             <div>
             <SigninStyleContainer>
-                
+            
             <div className='signin-full-form'>
             <div className='signin-form'>
                 <div className='contents-form'>
+
                     <label className='signin'>SignIn</label>
                     <input className='id' name='id' value={loginInfo.id} onChange={onChangeLoginInfo} placeholder='아이디를 입력하세요' required autoComplete="off"></input>
                     <input type="password" className='pw' name='password' value={loginInfo.password} onChange={onChangeLoginInfo} placeholder='패스워드를 입력하세요' required autoComplete="new-password"></input>
@@ -67,8 +69,6 @@ const Login=({history})=>{
 
     </div>
         )
- 
-
 }
 
 export default Login

@@ -12,12 +12,11 @@ import GardenCalendar from './Components/GardenCalendar/GardenCalendar';
 import MyGarden from './Components/MyGarden/MyGarden';
 
 
-
-
 function App() {
   return (
     <div className="App">
           <BrowserRouter>
+           
             <Route path="/" exact component={Main}/>
             <Route path="/signin" component={Signin}/>
             <Route path="/signup" component={Signup}/>
@@ -28,6 +27,7 @@ function App() {
             <Route path="/crops" component={Crops}/>
             <Route path="/gardencalendar" component={GardenCalendar}/>
             <Route path="/mygarden" component={MyGarden}/>
+          
           </BrowserRouter>
     </div>
   );

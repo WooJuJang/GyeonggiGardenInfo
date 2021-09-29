@@ -3,6 +3,7 @@ import {Header} from '../Common/Header'
 import { HeaderStyledContainer } from '../../css/HeaderStyledContainer'
 import { CropReccomendStyledContainer } from '../../css/CropRecommend/CropRecomendStyledContainer'
 import { UserInfoContext } from '../../UserInfoContext'
+
 const Croprecommend=({history})=>{
     const {state}=useContext(UserInfoContext)
     const moveCrops=(data)=>{

@@ -12,7 +12,7 @@ const TokenError =() =>{
     const [removeRefreshToken]=useMutation(LOGOUT,{variables:{id:state.id}})
     const logout=(route)=>{
         
-        removeCookie('accessToken')
+        
         removeCookie('refreshToken')
 
         removeRefreshToken(LOGOUT,{variables:{id:state.id}})

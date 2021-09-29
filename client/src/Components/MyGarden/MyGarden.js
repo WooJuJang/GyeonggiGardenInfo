@@ -286,7 +286,6 @@ const MyGarden = () => {
         landCalculation();
     },[findUserInfo,landCalculation])
     
-    
     return (
         <div>
             <HeaderStyledContainer my_garden state={state.id}>
