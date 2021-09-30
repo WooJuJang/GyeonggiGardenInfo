@@ -17,13 +17,7 @@ export const MainStyledContainer=Styled.div`
         background-color:black;
         opacity:0.8;
     }
-    .main-text-form{
-        font-size:2.7em;
-        font-weight:bold;
-        color:white;
-        margin-left:27%;
-        margin-top:20%;
-    }
+
     .header-form{
         width:100%;
         color:white;
@@ -41,5 +35,33 @@ export const MainStyledContainer=Styled.div`
         width:10%; 
         display:inline-block;
         float:right;
+    }
+    .main-text-form{
+        font-size:2.7em;
+        font-weight:bold;
+        color:white;
+        margin-left:16%;
+        margin-top:20%;
+    }
+    .text{
+        position:relative;
+        display: inline-block;
+        height: 50px; 
+        overflow: hidden;
+        white-space:nowrap;
+        letter-spacing:0.15em;
+        border-right:0.15em solid orange;
+        animation: 
+        typingAni 5s steps(50,end),
+        cursor 0.5s step-end infinite;
+    }
+    @keyframes typingAni {
+        0%{width:0}
+        100%{width: 89%;}
+      }
+    @keyframes cursor{
+        0%{border-color:transparent;}
+        50%{border-color:orange;}
+        100%{border-color:transparent;}
     }
 `

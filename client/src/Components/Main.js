@@ -15,7 +15,7 @@ function Main({history}){
                     <Header history={history} />
                     </HeaderStyledContainer>
                     <div className='main-text-form'>
-                    <label >Creating a healthy and prosperous world.</label>
+                    <label className='text'>Creating a healthy and prosperous world.</label>
                     </div>
                 </div>
             </div> 

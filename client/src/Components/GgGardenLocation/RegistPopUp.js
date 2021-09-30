@@ -17,12 +17,16 @@ const RegistPopUp=(props)=>{
             {open?
                 <div className="innerForm">
                    <header>
-                    <button onClick={close}>&times;</button>
+                    <button onClick={close} className="exit-btn">&times;</button>
                     </header>
                     <div className="main">
-                    <label className="kitgdn_nm">{data.KITGDN_NM}</label><br/>
-                    <label className="main_content">{data.REFINE_LOTNO_ADDR}</label><br/>
-                    <label className="main_content">{data.OPERT_MAINBD_NM}</label><br/>
+                    
+                            <label className="kitgdn_nm">{data.KITGDN_NM}</label><br/>  
+                     
+
+                    
+                    <label className="main_content">주소: {data.REFINE_LOTNO_ADDR}</label><br/>
+                    <label className="main_content">관리자: {data.OPERT_MAINBD_NM}</label><br/>
                     {data.SUBFACLT_CONT? <>
                     <label className="main_content">부대시설: {data.SUBFACLT_CONT}</label><br/></>
                     :<>

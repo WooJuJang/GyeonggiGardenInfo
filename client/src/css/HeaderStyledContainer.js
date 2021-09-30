@@ -30,10 +30,8 @@ button{
     display:inline-block;
     float:right;
     font-weight:bold;
-    
-
-    
 }
+
 .MoveGardenLocation{
     font-weight:${props=>props.garden_location_fontweight? 'bold' : ''};
     color:${props=>props.main?'white':'black'};
