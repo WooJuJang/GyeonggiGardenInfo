@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { GardenCalendarStyledContainer } from '../../css/GardenCalendar/GardenCalendarStyledContainer';
 import { useMutation, useQuery } from '@apollo/client';
 import { FINDUSERPLANTINFO, INSERTUSERCROPS, INSERTHARVESTDATE, INSERTREMOVEDATE, FINDMANAGEINFO, INSERTMANAGEDATE, FINDHOLIDAY } from '../../Database/Graphql';
-import { UserInfoContext } from '../../UserInfoContext';
+import { UserInfoContext } from '../Common/UserInfoContext';
 
 const MyCalendar = () => {
     const { state } = useContext(UserInfoContext)

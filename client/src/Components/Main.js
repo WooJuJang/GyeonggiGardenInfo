@@ -1,9 +1,9 @@
 import React, { useContext, useEffect } from 'react'
-import { HeaderStyledContainer } from '../css/HeaderStyledContainer'
+import { HeaderStyledContainer } from '../css/Common/HeaderStyledContainer'
 import {MainStyledContainer} from '../css/MainStyledContainer'
-import { UserInfoContext } from '../UserInfoContext'
+import { UserInfoContext } from './Common/UserInfoContext'
 import {Header} from './Common/Header'
-import { TimerContext } from './Common/Timer'
+import { TimerContext } from './Common/TimerContext'
 
 function Main({history}){
     const {state}=useContext(UserInfoContext)

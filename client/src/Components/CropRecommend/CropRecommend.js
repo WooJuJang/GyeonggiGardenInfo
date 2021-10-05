@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import {Header} from '../Common/Header'
-import { HeaderStyledContainer } from '../../css/HeaderStyledContainer'
+import { HeaderStyledContainer } from '../../css/Common/HeaderStyledContainer'
 import { CropReccomendStyledContainer } from '../../css/CropRecommend/CropRecomendStyledContainer'
-import { UserInfoContext } from '../../UserInfoContext'
+import { UserInfoContext } from '../Common/UserInfoContext'
 
 const Croprecommend=({history})=>{
     const {state}=useContext(UserInfoContext)

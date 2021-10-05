@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import {getCookie,removeCookie} from '../Auth/Cookis'
 import { LOGOUT} from "../../Database/Graphql"
 import {useMutation} from '@apollo/react-hooks'
-import {UserInfoContext } from '../../UserInfoContext'
+import {UserInfoContext } from './UserInfoContext'
 
 
 export const Header=({history})=>{

@@ -1,5 +1,5 @@
 import React,{createContext,useReducer } from 'react';
-import { getCookie, setCookie } from './Components/Auth/Cookis';
+import { getCookie, setCookie } from '../Auth/Cookis';
 
 let initialState = {id:''};
 const UserInfoContext = createContext(initialState);

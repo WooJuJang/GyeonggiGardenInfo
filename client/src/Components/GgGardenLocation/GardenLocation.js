@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { HeaderStyledContainer } from "../../css/HeaderStyledContainer";
+import { HeaderStyledContainer } from "../../css/Common/HeaderStyledContainer";
 import {Header} from "../Common/Header";
-import {GardenLocationStyledContainter} from "../../css/GardenLocationStyledContainter";
-import { Location } from "../Common/Location";
+import {GardenLocationStyledContainter} from "../../css/GgGardenLocation/GardenLocationStyledContainter";
+import { Location } from "./Location";
 import {FINDGARDENSGNM,FINDGARDENDETAILINFO,FINDUSER,FINDLOGTLAT} from '../../Database/Graphql'
 import { useQuery,useLazyQuery } from "@apollo/client";
 import RegistPopUp from "./RegistPopUp";
@@ -10,7 +10,7 @@ import { getCookie} from "../Auth/Cookis";
 import { RegistPopUpStyledContainer } from "../../css/GgGardenLocation/RegistPopUpStyledContainer";
 import Posts from './Posts'
 import Pagination from './Pagination'
-import { UserInfoContext } from "../../UserInfoContext";
+import { UserInfoContext } from "../Common/UserInfoContext";
 
 const GardenLocation =({history})=>{
 

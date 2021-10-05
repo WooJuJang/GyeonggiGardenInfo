@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {Header} from '../Common/Header'
-import { HeaderStyledContainer } from '../../css/HeaderStyledContainer'
+import { HeaderStyledContainer } from '../../css/Common/HeaderStyledContainer'
 import { useQuery } from '@apollo/client';
 import { FINDSEASON } from '../../Database/Graphql';
 import { CropStyledContainer } from '../../css/CropRecommend/CropStyledContainer';

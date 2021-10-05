@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import {PageUl,PageLi,PageSpan} from '../../css/PaginationStyledContainer'
+import {PageUl,PageLi,PageSpan} from '../../css/GgGardenLocation/PaginationStyledContainer'
 
 const Pagination = ({ postsPerPage, totalPosts, paginate ,pagenm}) => {
 

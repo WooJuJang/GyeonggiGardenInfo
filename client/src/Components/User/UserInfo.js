@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client'
 import React, { useEffect, useState ,useContext} from 'react'
-import { UserInfoStyledContainer } from '../../css/UserInfoStyledContainer'
+import { UserInfoStyledContainer } from '../../css/User/UserInfoStyledContainer'
 import { FINDUSER } from '../../Database/Graphql'
-import {UserInfoContext} from '../../UserInfoContext'
+import {UserInfoContext} from '../Common/UserInfoContext'
 
 const UserInfo = ({ history }) => {
     

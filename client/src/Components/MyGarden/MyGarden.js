@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from '@apollo/client';
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useHistory } from "react-router-dom";
-import { HeaderStyledContainer } from '../../css/HeaderStyledContainer';
+import { HeaderStyledContainer } from '../../css/Common/HeaderStyledContainer';
 import { MyGardenStyledContainer } from '../../css/MyGarden/MyGardenStyledContainer';
 import { FINDFORECAST, FINDMANAGEINFO, FINDUSER, INSERTMOISTURE, INSERTNUTRITION, INSERTWEEDQUANTITY } from '../../Database/Graphql';
-import { UserInfoContext } from '../../UserInfoContext';
+import { UserInfoContext } from '../Common/UserInfoContext';
 import { Header } from '../Common/Header'
 import {PieChart} from "react-minimal-pie-chart";
 const MyGarden = () => {

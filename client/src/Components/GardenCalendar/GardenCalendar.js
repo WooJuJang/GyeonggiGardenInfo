@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 import { useHistory } from 'react-router'
 import {Header} from '../Common/Header'
-import { HeaderStyledContainer } from '../../css/HeaderStyledContainer'
+import { HeaderStyledContainer } from '../../css/Common/HeaderStyledContainer'
 import MyCalendar from './MyCalendar'
-import { UserInfoContext } from '../../UserInfoContext'
+import { UserInfoContext } from '../Common/UserInfoContext'
 
 const GardenCalendar=()=>{
     const history=useHistory();

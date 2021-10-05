@@ -1,5 +1,5 @@
 import React,{createContext,useContext,useState,useEffect, useReducer, useCallback} from 'react';
-import { UserInfoContext } from '../../UserInfoContext';
+import { UserInfoContext } from './UserInfoContext';
 import {useMutation} from '@apollo/react-hooks'
 
 import { getCookie, removeCookie, setCookie } from '../Auth/Cookis';

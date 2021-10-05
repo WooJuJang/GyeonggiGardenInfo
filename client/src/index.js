@@ -8,8 +8,8 @@ import { getCookie} from './Components/Auth/Cookis';
 import App from './App';
 import { onError } from "apollo-link-error";
 import { Observable } from 'apollo-link';
-import { StateProvider } from './UserInfoContext';
-import { TimerProvider } from './Components/Common/Timer';
+import { StateProvider } from './Components/Common/UserInfoContext';
+import { TimerProvider } from './Components/Common/TimerContext';
 
 let accessToken;
 const authLink = setContext((_, { headers }) => {

@@ -3,7 +3,7 @@ import {removeCookie} from '../Auth/Cookis'
 import {useMutation} from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
 import { TokenErrorStyledContainer } from '../../css/Error/TokenErrorStyledContainer'
-import {UserInfoContext} from '../../UserInfoContext'
+import {UserInfoContext} from '../Common/UserInfoContext'
 import {LOGOUT} from "../../Database/Graphql"
 
 const TokenError =() =>{

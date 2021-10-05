@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {SIGNUP} from '../../Database/Graphql'
 import {useMutation} from '@apollo/react-hooks'
-import {SignupStyleContainer} from '../../css/SigninStyleContainer'
+import {SignupStyleContainer} from '../../css/User/SigninStyleContainer'
 
 function Signup({history}){
 
