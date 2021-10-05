@@ -2,7 +2,7 @@ import React,{createContext,useContext,useState,useEffect, useReducer, useCallba
 import { UserInfoContext } from '../../UserInfoContext';
 import {useMutation} from '@apollo/react-hooks'
 
-import { removeCookie } from '../Auth/Cookis';
+import { getCookie, removeCookie, setCookie } from '../Auth/Cookis';
 import { LOGOUT } from '../../Database/Graphql';
 
 const TimerContext=createContext();
@@ -10,16 +10,18 @@ const TimerContext=createContext();
 const TimerProvider=({children})=>{
     const {state,dispatch}=useContext(UserInfoContext);
     const [removeRefreshToken]=useMutation(LOGOUT,{variables:{id:state.id}})
-    const [value,setValue]=useState(10);
+    const [value,setValue]=useState();
     const [isIncrease,setIsIncrease]=useState(false)
-
+   
     const tick=useCallback(()=>{
+        
         return setTimeout(()=>setValue(value-1),1000)
     },[value])
+ 
     const logout=useCallback(()=>{
         setIsIncrease(false)
-        setValue(60*60)
-      
+        
+        removeCookie('timer')
         clearTimeout(tick)
         removeCookie('refreshToken')
        removeRefreshToken(LOGOUT,{variables:{id:state.id}})
@@ -31,6 +33,7 @@ const TimerProvider=({children})=>{
         if(!isIncrease) return undefined;
         if(value>0 && isIncrease)
             tick();
+            setCookie('timer',value)
         if(value<=0){
             logout();
         }
@@ -40,8 +43,13 @@ const TimerProvider=({children})=>{
     let [timerstate,timerdispatch]=useReducer((state,action)=>{
         switch(action.type){
             case 'TIMER_START':
-                setIsIncrease(true)
-                setValue(60*60)
+                
+                if(getCookie('timer')){
+                    setIsIncrease(true)
+                    setValue(getCookie('timer'))
+                    
+                }
+
                 break;
             case 'TIMER_RESET':
                 logout();

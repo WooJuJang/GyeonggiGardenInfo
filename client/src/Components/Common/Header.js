@@ -12,6 +12,7 @@ export const Header=({history})=>{
 
     const logout=()=>{
         removeCookie('refreshToken')
+        removeCookie('timer')
         removeRefreshToken(LOGOUT,{variables:{id:state.id}})
         dispatch({type:'REMOVE_USER'})
         window.location.replace("/")
@@ -67,15 +68,6 @@ export const Header=({history})=>{
 
     return(
     <div className='header-form'>
-        {/* {useContext(TimerContext).value}
-        <button onClick={()=>{
-                        timer.timerdispatch({type:'TIMER_START'})
-                    }}>start</button>
-                    <button onClick={()=>{
-                        timer.timerdispatch({type:'TIMER_RESET'})
-                    }}>
-                        stop
-        </button> */}
         <div className='menu'>      
             <label onClick={MoveGardenLocation} className='MoveGardenLocation'>경기도 텃밭 위치</label><label>&nbsp;&nbsp;|&nbsp;&nbsp;</label>
             <label onClick={MoveCropRecommend} className='MoveCropRecommend'>텃밭 작물 추천</label><label>&nbsp;&nbsp;|&nbsp;&nbsp;</label>

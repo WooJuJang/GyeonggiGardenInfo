@@ -3,7 +3,7 @@ import { HeaderStyledContainer } from "../../css/HeaderStyledContainer";
 import {Header} from "../Common/Header";
 import {GardenLocationStyledContainter} from "../../css/GardenLocationStyledContainter";
 import { Location } from "../Common/Location";
-import {FINDGARDENSGNM,FINDGARDENDETAILINFO,FINDUSER} from '../../Database/Graphql'
+import {FINDGARDENSGNM,FINDGARDENDETAILINFO,FINDUSER,FINDLOGTLAT} from '../../Database/Graphql'
 import { useQuery,useLazyQuery } from "@apollo/client";
 import RegistPopUp from "./RegistPopUp";
 import { getCookie} from "../Auth/Cookis";
@@ -21,8 +21,8 @@ const GardenLocation =({history})=>{
         SUBFACLT_CONT:'',
         LOTOUT_PC_CONT:'',
         REFINE_LOTNO_ADDR:'경기도 안성시 공도읍 275-17',
-        REFINE_WGS84_LOGT:'127.2840722588',
-        REFINE_WGS84_LAT:'36.9987490608'
+        REFINE_WGS84_LOGT:'127.165263172353',
+        REFINE_WGS84_LAT:'37.0035656380062'
     })
     const [input_area,setInput_area]=useState('')
     const [gardenInfo,setGardenInfo]=useState([''])
@@ -31,6 +31,8 @@ const GardenLocation =({history})=>{
 
     const [detailInfo,setDetailInfo]=useState('')
     const findGardenDetailInfo=useQuery(FINDGARDENDETAILINFO,{variables:{area:detailInfo}})
+    const findLogtLat=useQuery(FINDLOGTLAT,{variables:{address:gardenDetailInfo.REFINE_LOTNO_ADDR}})
+    const findUserInfo=useQuery(FINDUSER)
 
     const {state}=useContext(UserInfoContext)
 
@@ -43,7 +45,6 @@ const GardenLocation =({history})=>{
         if(input_area!==""){
             findGardenNm({variables:{area:input_area}})
         }
-
     }
 
     /* 선택된 지역에 속한 농장 정보 출력 */
@@ -51,12 +52,17 @@ const GardenLocation =({history})=>{
         setCurrentPage(1)
         setDetailInfo(e.target.innerText)
         setGardenDetailInfo({
+            //...prev,
             SG_NM:e.target.innerText,
-            REFINE_LOTNO_ADDR:'',
-        })  
+            REFINE_LOTNO_ADDR:'경기도 안성시 공도읍 275-17',
+            REFINE_WGS84_LOGT:'127.165263172353',
+            REFINE_WGS84_LAT:'37.0035656380062'
+
+        })
+        findUserInfo.refetch(FINDUSER)
     }
     useEffect(()=>{
-        if(gardenDetailInfo.SG_NM){
+        if(gardenDetailInfo.SG_NM!==''){
             setLoading(true)
             if(findGardenDetailInfo.loading===false && findGardenDetailInfo.data){
                 setGardenInfo(findGardenDetailInfo.data)
@@ -64,14 +70,10 @@ const GardenLocation =({history})=>{
                 setLoading(false)
             }
         }
-
-
-
-
     },[gardenDetailInfo.SG_NM,findGardenDetailInfo.data,findGardenDetailInfo.loading])
 
 const [popupOpen,setPopUpOpen]=useState(false)
-const findUserInfo=useQuery(FINDUSER)
+
 const [userInfo,setUserInfo]=useState({
     id:'',
     city:'',
@@ -79,25 +81,29 @@ const [userInfo,setUserInfo]=useState({
 })
 
 useEffect(()=>{
-
     if(findUserInfo?.loading ===false && findUserInfo.data?.findUser){
     setUserInfo({        
         id:findUserInfo.data.findUser.id,
         city:findUserInfo.data.findUser.city,
         garden_name:findUserInfo.data.findUser.garden_name
     })
-
 }
 },[findUserInfo])
 
 const openPopUp=()=>{
     if(getCookie('refreshToken')){
-        findUserInfo.refetch(FINDUSER)
+        
+        console.log(userInfo)
         if(!userInfo.garden_name){
             if(userInfo.city===gardenDetailInfo.SG_NM){
-                setPopUpOpen(true)
+                    console.log(gardenDetailInfo)
+                    setPopUpOpen(true)
+                
+                
+                
             }else{
-
+                console.log(userInfo.city)
+                console.log(gardenDetailInfo.SG_NM)
                 alert('거주지가 다릅니다.')
             }
         }else{
@@ -112,9 +118,8 @@ const openPopUp=()=>{
 const closePopUp=()=>{
     setPopUpOpen(false)
 }
+
 /* 페이징에 필요한 코드 */
-
-
 const [postsLenth,setPostsLength]=useState(0);
 const [loading, setLoading] = useState(false);
 const [currentPage, setCurrentPage] = useState(1);
@@ -138,6 +143,7 @@ const getGardenNM=(text)=>{
 
     for(let i=0;i<gardenInfo.findGardenDetailInfo.length;i++){
         if(gardenInfo.findGardenDetailInfo[i].KITGDN_NM===garden_nm){
+
             setGardenDetailInfo(gardenDetailInfo=>({...gardenDetailInfo,
                 
                 OPERT_MAINBD_NM:gardenInfo.findGardenDetailInfo[i].OPERT_MAINBD_NM,
@@ -148,14 +154,35 @@ const getGardenNM=(text)=>{
                 REFINE_WGS84_LOGT:gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LOGT,
                 REFINE_WGS84_LAT:gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LAT
             }))
-           
+            if(!gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LOGT){
+                findLogtLat.refetch(FINDLOGTLAT,{variables:{address:gardenInfo.findGardenDetailInfo[i].REFINE_LOTNO_ADDR}}).then((res)=>{
+                    if(res.data.findLogtLat){
+                        setGardenDetailInfo(prev=>({
+                            ...prev,
+                            REFINE_WGS84_LOGT:res.data.findLogtLat[0],
+                            REFINE_WGS84_LAT:res.data.findLogtLat[1],
+                        }))  
+                    }
+
+                    
+                }).catch((err)=>{
+                    console.log(err)
+                    setGardenDetailInfo(prev=>({
+                        ...prev,
+                        REFINE_WGS84_LOGT:null,
+                        REFINE_WGS84_LAT:null,
+                    }))  
+                })
+            }
         }
     }
+    
 }
 useEffect(()=>{
     if(detailInfo)
         setPageNm(pagenm=>!pagenm)
 },[detailInfo])
+
     return(
         <div>
             <HeaderStyledContainer garden_location_fontweight state={state.id}>

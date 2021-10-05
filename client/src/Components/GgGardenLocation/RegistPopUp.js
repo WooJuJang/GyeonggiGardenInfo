@@ -8,6 +8,7 @@ const RegistPopUp=(props)=>{
         close();
     }})
     const regist=()=>{
+        console.log(data)
         insertUserGarden({variables:{garden_name:data.KITGDN_NM,garden_latitude:parseFloat(data.REFINE_WGS84_LAT),garden_longitude:parseFloat(data.REFINE_WGS84_LOGT),moisture:0,nutrition:0,weed_quantity:0}})
     }
     return(

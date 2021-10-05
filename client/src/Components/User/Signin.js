@@ -4,13 +4,10 @@ import { SigninStyleContainer } from '../../css/SigninStyleContainer'
 import {SIGNIN} from '../../Database/Graphql'
 import {setCookie} from '../Auth/Cookis'
 import {UserInfoContext} from '../../UserInfoContext'
-import { TimerContext } from '../Common/Timer'
 
 const Login=({history})=>{
    
     const contextValue=useContext(UserInfoContext)
-    const timer=useContext(TimerContext)
-
 
     const moveSignup=()=>{
         history.push("/signup")
@@ -34,9 +31,8 @@ const Login=({history})=>{
                 
     }})
     const OnHandleLogin=async()=>{
-
+            setCookie('timer',60*60)
             const login_data=await signin({variables:{id:loginInfo.id,password:loginInfo.password}})
-            timer.timerdispatch({type:'TIMER_START'})
             if(!login_data.errors){
                 history.push('/')
             }
