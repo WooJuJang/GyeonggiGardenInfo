@@ -11,8 +11,10 @@ import { RegistPopUpStyledContainer } from "../../css/GgGardenLocation/RegistPop
 import Posts from './Posts'
 import Pagination from './Pagination'
 import { UserInfoContext } from "../Common/UserInfoContext";
-
-const GardenLocation =({history})=>{
+import { useHistory } from "react-router-dom";
+//경기도 텃밭위치 
+const GardenLocation =()=>{
+    const history=useHistory();
 
     const [gardenDetailInfo,setGardenDetailInfo]=useState({
         SG_NM:'',
@@ -52,7 +54,6 @@ const GardenLocation =({history})=>{
         setCurrentPage(1)
         setDetailInfo(e.target.innerText)
         setGardenDetailInfo({
-            //...prev,
             SG_NM:e.target.innerText,
             REFINE_LOTNO_ADDR:'경기도 안성시 공도읍 275-17',
             REFINE_WGS84_LOGT:'127.165263172353',
@@ -72,8 +73,8 @@ const GardenLocation =({history})=>{
         }
     },[gardenDetailInfo.SG_NM,findGardenDetailInfo.data,findGardenDetailInfo.loading])
 
-const [popupOpen,setPopUpOpen]=useState(false)
 
+//로그인 유저 정보 저장
 const [userInfo,setUserInfo]=useState({
     id:'',
     city:'',
@@ -90,6 +91,8 @@ useEffect(()=>{
 }
 },[findUserInfo])
 
+//텃밭신청 팝업
+const [popupOpen,setPopUpOpen]=useState(false)
 const openPopUp=()=>{
     if(getCookie('refreshToken')){
         

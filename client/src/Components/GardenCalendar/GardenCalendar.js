@@ -4,7 +4,7 @@ import {Header} from '../Common/Header'
 import { HeaderStyledContainer } from '../../css/Common/HeaderStyledContainer'
 import MyCalendar from './MyCalendar'
 import { UserInfoContext } from '../Common/UserInfoContext'
-
+//텃밭달력 부모컴포넌트
 const GardenCalendar=()=>{
     const history=useHistory();
     const {state}=useContext(UserInfoContext)

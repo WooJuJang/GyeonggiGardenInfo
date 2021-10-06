@@ -8,9 +8,11 @@ import { TimerContext } from './Common/TimerContext'
 function Main({history}){
     const {state}=useContext(UserInfoContext)
     const timer=useContext(TimerContext)
-   useEffect(()=>{
-    timer.timerdispatch({type:'TIMER_START'})
-   },[timer])
+
+    //자동로그아웃 타이머 시작
+    useEffect(()=>{
+        timer.timerdispatch({type:'TIMER_START'})
+    },[timer])
         
 
     return( 

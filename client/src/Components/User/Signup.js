@@ -2,14 +2,17 @@ import React, { useState } from 'react'
 import {SIGNUP} from '../../Database/Graphql'
 import {useMutation} from '@apollo/react-hooks'
 import {SignupStyleContainer} from '../../css/User/SigninStyleContainer'
+import {useHistory} from'react-router-dom'
 
-function Signup({history}){
-
+const Signup=()=>{
+    const history=useHistory();
     const [userInfo,setUserInfo]=useState({
         id:'',
         password:'',
         city:'',
     })
+    const [singup]=useMutation(SIGNUP)
+
     const onChangeUserInfo=(e)=>{
         if(e.target.name==="id"){
             return setUserInfo(userInfo=>({...userInfo,id:e.target.value}))
@@ -19,11 +22,9 @@ function Signup({history}){
             return setUserInfo(userInfo=>({...userInfo,city:e.target.value}))
         }
     }
-    const [singup]=useMutation(SIGNUP)
     
     const onHandleSubmit=async(e)=>{
         e.preventDefault();
-        console.log(userInfo.id);
         singup({variables:{id:userInfo.id,password:userInfo.password,city:userInfo.city}}).then((res)=>{
             if(res.data.signup===null){
                 return (
@@ -33,9 +34,8 @@ function Signup({history}){
                 history.push('/signin')
             }
         });
-        
-        
     }
+
     return(
         <div>
             <SignupStyleContainer>

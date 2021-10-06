@@ -3,8 +3,10 @@ import {Header} from '../Common/Header'
 import { HeaderStyledContainer } from '../../css/Common/HeaderStyledContainer'
 import { CropReccomendStyledContainer } from '../../css/CropRecommend/CropRecomendStyledContainer'
 import { UserInfoContext } from '../Common/UserInfoContext'
-
-const Croprecommend=({history})=>{
+import { useHistory } from 'react-router-dom'
+//계절선택
+const Croprecommend=()=>{
+    const history=useHistory();
     const {state}=useContext(UserInfoContext)
     const moveCrops=(data)=>{
         history.push({pathname:"/crops",state:data})

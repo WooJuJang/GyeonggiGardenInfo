@@ -1,14 +1,13 @@
 import { useMutation } from '@apollo/client';
 import React from 'react';
 import {INSERTUSERGARDEN } from '../../Database/Graphql';
-
+//텃밭 신청팝업
 const RegistPopUp=(props)=>{
     const{open,close,data}=props
     const [insertUserGarden]=useMutation(INSERTUSERGARDEN,{onCompleted:()=>{
         close();
     }})
     const regist=()=>{
-        console.log(data)
         insertUserGarden({variables:{garden_name:data.KITGDN_NM,garden_latitude:parseFloat(data.REFINE_WGS84_LAT),garden_longitude:parseFloat(data.REFINE_WGS84_LOGT),moisture:0,nutrition:0,weed_quantity:0}})
     }
     return(

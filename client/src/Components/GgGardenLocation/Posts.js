@@ -1,5 +1,5 @@
 import React from 'react';
-
+//지역별 텃밭 나열
 const Posts = ({ posts, loading,getGardenNM }) => {
   return (
     <>

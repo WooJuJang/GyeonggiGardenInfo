@@ -4,18 +4,26 @@ import { SigninStyleContainer } from '../../css/User/SigninStyleContainer'
 import {SIGNIN} from '../../Database/Graphql'
 import {setCookie} from '../Auth/Cookis'
 import {UserInfoContext} from '../Common/UserInfoContext'
+import {useHistory} from 'react-router-dom'
 
-const Login=({history})=>{
-   
+const Login=()=>{
+    const history=useHistory();
     const contextValue=useContext(UserInfoContext)
-
-    const moveSignup=()=>{
-        history.push("/signup")
-    }
+    const fulldaytime=60*60;
     const [loginInfo,setLoginInfo]=useState({
         id:'',
         password:'',
     })
+
+    const [signin,{error}]=useMutation(SIGNIN,{errorPolicy:'all', onCompleted:  (data) => {     
+        setCookie('refreshToken',data.signin,{
+                    path:"/",
+                })
+        contextValue.dispatch({type:'INSERT_USER',id:loginInfo.id})
+                
+    }})
+
+    //로그인 작업
     const onChangeLoginInfo=(e)=>{
         if(e.target.name==='id'){
             return setLoginInfo(loginInfo=>({...loginInfo,id:e.target.value}))
@@ -23,21 +31,17 @@ const Login=({history})=>{
             return setLoginInfo(loginInfo=>({...loginInfo,password:e.target.value}))
         }
     }
-    const [signin,{error}]=useMutation(SIGNIN,{errorPolicy:'all', onCompleted:  (data) => {     
-        setCookie('refreshToken',data.signin,{
-                    path:"/",
-                })
-                contextValue.dispatch({type:'INSERT_USER',id:loginInfo.id})
-                
-    }})
-    const OnHandleLogin=async()=>{
-            setCookie('timer',60*60)
+    const onHandleLogin=async()=>{
+            setCookie('timer',fulldaytime)
             const login_data=await signin({variables:{id:loginInfo.id,password:loginInfo.password}})
             if(!login_data.errors){
                 history.push('/')
             }
     }
-
+    //회원가입창으로 이동
+    const moveSignup=()=>{
+        history.push("/signup")
+    }
 
 
         return(
@@ -55,7 +59,7 @@ const Login=({history})=>{
                     {error?<div>{error.message}</div>:<></>}
                     <div className='btn-form'>
 
-                    <button className='signin-btn' onClick={OnHandleLogin}>SignIn</button>
+                    <button className='signin-btn' onClick={onHandleLogin}>SignIn</button>
                     <button className='signup-btn' onClick={moveSignup}>SignUp</button>
                     </div>
                 </div>

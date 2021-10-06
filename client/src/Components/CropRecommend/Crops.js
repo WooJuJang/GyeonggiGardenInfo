@@ -4,9 +4,10 @@ import { HeaderStyledContainer } from '../../css/Common/HeaderStyledContainer'
 import { useQuery } from '@apollo/client';
 import { FINDSEASON } from '../../Database/Graphql';
 import { CropStyledContainer } from '../../css/CropRecommend/CropStyledContainer';
-const Crops = ({ history }) => {
-    
- 
+import { useHistory } from 'react-router-dom';
+//계절별 작물추천
+const Crops = () => {
+    const history=useHistory();
     const cropsInfo = useQuery(FINDSEASON, { variables: { season: history.location.state } })
     const [cropInfo, setCropInfo] = useState({
         crops: '',
@@ -37,7 +38,8 @@ const Crops = ({ history }) => {
             image:cropsInfo.data.findSeason[0].image,
         })
    },[cropsInfo])
-    const SelectedCropInfo = (e) => {
+
+    const saveSelectedCropInfo = (e) => {
         let cropname = e.target.innerText.split("|")[0]
         for (let i = 0; i < cropsInfo.data.findSeason.length; i++) {
             if (cropsInfo.data.findSeason[i].crops === cropname) {
@@ -75,7 +77,7 @@ const Crops = ({ history }) => {
                         <div className="crop-name-list">
                             {cropsInfo.data && cropsInfo.data.findSeason.map(
                                 (info, key) =>
-                                    <label key={key} onClick={SelectedCropInfo} className={info.crops}>{info.crops + "|"}</label>)
+                                    <label key={key} onClick={saveSelectedCropInfo} className={info.crops}>{info.crops + "|"}</label>)
                             }
                         </div>
                         <div className="crop-name">

@@ -1,37 +1,35 @@
 import { useQuery } from '@apollo/client'
-import React, { useEffect, useState ,useContext} from 'react'
+import React, { useEffect, useState} from 'react'
 import { UserInfoStyledContainer } from '../../css/User/UserInfoStyledContainer'
 import { FINDUSER } from '../../Database/Graphql'
-import {UserInfoContext} from '../Common/UserInfoContext'
+import {useHistory} from 'react-router-dom'
 
-const UserInfo = ({ history }) => {
-    
-    const {state}=useContext(UserInfoContext)
-    if(state.id===''){
-        history.push('/signin');
-    }
-    const findUserInfo = useQuery(FINDUSER,{ errorPolicy: "all" })
+const UserInfo = () => {
+    const history=useHistory();
     
     const [userInfo, setUserInfo] = useState({
         id: '',
         city: '',
         garden_name: '',
     })
-    if (userInfo.id === '') {
-        findUserInfo.refetch(FINDUSER)
-    }
+    const findUserInfo = useQuery(FINDUSER,{ errorPolicy: "all" })
+
+
     useEffect(() => {
+        if (userInfo.id === '') {
+            findUserInfo.refetch(FINDUSER)
+        }
         if (findUserInfo.loading === false && findUserInfo.data?.findUser?.id) {
             setUserInfo({
                 id: findUserInfo.data.findUser.id,
                 city: findUserInfo.data.findUser.city,
                 garden_name: findUserInfo.data.findUser.garden_name
             })
-
         }
-        
-    }, [findUserInfo])
-    const moveMain = () => {
+    }, [findUserInfo,userInfo.id])
+
+    //이전페이지로 이동
+    const moveBack = () => {
         history.goBack()
     }
 
@@ -54,7 +52,7 @@ const UserInfo = ({ history }) => {
                     <label className='item'>신청 텃밭</label>
                     <label className='info-item'>{userInfo.garden_name}</label>
 
-                    <button className='btn' onClick={moveMain}>OK</button>
+                    <button className='btn' onClick={moveBack}>OK</button>
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@ import { FINDFORECAST, FINDMANAGEINFO, FINDUSER, INSERTMOISTURE, INSERTNUTRITION
 import { UserInfoContext } from '../Common/UserInfoContext';
 import { Header } from '../Common/Header'
 import {PieChart} from "react-minimal-pie-chart";
+//내텃밭위치 날씨 및 현재 토양상태 그래프 출력
 const MyGarden = () => {
     let history = useHistory();
     const { state } = useContext(UserInfoContext)

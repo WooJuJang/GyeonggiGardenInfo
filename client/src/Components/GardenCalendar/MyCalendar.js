@@ -6,7 +6,7 @@ import { GardenCalendarStyledContainer } from '../../css/GardenCalendar/GardenCa
 import { useMutation, useQuery } from '@apollo/client';
 import { FINDUSERPLANTINFO, INSERTUSERCROPS, INSERTHARVESTDATE, INSERTREMOVEDATE, FINDMANAGEINFO, INSERTMANAGEDATE, FINDHOLIDAY } from '../../Database/Graphql';
 import { UserInfoContext } from '../Common/UserInfoContext';
-
+//텃밭달력 
 const MyCalendar = () => {
     const { state } = useContext(UserInfoContext)
     const today = new Date();
@@ -42,6 +42,7 @@ const MyCalendar = () => {
     //사용자 작물관리 정보 출력
     const [organize_eventarray, setOrganizeEventarray] = useState([]);
 
+    //달력 이벤트
     useEffect(() => {
         let eventarray = [];
         const manage_list = {
@@ -333,7 +334,7 @@ const MyCalendar = () => {
                                     <div className='detail-list'>
                                         {
                                             Array.from(managemen_content_list).map((data, index) => {
-                                               return <li key={index}>{data}</li>
+                                                return <li key={index}>{data}</li>
                                             })
                                         }
                                     </div>
