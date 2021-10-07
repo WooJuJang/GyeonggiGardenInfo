@@ -1,6 +1,9 @@
 import Styled from '@emotion/styled'
-
-export const CropStyledContainer=Styled.div`
+type crop={
+    image?:any
+    crop?:any
+}
+export const CropStyledContainer=Styled.div<crop>`
 
     .main-form{
         display:flex;

@@ -5,10 +5,10 @@ import React, { useContext, useEffect, useState } from 'react'
 import { GardenCalendarStyledContainer } from '../../css/GardenCalendar/GardenCalendarStyledContainer';
 import { useMutation, useQuery } from '@apollo/client';
 import { FINDUSERPLANTINFO, INSERTUSERCROPS, INSERTHARVESTDATE, INSERTREMOVEDATE, FINDMANAGEINFO, INSERTMANAGEDATE, FINDHOLIDAY } from '../../Database/Graphql';
-import { UserInfoContext } from '../Common/UserInfoContext';
+import { useStateContext } from '../Common/UserInfoContext';
 //텃밭달력 
 const MyCalendar = () => {
-    const { state } = useContext(UserInfoContext)
+    const state = useStateContext();
     const today = new Date();
     const userPlantInfo = useQuery(FINDUSERPLANTINFO, { variables: { id: state.id } })
     const userManageInfo = useQuery(FINDMANAGEINFO, { variables: { id: state.id } }, { fetchPolicy: 'network-only' })

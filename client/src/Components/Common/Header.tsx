@@ -2,23 +2,26 @@ import React, { useContext } from 'react'
 import { getCookie, removeCookie } from '../Auth/Cookis'
 import { LOGOUT } from "../../Database/Graphql"
 import { useMutation } from '@apollo/react-hooks'
-import { UserInfoContext } from './UserInfoContext'
+import { useStateContext,useDispatchContext } from './UserInfoContext'
 import { useHistory } from 'react-router-dom'
 import { TimerContext } from './TimerContext'
 
 export const Header = () => {
     const history = useHistory();
-    const { state, dispatch } = useContext(UserInfoContext);
+    const state=useStateContext();
+    const dispatch=useDispatchContext();
     const {timerdispatch}=useContext(TimerContext);
-    const [removeRefreshToken] = useMutation(LOGOUT, { variables: { id: state.id } })
+
+    const [removeRefreshToken] = useMutation(LOGOUT,{variables:{id:state.id}})
 
     const logout = () => {
         removeCookie('refreshToken')
         removeCookie('timer')
-        removeRefreshToken(LOGOUT, { variables: { id: state.id } })
+        removeRefreshToken()
         dispatch({ type: 'REMOVE_USER' })
         timerdispatch({type:'TIMER_RESET'})
-        window.location.replace("/")
+       window.location.replace("/")
+      
     }
 
     const moveLogin = () => {

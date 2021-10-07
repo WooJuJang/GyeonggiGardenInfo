@@ -3,12 +3,13 @@ import React, { useContext, useState } from 'react'
 import { SigninStyleContainer } from '../../css/User/SigninStyleContainer'
 import {SIGNIN} from '../../Database/Graphql'
 import {setCookie} from '../Auth/Cookis'
-import {UserInfoContext} from '../Common/UserInfoContext'
+import {useDispatchContext} from '../Common/UserInfoContext'
 import {useHistory} from 'react-router-dom'
 
 const Login=()=>{
     const history=useHistory();
-    const contextValue=useContext(UserInfoContext)
+
+    const dispatch=useDispatchContext();
     const fulldaytime=60*60;
     const [loginInfo,setLoginInfo]=useState({
         id:'',
@@ -19,12 +20,12 @@ const Login=()=>{
         setCookie('refreshToken',data.signin,{
                     path:"/",
                 })
-        contextValue.dispatch({type:'INSERT_USER',id:loginInfo.id})
+                dispatch({type:'INSERT_USER',id:loginInfo.id})
                 
     }})
 
     //로그인 작업
-    const onChangeLoginInfo=(e)=>{
+    const onChangeLoginInfo=(e:React.ChangeEvent<HTMLInputElement>)=>{
         if(e.target.name==='id'){
             return setLoginInfo(loginInfo=>({...loginInfo,id:e.target.value}))
         }else{

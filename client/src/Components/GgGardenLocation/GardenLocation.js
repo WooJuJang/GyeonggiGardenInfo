@@ -10,7 +10,7 @@ import { getCookie} from "../Auth/Cookis";
 import { RegistPopUpStyledContainer } from "../../css/GgGardenLocation/RegistPopUpStyledContainer";
 import Posts from './Posts'
 import Pagination from './Pagination'
-import { UserInfoContext } from "../Common/UserInfoContext";
+import { useStateContext,useDispatchContext } from "../Common/UserInfoContext";
 import { useHistory } from "react-router-dom";
 //경기도 텃밭위치 
 const GardenLocation =()=>{
@@ -36,7 +36,7 @@ const GardenLocation =()=>{
     const findLogtLat=useQuery(FINDLOGTLAT,{variables:{address:gardenDetailInfo.REFINE_LOTNO_ADDR}})
     const findUserInfo=useQuery(FINDUSER)
 
-    const {state}=useContext(UserInfoContext)
+    const state=useStateContext();
 
     const onHandleChange=(e)=>{
         setInput_area(e.target.value)
@@ -189,7 +189,7 @@ useEffect(()=>{
     return(
         <div>
             <HeaderStyledContainer garden_location_fontweight state={state.id}>
-            <Header history={history}/>
+            <Header/>
             </HeaderStyledContainer>
             <GardenLocationStyledContainter>
             <div className='main-form'>

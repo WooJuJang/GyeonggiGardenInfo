@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from 'react'
 import { HeaderStyledContainer } from '../css/Common/HeaderStyledContainer'
 import {MainStyledContainer} from '../css/MainStyledContainer'
-import { UserInfoContext } from './Common/UserInfoContext'
+import { useStateContext } from './Common/UserInfoContext'
 import {Header} from './Common/Header'
 import { TimerContext } from './Common/TimerContext'
 
-function Main({history}){
-    const {state}=useContext(UserInfoContext)
+const Main=()=>{
+    const state=useStateContext();
     const timer=useContext(TimerContext)
 
     //자동로그아웃 타이머 시작
@@ -20,7 +20,7 @@ function Main({history}){
             <div className='main-form'>
                 <div className='blackbox'>
                     <HeaderStyledContainer main state={state.id}>
-                    <Header history={history} />
+                    <Header/>
                     </HeaderStyledContainer>
                     <div className='main-text-form'>
                     <label className='text'>Creating a healthy and prosperous world.</label>

@@ -39,8 +39,9 @@ const Crops = () => {
         })
    },[cropsInfo])
 
-    const saveSelectedCropInfo = (e) => {
-        let cropname = e.target.innerText.split("|")[0]
+    const saveSelectedCropInfo = (e:React.MouseEvent<HTMLLabelElement>)=>{
+        let change_format_cropname=e.target as HTMLElement;
+        let cropname = change_format_cropname.innerText.split("|")[0]
         for (let i = 0; i < cropsInfo.data.findSeason.length; i++) {
             if (cropsInfo.data.findSeason[i].crops === cropname) {
                 
@@ -62,10 +63,11 @@ const Crops = () => {
         
         
     }
+    
     return (
         <div>
             <HeaderStyledContainer crop_recommend_fontweight>
-                <Header history={history} />
+                <Header/>
             </HeaderStyledContainer>
             <CropStyledContainer image={cropInfo.image} crop={cropInfo.crops}>
                 
@@ -76,7 +78,7 @@ const Crops = () => {
                     <div className="crop-info">
                         <div className="crop-name-list">
                             {cropsInfo.data && cropsInfo.data.findSeason.map(
-                                (info, key) =>
+                                (info:any,key:any) =>
                                     <label key={key} onClick={saveSelectedCropInfo} className={info.crops}>{info.crops + "|"}</label>)
                             }
                         </div>

@@ -1,6 +1,14 @@
 import Styled from '@emotion/styled'
 
-export const HeaderStyledContainer=Styled.div`
+type menu={
+    crop_recommend_fontweight?:any
+    garden_location_fontweight?:any
+    my_garden?:any
+    garden_calendar?:any
+    main?:any
+    state?:any
+}
+export const HeaderStyledContainer=Styled.div<menu>`
 .header-form{
     width:100%;
     text-align:center;
@@ -79,3 +87,4 @@ button{
     border-bottom:solid 1px white;
 }
 `
+

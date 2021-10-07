@@ -2,19 +2,20 @@ import React, { useContext } from 'react'
 import {Header} from '../Common/Header'
 import { HeaderStyledContainer } from '../../css/Common/HeaderStyledContainer'
 import { CropReccomendStyledContainer } from '../../css/CropRecommend/CropRecomendStyledContainer'
-import { UserInfoContext } from '../Common/UserInfoContext'
+import { useStateContext } from '../Common/UserInfoContext'
 import { useHistory } from 'react-router-dom'
 //계절선택
 const Croprecommend=()=>{
     const history=useHistory();
-    const {state}=useContext(UserInfoContext)
-    const moveCrops=(data)=>{
+    const state=useStateContext();
+    const moveCrops=(data:String)=>{
         history.push({pathname:"/crops",state:data})
     }
+    console.log(state.id)
     return(
         <div>
         <HeaderStyledContainer crop_recommend_fontweight state={state.id}>
-        <Header history={history}/>
+        <Header/>
         </HeaderStyledContainer>
             <CropReccomendStyledContainer>
             <div className="main">

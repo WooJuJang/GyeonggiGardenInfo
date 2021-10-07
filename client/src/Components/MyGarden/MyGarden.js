@@ -4,13 +4,13 @@ import { useHistory } from "react-router-dom";
 import { HeaderStyledContainer } from '../../css/Common/HeaderStyledContainer';
 import { MyGardenStyledContainer } from '../../css/MyGarden/MyGardenStyledContainer';
 import { FINDFORECAST, FINDMANAGEINFO, FINDUSER, INSERTMOISTURE, INSERTNUTRITION, INSERTWEEDQUANTITY } from '../../Database/Graphql';
-import { UserInfoContext } from '../Common/UserInfoContext';
+import { useStateContext } from '../Common/UserInfoContext';
 import { Header } from '../Common/Header'
 import {PieChart} from "react-minimal-pie-chart";
 //내텃밭위치 날씨 및 현재 토양상태 그래프 출력
 const MyGarden = () => {
     let history = useHistory();
-    const { state } = useContext(UserInfoContext)
+    const state = useStateContext();
     const findUserInfo = useQuery(FINDUSER, { errorPolicy: "all" })
     const userManageInfo=useQuery(FINDMANAGEINFO,{variables:{id:state.id}},{fetchPolicy:'network-only'})
     const [userInfo, setUserInfo] = useState({
@@ -290,7 +290,7 @@ const MyGarden = () => {
     return (
         <div>
             <HeaderStyledContainer my_garden state={state.id}>
-                <Header history={history} />
+                <Header/>
             </HeaderStyledContainer>
             <MyGardenStyledContainer>
                 <div className="forecast-form">
