@@ -16,7 +16,7 @@ import { useHistory } from "react-router-dom";
 const GardenLocation =()=>{
     const history=useHistory();
 
-    const [gardenDetailInfo,setGardenDetailInfo]=useState({
+    const [gardenDetailInfo,setGardenDetailInfo]=useState<any>({
         SG_NM:'',
         OPERT_MAINBD_NM:'',
         KITGDN_NM:'',
@@ -27,18 +27,25 @@ const GardenLocation =()=>{
         REFINE_WGS84_LAT:'37.0035656380062'
     })
     const [input_area,setInput_area]=useState('')
-    const [gardenInfo,setGardenInfo]=useState([''])
-    const [gardenNmInfo,setGardenNmInfo]=useState([''])
+    const [gardenInfo,setGardenInfo]=useState<any>([''])
+    const [gardenNmInfo,setGardenNmInfo]=useState<any>([''])
     const [findGardenNm]=useLazyQuery(FINDGARDENSGNM,{onCompleted:data=>setGardenNmInfo(data)})
 
     const [detailInfo,setDetailInfo]=useState('')
     const findGardenDetailInfo=useQuery(FINDGARDENDETAILINFO,{variables:{area:detailInfo}})
-    const findLogtLat=useQuery(FINDLOGTLAT,{variables:{address:gardenDetailInfo.REFINE_LOTNO_ADDR}})
+    interface LogLatInventory<TData>{
+        data: TData | null;
+    }
+    interface LogtLatInventoryVars{
+        address:string;
+    }
+    const findLogtLat=useQuery<LogtLatInventoryVars>(FINDLOGTLAT,{variables:{address:gardenDetailInfo.REFINE_LOTNO_ADDR}})
+
     const findUserInfo=useQuery(FINDUSER)
 
     const state=useStateContext();
 
-    const onHandleChange=(e)=>{
+    const onHandleChange=(e:any)=>{
         setInput_area(e.target.value)
     }
 
@@ -50,7 +57,7 @@ const GardenLocation =()=>{
     }
 
     /* 선택된 지역에 속한 농장 정보 출력 */
-    const onHandleSGNM=(e)=>{
+    const onHandleSGNM=(e:any)=>{
         setCurrentPage(1)
         setDetailInfo(e.target.innerText)
         setGardenDetailInfo({
@@ -75,7 +82,7 @@ const GardenLocation =()=>{
 
 
 //로그인 유저 정보 저장
-const [userInfo,setUserInfo]=useState({
+const [userInfo,setUserInfo]=useState<any>({
     id:'',
     city:'',
     garden_nm:''
@@ -130,8 +137,8 @@ const postsPerPage=3;
 const indexOfLast = currentPage * postsPerPage;
 const indexOfFirst = indexOfLast - postsPerPage;
 
-function currentPosts(tmp) {
-  let currentPosts = [];
+function currentPosts(tmp:string) {
+  let currentPosts:any = [];
   if(tmp){
     currentPosts = tmp.slice(indexOfFirst, indexOfLast);
     return currentPosts;
@@ -140,14 +147,14 @@ function currentPosts(tmp) {
 }
 var garden_nm='';
 const [pagenm,setPageNm]=useState(true)
-const getGardenNM=(text)=>{
+const getGardenNM=(text:string):void=>{
     
     garden_nm=text;
 
     for(let i=0;i<gardenInfo.findGardenDetailInfo.length;i++){
         if(gardenInfo.findGardenDetailInfo[i].KITGDN_NM===garden_nm){
 
-            setGardenDetailInfo(gardenDetailInfo=>({...gardenDetailInfo,
+            setGardenDetailInfo((gardenDetailInfo:any)=>({...gardenDetailInfo,
                 
                 OPERT_MAINBD_NM:gardenInfo.findGardenDetailInfo[i].OPERT_MAINBD_NM,
                 KITGDN_NM:gardenInfo.findGardenDetailInfo[i].KITGDN_NM,
@@ -158,9 +165,9 @@ const getGardenNM=(text)=>{
                 REFINE_WGS84_LAT:gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LAT
             }))
             if(!gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LOGT){
-                findLogtLat.refetch(FINDLOGTLAT,{variables:{address:gardenInfo.findGardenDetailInfo[i].REFINE_LOTNO_ADDR}}).then((res)=>{
+                findLogtLat.refetch({variables:{address:gardenInfo.findGardenDetailInfo[i].REFINE_LOTNO_ADDR}}).then((res:any)=>{
                     if(res.data.findLogtLat){
-                        setGardenDetailInfo(prev=>({
+                        setGardenDetailInfo((prev:any)=>({
                             ...prev,
                             REFINE_WGS84_LOGT:res.data.findLogtLat[0],
                             REFINE_WGS84_LAT:res.data.findLogtLat[1],
@@ -170,7 +177,7 @@ const getGardenNM=(text)=>{
                     
                 }).catch((err)=>{
                     console.log(err)
-                    setGardenDetailInfo(prev=>({
+                    setGardenDetailInfo((prev:any)=>({
                         ...prev,
                         REFINE_WGS84_LOGT:null,
                         REFINE_WGS84_LAT:null,
@@ -201,7 +208,7 @@ useEffect(()=>{
                         <button onClick={onClickHandle}>Search</button>
                         <br/>
                         <div className="item__nmlist">
-                        {gardenNmInfo.findGardenSGNM && gardenNmInfo.findGardenSGNM.map((sg,index)=><li key={index} className="item__nmlist__content" onClick={onHandleSGNM}>{sg}</li>)}
+                        {gardenNmInfo.findGardenSGNM && gardenNmInfo.findGardenSGNM.map((sg:any,index:any)=><li key={index} className="item__nmlist__content" onClick={onHandleSGNM}>{sg}</li>)}
                         </div>
                     </div>
 

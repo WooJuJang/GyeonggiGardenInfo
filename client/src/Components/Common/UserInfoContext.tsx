@@ -60,10 +60,8 @@ const dispatchContext = createContext<IDispatch|undefined>(undefined);
 
 
 const reducer=(state:any,action:Action):State=>{
-  if(!state){
-    state={
-      id:getCookie('id')}
-  }
+
+  console.log(action)
   switch(action.type){
     case 'INSERT_USER':
       setCookie('id',action.id,{
@@ -83,7 +81,11 @@ const reducer=(state:any,action:Action):State=>{
 }
 
 export const StateProvider=({children}:{children:React.ReactNode})=>{
-  const [state,dispatch]=useReducer(reducer,initialState)
+  let [state,dispatch]=useReducer(reducer,initialState)
+  if(state.id===''){
+    state={
+      id:getCookie('id')}
+  }
   return(
     <dispatchContext.Provider value={dispatch}>
       <stateContext.Provider value={state}>

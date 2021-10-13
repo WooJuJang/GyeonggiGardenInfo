@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client';
 import React from 'react';
 import {INSERTUSERGARDEN } from '../../Database/Graphql';
 //텃밭 신청팝업
-const RegistPopUp=(props)=>{
+const RegistPopUp=(props:any)=>{
     const{open,close,data}=props
     const [insertUserGarden]=useMutation(INSERTUSERGARDEN,{onCompleted:()=>{
         close();

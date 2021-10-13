@@ -12,9 +12,9 @@ const TokenError =() =>{
     const dispatch=useDispatchContext();
     const [removeRefreshToken]=useMutation(LOGOUT,{variables:{id:state.id}})
 
-    const logout=(route)=>{
+    const logout=(route:string)=>{
         removeCookie('refreshToken')
-        removeRefreshToken(LOGOUT,{variables:{id:state.id}})
+        removeRefreshToken()
         dispatch({type:'REMOVE_USER'})
         history.push(route)
     }

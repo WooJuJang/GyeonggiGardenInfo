@@ -12,7 +12,7 @@ const MyGarden = () => {
     let history = useHistory();
     const state = useStateContext();
     const findUserInfo = useQuery(FINDUSER, { errorPolicy: "all" })
-    const userManageInfo=useQuery(FINDMANAGEINFO,{variables:{id:state.id}},{fetchPolicy:'network-only'})
+    const userManageInfo=useQuery(FINDMANAGEINFO,{variables:{id:state.id}})
     const [userInfo, setUserInfo] = useState({
         id: '',
         city: '',
@@ -50,18 +50,18 @@ const MyGarden = () => {
 
     //텃밭위치 기상정보 출력//
     const [date, setDate] = useState(new Date())
-    const [forecastdata, setForecastData] = useState([]);
+    const [forecastdata, setForecastData] = useState<any[]>([]);
     let year = date.getFullYear();
     let month = ('0' + (date.getMonth() + 1)).slice(-2)
     let day = ('0' + date.getDate()).slice(-2);
-    let hours;
+    let hours:any;
     let today_date=year + month + day;
     if (date.getMinutes() <= 40) {
         hours = ('0' + (date.getHours() - 1)).slice(-2)
     } else {
         hours = ('0' + date.getHours()).slice(-2)
     }
-    const findForecast = useQuery(FINDFORECAST, { variables: { lat: userInfo.garden_latitude, long: userInfo.garden_longitude, date: today_date, time: hours + "00" } })
+    const findForecast = useQuery(FINDFORECAST, { variables: { lat: userInfo.garden_latitude , long: userInfo.garden_longitude, date: today_date, time: hours + "00" } })
    
     //기상관측 데이터
     let temp
@@ -69,7 +69,7 @@ const MyGarden = () => {
     let pty
     let wsd
     let rn1
-    const pty_list = {
+    const pty_list:any = {
         0: '비/눈 없음',
         1: '비',
         2: '비/눈',
@@ -81,13 +81,13 @@ const MyGarden = () => {
     
     const onHandleForecast = () => {
         setDate(new Date());
-        findForecast.refetch({ variables: { lat: userInfo.garden_latitude, long: userInfo.garden_longitude, date: today_date, time: hours + "00" } })
+        findForecast.refetch()
     }
     useEffect(() => {
         setForecastData([])
 
         if (findForecast.loading === false && findForecast.data) {
-            findForecast.data.findForecast.map((data) => {
+            findForecast.data.findForecast.map((data:any) => {
                 return setForecastData((forecastdata) => [...forecastdata, { category: data.category, obsrValue: data.obsrValue }])
             })
         }
@@ -109,9 +109,9 @@ const MyGarden = () => {
     })
 
     //작물관리정보
-    const [fertilizer,setFertilizer]=useState('');
-    const [watering,setWatering]=useState('');
-    const [weed,setWeed]=useState('');
+    const [fertilizer,setFertilizer]=useState<any>('');
+    const [watering,setWatering]=useState<any>('');
+    const [weed,setWeed]=useState<any>('');
 
     const [insertMoisture]=useMutation(INSERTMOISTURE,{
         refetchQueries:[
@@ -139,7 +139,7 @@ const MyGarden = () => {
     },[userManageInfo])
     
     //매 정각값 출력
-    const [sharp,setSharp]=useState(new Date().getHours());
+    const [sharp,setSharp]=useState<any>(new Date().getHours());
     const time=()=>{
         let d=new Date()
         let s=d.getMinutes();
@@ -153,20 +153,21 @@ const MyGarden = () => {
     const landCalculation=useCallback(()=>{
         let datediff;
 
-        let sortedWatering;
-        let wateringPercent=0;
+        let sortedWatering:string;
+        let wateringPercent:any=0;
 
-        let sortedWeed;
-        let weedPercent=0;
+        let sortedWeed:string;
+        let weedPercent:any=0;
 
-        let sortedfertilizer;
-        let fertilizerPercent=0;
+        let sortedfertilizer:string;
+        let fertilizerPercent:any=0;
 
         //수분량 계산
         if(watering.length>0){
             sortedWatering=watering.slice(0,watering.length).sort()
-            let temp_date=year.toString()+"-"+month.toString()+"-"+day.toString()
-            datediff=(new Date(temp_date)-new Date(sortedWatering[sortedWatering.length-1]))/(1000*3600*24)
+            let temp_date:any=year.toString()+"-"+month.toString()+"-"+day.toString()
+        
+            datediff=(+new Date(temp_date)-(+new Date(sortedWatering[sortedWatering.length-1])))/(1000*3600*24)
                 if(datediff>5){
                     insertMoisture({variables:{id:state.id,moisture:0}})
                 }else{
@@ -213,7 +214,7 @@ const MyGarden = () => {
         if(weed.length>0){
             sortedWeed=weed.slice(0,weed.length).sort()
             let temp_date=year.toString()+"-"+month.toString()+"-"+day.toString()
-            datediff=(new Date(temp_date)-new Date(sortedWeed[sortedWeed.length-1]))/(1000*3600*24)            
+            datediff=(+new Date(temp_date)-(+new Date(sortedWeed[sortedWeed.length-1])))/(1000*3600*24)            
             if(datediff>3){
                 insertWeedQuantity({variables:{id:state.id,weed_quantity:0}})
             }else{
@@ -234,7 +235,7 @@ const MyGarden = () => {
                         weedPercent=100;
                         break;  
                 }
-                 if(parseFloat(weedPercent+(sharp*1.3)).toFixed(1)<=100 && parseFloat(weedPercent+(sharp*1.3)).toFixed(1)>0){
+                 if(+parseFloat(weedPercent+(sharp*1.3)).toFixed(1) <= 100 && +parseFloat(weedPercent+(sharp*1.3)).toFixed(1)>0){
                     insertWeedQuantity({variables:{id:state.id,weed_quantity:parseFloat((weedPercent+(sharp*1.3)).toFixed(1))}})
                  }else if(parseFloat((weedPercent+(sharp*1.3)).toFixed(1))>100){
                     insertWeedQuantity({variables:{id:state.id,weed_quantity:100}})
@@ -250,7 +251,7 @@ const MyGarden = () => {
        if(fertilizer.length>0){
         sortedfertilizer=fertilizer.slice(0,fertilizer.length).sort();
         let temp_date=year.toString()+"-"+month.toString()+"-"+day.toString()
-        datediff=(new Date(temp_date)-new Date(sortedfertilizer[sortedfertilizer.length-1]))/(1000*3600*24)   
+        datediff=(+new Date(temp_date)-(+new Date(sortedfertilizer[sortedfertilizer.length-1])))/(1000*3600*24)   
         fertilizerPercent=((userInfo.moisture*0.2)-(userInfo.weed_quantity*0.3))
         if(datediff>=30){
             insertNutrition({variables:{id:state.id,nutrition:(userInfo.moisture*0.2)-(userInfo.weed_quantity*0.3)}})
@@ -267,7 +268,7 @@ const MyGarden = () => {
             }
         }  
         
-        if(parseFloat((fertilizerPercent.toFixed(1))<=100 && parseFloat((fertilizerPercent)).toFixed(1))>0){
+        if(parseFloat((fertilizerPercent.toFixed(1)))<=100 && parseFloat((fertilizerPercent).toFixed(1))>0){
             insertNutrition({variables:{id:state.id,nutrition:parseFloat((fertilizerPercent).toFixed(1))}})
             }else if(parseFloat((fertilizerPercent).toFixed(1))>100){
             insertNutrition({variables:{id:state.id,nutrition:100}})
@@ -317,7 +318,7 @@ const MyGarden = () => {
                 </div>
                 <div className="statistics-form">
                     <label></label>
-                        <label name="moisture-chart">
+                        <label className="moisture-chart">
                             <PieChart
                             data={[
                                 {
@@ -345,7 +346,7 @@ const MyGarden = () => {
                                 수분량
                             </label>
                         </label>
-                        <label name="nutrition-chart">
+                        <label className="nutrition-chart">
                             <PieChart
                                 data={[
                                     {
@@ -373,7 +374,7 @@ const MyGarden = () => {
                                 </label>
                             
                         </label>
-                        <label name="weed_quantity-chart">
+                        <label className="weed_quantity-chart">
                             <PieChart
                                 data={[
                                     {

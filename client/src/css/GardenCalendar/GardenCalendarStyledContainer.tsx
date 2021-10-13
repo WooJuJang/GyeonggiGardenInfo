@@ -1,6 +1,13 @@
 import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled"
 
+type calendar={
+    plantlist?:any
+    managementlist?:any
+    harvestlist?:any
+    removelist?:any
+}
+
 const test='2021-08-16';
 const tagtest='[data-date=\''+test+'\']{color:red;}';
 const scale=keyframes`
@@ -12,7 +19,7 @@ const scale=keyframes`
   }
 
 `
-export const GardenCalendarStyledContainer=styled.div`
+export const GardenCalendarStyledContainer=styled.div<calendar>`
     .fc-col-header-cell.fc-day.fc-day-sat{
         color:blue;
     }

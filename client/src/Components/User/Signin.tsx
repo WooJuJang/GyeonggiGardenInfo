@@ -10,7 +10,7 @@ const Login=()=>{
     const history=useHistory();
 
     const dispatch=useDispatchContext();
-    const fulldaytime=60*60;
+    const fulldaytime:number=60*60;
     const [loginInfo,setLoginInfo]=useState({
         id:'',
         password:'',
@@ -33,6 +33,7 @@ const Login=()=>{
         }
     }
     const onHandleLogin=async()=>{
+        console.log(typeof fulldaytime)
             setCookie('timer',fulldaytime)
             const login_data=await signin({variables:{id:loginInfo.id,password:loginInfo.password}})
             if(!login_data.errors){

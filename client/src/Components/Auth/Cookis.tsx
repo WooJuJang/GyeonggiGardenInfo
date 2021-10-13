@@ -1,15 +1,15 @@
 import {Cookies} from "react-cookie"
 
 const cookies = new Cookies()
-export const setCookie=async (name,value,option)=>{
+export const setCookie=async (name:string,value:any,option?:any)=>{
     return cookies.set(name,value,{...option})
 }
 
-export const getCookie= (name)=>{
+export const getCookie= (name:string)=>{
     return  cookies.get(name)
 }
 
-export const removeCookie=(name)=>{
+export const removeCookie=(name:string)=>{
     return cookies.remove(name)
 }
 
