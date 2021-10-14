@@ -22,11 +22,7 @@ const RegistPopUp = (props: any) => {
                                 <button onClick={close} className="exit-btn">&times;</button>
                             </header>
                             <div className="main">
-
                                 <label className="kitgdn_nm">{data.KITGDN_NM}</label><br />
-
-
-
                                 <label className="main_content">주소: {data.REFINE_LOTNO_ADDR}</label><br />
                                 <label className="main_content">관리자: {data.OPERT_MAINBD_NM}</label><br />
                                 {data.SUBFACLT_CONT ? <>
@@ -34,7 +30,6 @@ const RegistPopUp = (props: any) => {
                                     : <>
                                         <label className="main_content">부대시설: 데이터가 존재 하지 않습니다.</label><br /></>
                                 }
-
                                 {data.LOTOUT_PC_CONT ? <>
                                     <label className="main_content">
                                         분양가격: {data.LOTOUT_PC_CONT}

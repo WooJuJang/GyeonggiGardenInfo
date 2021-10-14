@@ -13,6 +13,7 @@ const Signup = () => {
     })
     const [singup] = useMutation(SIGNUP)
 
+    //회원가입 input작업
     const onChangeUserInfo = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.name === "id") {
             return setUserInfo(userInfo => ({ ...userInfo, id: e.target.value }))
@@ -23,6 +24,7 @@ const Signup = () => {
         }
     }
 
+    //회원가입 작업
     const onHandleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         singup({ variables: { id: userInfo.id, password: userInfo.password, city: userInfo.city } }).then((res) => {

@@ -8,7 +8,6 @@ import { useHistory } from 'react-router-dom'
 
 const Login = () => {
     const history = useHistory();
-
     const dispatch = useDispatchContext();
     const fulldaytime: number = 60 * 60;
     const [loginInfo, setLoginInfo] = useState({
@@ -26,7 +25,7 @@ const Login = () => {
         }
     })
 
-    //로그인 작업
+    //로그인 input작업
     const onChangeLoginInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.name === 'id') {
             return setLoginInfo(loginInfo => ({ ...loginInfo, id: e.target.value }))
@@ -34,8 +33,8 @@ const Login = () => {
             return setLoginInfo(loginInfo => ({ ...loginInfo, password: e.target.value }))
         }
     }
+    //로그인 작업
     const onHandleLogin = async () => {
-        console.log(typeof fulldaytime)
         setCookie('timer', fulldaytime)
         const login_data = await signin({ variables: { id: loginInfo.id, password: loginInfo.password } })
         if (!login_data.errors) {

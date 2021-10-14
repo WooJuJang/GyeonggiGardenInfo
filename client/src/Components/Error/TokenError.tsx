@@ -5,13 +5,18 @@ import { useHistory } from 'react-router-dom'
 import { TokenErrorStyledContainer } from '../../css/Error/TokenErrorStyledContainer'
 import { useStateContext, useDispatchContext } from '../Common/UserInfoContext'
 import { LOGOUT } from "../../Database/Graphql"
+
 //토큰 유효기간만료 혹은 에러 페이지
 const TokenError = () => {
     const history = useHistory();
+
+    //사용자정보 컨텍스트
     const state = useStateContext();
     const dispatch = useDispatchContext();
+
     const [removeRefreshToken] = useMutation(LOGOUT, { variables: { id: state.id } })
 
+    //로그아웃 기능
     const logout = (route: string) => {
         removeCookie('refreshToken')
         removeRefreshToken()

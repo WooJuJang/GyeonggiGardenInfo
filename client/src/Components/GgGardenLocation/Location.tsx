@@ -16,12 +16,9 @@ export const Location = ({ address, logt, lat }: any) => {
       position: markerPosition
     });
     marker.setMap(map);
-
-
   }
 
   useEffect(() => {
-
     kakao.maps.load(() => {
       createmap(logt, lat)
     })

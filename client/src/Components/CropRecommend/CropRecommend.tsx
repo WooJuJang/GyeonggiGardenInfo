@@ -4,6 +4,7 @@ import { HeaderStyledContainer } from '../../css/Common/HeaderStyledContainer'
 import { CropReccomendStyledContainer } from '../../css/CropRecommend/CropRecomendStyledContainer'
 import { useStateContext } from '../Common/UserInfoContext'
 import { useHistory } from 'react-router-dom'
+
 //계절선택
 const Croprecommend = () => {
     const history = useHistory();
@@ -11,7 +12,7 @@ const Croprecommend = () => {
     const moveCrops = (data: String) => {
         history.push({ pathname: "/crops", state: data })
     }
-    console.log(state.id)
+
     return (
         <div>
             <HeaderStyledContainer crop_recommend_fontweight state={state.id}>

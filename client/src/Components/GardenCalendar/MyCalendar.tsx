@@ -148,7 +148,6 @@ const MyCalendar = () => {
     //날짜 클릭시 관련 이벤트 출력
     const formatEventArray = (dateStr: string) => {
         reset();
-        console.log(organize_eventarray)
         const events = organizedOutputEventArray.filter((data: any) => {
 
             if (data.date.includes(dateStr)) {

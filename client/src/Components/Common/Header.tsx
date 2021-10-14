@@ -13,6 +13,7 @@ export const Header = () => {
     const timer = useContext(timerDispatchContext);
     const [removeRefreshToken] = useMutation(LOGOUT, { variables: { id: state.id } })
 
+    //로그아웃 기능
     const logout = () => {
         removeCookie('refreshToken')
         removeCookie('timer')
@@ -21,6 +22,7 @@ export const Header = () => {
         timer({ type: 'TIMER_RESET' })
     }
 
+    //페이지 이동
     const moveLogin = () => {
         history.push("/signin")
     }
