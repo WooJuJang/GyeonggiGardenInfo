@@ -3,13 +3,11 @@ import { HeaderStyledContainer } from '../css/Common/HeaderStyledContainer'
 import {MainStyledContainer} from '../css/MainStyledContainer'
 import { useStateContext } from './Common/UserInfoContext'
 import {Header} from './Common/Header'
-//import { useTimerContext } from './Common/TimerContext'
 import {timerDispatchContext} from './Common/TimerContext'
 const Main=()=>{
     const state=useStateContext();
     const timer=useContext(timerDispatchContext);
-    console.log(state)
-    console.log(timer)
+
     //자동로그아웃 타이머 시작
     useEffect(()=>{
         if(timer){

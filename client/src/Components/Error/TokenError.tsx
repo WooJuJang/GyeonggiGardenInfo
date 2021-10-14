@@ -1,38 +1,38 @@
-import React,{useContext} from 'react'
-import {removeCookie} from '../Auth/Cookis'
-import {useMutation} from '@apollo/react-hooks'
+import React from 'react'
+import { removeCookie } from '../Auth/Cookis'
+import { useMutation } from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
 import { TokenErrorStyledContainer } from '../../css/Error/TokenErrorStyledContainer'
-import {useStateContext,useDispatchContext} from '../Common/UserInfoContext'
-import {LOGOUT} from "../../Database/Graphql"
+import { useStateContext, useDispatchContext } from '../Common/UserInfoContext'
+import { LOGOUT } from "../../Database/Graphql"
 //토큰 유효기간만료 혹은 에러 페이지
-const TokenError =() =>{
-    const history=useHistory();
-    const state=useStateContext();
-    const dispatch=useDispatchContext();
-    const [removeRefreshToken]=useMutation(LOGOUT,{variables:{id:state.id}})
+const TokenError = () => {
+    const history = useHistory();
+    const state = useStateContext();
+    const dispatch = useDispatchContext();
+    const [removeRefreshToken] = useMutation(LOGOUT, { variables: { id: state.id } })
 
-    const logout=(route:string)=>{
+    const logout = (route: string) => {
         removeCookie('refreshToken')
         removeRefreshToken()
-        dispatch({type:'REMOVE_USER'})
+        dispatch({ type: 'REMOVE_USER' })
         history.push(route)
     }
- return(
-     <TokenErrorStyledContainer>
-     <div className="errorForm">
-            <p className="errorName">Token Error!</p>
+    return (
+        <TokenErrorStyledContainer>
+            <div className="errorForm">
+                <p className="errorName">Token Error!</p>
 
-            <label className="errorExplanation">Please try logging in again or ask site administrator</label>
-           <br/>
-            <label className="email">wooju.jang@vatech.com</label>
-            <br/>
-            <div className="btn-form">
-                <button onClick={()=>logout('/')}>Go Main</button>
-                <button onClick={()=>logout('/signin')}>SignIn</button>
+                <label className="errorExplanation">Please try logging in again or ask site administrator</label>
+                <br />
+                <label className="email">wooju.jang@vatech.com</label>
+                <br />
+                <div className="btn-form">
+                    <button onClick={() => logout('/')}>Go Main</button>
+                    <button onClick={() => logout('/signin')}>SignIn</button>
+                </div>
             </div>
-     </div>
-     </TokenErrorStyledContainer>
- )
+        </TokenErrorStyledContainer>
+    )
 }
 export default TokenError

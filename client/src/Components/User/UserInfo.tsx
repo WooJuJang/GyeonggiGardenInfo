@@ -1,18 +1,18 @@
 import { useQuery } from '@apollo/client'
-import React, { useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { UserInfoStyledContainer } from '../../css/User/UserInfoStyledContainer'
 import { FINDUSER } from '../../Database/Graphql'
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 const UserInfo = () => {
-    const history=useHistory();
-    
+    const history = useHistory();
+
     const [userInfo, setUserInfo] = useState({
         id: '',
         city: '',
         garden_name: '',
     })
-    const findUserInfo = useQuery(FINDUSER,{ errorPolicy: "all" })
+    const findUserInfo = useQuery(FINDUSER, { errorPolicy: "all" })
 
 
     useEffect(() => {
@@ -26,7 +26,7 @@ const UserInfo = () => {
                 garden_name: findUserInfo.data.findUser.garden_name
             })
         }
-    }, [findUserInfo,userInfo.id])
+    }, [findUserInfo, userInfo.id])
 
     //이전페이지로 이동
     const moveBack = () => {
@@ -38,24 +38,24 @@ const UserInfo = () => {
 
         <UserInfoStyledContainer>
             <div className='userinfo-form'>
-            <div className='userinfo-form-box'>
-                <div className='userinfo-form-box-grid'>
-                    <label className='item1'>사용자 정보</label>
+                <div className='userinfo-form-box'>
+                    <div className='userinfo-form-box-grid'>
+                        <label className='item1'>사용자 정보</label>
 
 
-                    <label className='item'>사용자 아이디 </label>
-                    <label className='info-item'>{userInfo.id}</label>
+                        <label className='item'>사용자 아이디 </label>
+                        <label className='info-item'>{userInfo.id}</label>
 
-                    <label className='item'>사용자 지역 </label>
-                    <label className='info-item'>{userInfo.city}</label>
+                        <label className='item'>사용자 지역 </label>
+                        <label className='info-item'>{userInfo.city}</label>
 
-                    <label className='item'>신청 텃밭</label>
-                    <label className='info-item'>{userInfo.garden_name}</label>
+                        <label className='item'>신청 텃밭</label>
+                        <label className='info-item'>{userInfo.garden_name}</label>
 
-                    <button className='btn' onClick={moveBack}>OK</button>
+                        <button className='btn' onClick={moveBack}>OK</button>
+                    </div>
                 </div>
             </div>
-        </div>
         </UserInfoStyledContainer>
 
     )

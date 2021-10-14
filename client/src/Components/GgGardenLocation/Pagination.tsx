@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { PageUl, PageLi, PageSpan } from '../../css/GgGardenLocation/PaginationStyledContainer'
 //페이징
-const Pagination = ({ postsPerPage, totalPosts, paginate, pagenm }:any) => {
+const Pagination = ({ postsPerPage, totalPosts, paginate, pagenm }: any) => {
 
   const perPage = 5;
   const [currentPage, setCurrentPage] = useState(pagenm)

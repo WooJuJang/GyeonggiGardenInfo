@@ -13,7 +13,7 @@ const MyCalendar = () => {
     const userPlantInfo = useQuery(FINDUSERPLANTINFO, { variables: { id: state.id } })
     const userManageInfo = useQuery(FINDMANAGEINFO, { variables: { id: state.id } })
 
-    const daylist:any = {
+    const daylist: any = {
         Mon: 'Monday',
         Tue: 'Tuesday',
         Wed: 'Wednesday',
@@ -44,8 +44,8 @@ const MyCalendar = () => {
 
     //달력 이벤트
     useEffect(() => {
-        let eventarray:any[] = [];
-        const manage_list:any = {
+        let eventarray: any[] = [];
+        const manage_list: any = {
             fertilizer: "비료 주기",
             watering: "물 주기",
             weed: "잡초 뽑기",
@@ -55,41 +55,41 @@ const MyCalendar = () => {
         setHarvestableCropsArray([])
         //공휴일 데이터 정돈된 이벤트배열에 추가
         if (findHoliday.loading === false && findHoliday?.data) {
-            findHoliday.data.findHoliday.forEach((data:any) => {
+            findHoliday.data.findHoliday.forEach((data: any) => {
                 let date = String(data.locdate)
                 setOrganizeEventarray(prev => [...prev, { title: [data.dateName], date: date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2), color: 'red' }])
             })
 
             //사용자 작물정보 이벤트배열에 추가
-            userPlantInfo.data?.findUserPlantInfo.forEach((data:any) => {
-               
+            userPlantInfo.data?.findUserPlantInfo.forEach((data: any) => {
+
                 if (data.plant_date) {
-                    data.plant_date.forEach((plant_day:any) => {
+                    data.plant_date.forEach((plant_day: any) => {
                         eventarray.push({ title: data.user_crops + '심기', date: plant_day })
                     })
                 }
                 if (data.harvest_date) {
-                    data.harvest_date.forEach((harvest_day:any) => {
+                    data.harvest_date.forEach((harvest_day: any) => {
                         eventarray.push({ title: data.user_crops + '수확', date: harvest_day })
                     })
                 }
                 if (data.remove_date) {
-                    data.remove_date.forEach((remove_day:any) => {
+                    data.remove_date.forEach((remove_day: any) => {
                         eventarray.push({ title: data.user_crops + '제거', date: remove_day })
                     })
                 }
                 if (!data.remove_date[0]) {
-                    setHarvestableCropsArray((harvestable_crops_array:any) => [...harvestable_crops_array, data.user_crops])
+                    setHarvestableCropsArray((harvestable_crops_array: any) => [...harvestable_crops_array, data.user_crops])
                 }
             })
-            
+
             //사용자 작물관리 정보 이벤트배열에 추가
             const usermanageinfo = userManageInfo.data?.findUserManageInfo
             if (usermanageinfo) {
                 for (let prop in usermanageinfo) {
                     if (prop !== '__typename') {
                         if (usermanageinfo[prop]) {
-                            usermanageinfo[prop].forEach((day:any) => {
+                            usermanageinfo[prop].forEach((day: any) => {
                                 eventarray.push({ title: manage_list[prop], date: day })
                             })
                         }
@@ -99,13 +99,13 @@ const MyCalendar = () => {
             }
             //사용자 작물관리 정보 중복삭제 및 같은 날짜로 작업 묶기 
             eventarray?.forEach((data) => {
-                let titlearray:any[] = [];
+                let titlearray: any[] = [];
                 eventarray.forEach((a) => {
                     if (a.date === data.date) {
                         titlearray.push(a.title)
                     }
                 })
-                
+
                 setOrganizeEventarray((prev) => ([...prev, { title: titlearray, date: data.date, color: 'green' }]))
             })
 
@@ -113,22 +113,22 @@ const MyCalendar = () => {
     }, [userPlantInfo, userManageInfo, findHoliday, userManageInfo.data?.findUserManageInfo, userPlantInfo.data?.findUserPlantInfo])
 
     //이벤트 배열 중복값 제거 => 최종 출력용 배열 생성
-    const [organizedOutputEventArray,setOrganizedOutputEventArray]=useState<any>([])
-    useEffect(()=>{
-        setOrganizedOutputEventArray(organize_eventarray.reduce((accumalator,current)=>{
-                if(!accumalator.some((item:any)=>item.date === current.date && item.color === current.color)){
-                    accumalator.push(current)
-                }
+    const [organizedOutputEventArray, setOrganizedOutputEventArray] = useState<any>([])
+    useEffect(() => {
+        setOrganizedOutputEventArray(organize_eventarray.reduce((accumalator, current) => {
+            if (!accumalator.some((item: any) => item.date === current.date && item.color === current.color)) {
+                accumalator.push(current)
+            }
             return accumalator
-        },[]))
-    },[organize_eventarray])
+        }, []))
+    }, [organize_eventarray])
 
     //날짜 클릭 이벤트
     const [selectDate, setSelectDate] = useState(today.getDate())
     const [select_full_date, setSelectFullDate] = useState('')
     const [day, setDay] = useState<any>(daylist[String(today).split(' ')[0]])
 
-    const handleDateClick = (dateStr:any, fulldate:any) => {
+    const handleDateClick = (dateStr: any, fulldate: any) => {
         setPlantList('none')
         setManagementList('none')
         setHarvestList('none')
@@ -146,11 +146,11 @@ const MyCalendar = () => {
         setCheckboxStatus([])
     }
     //날짜 클릭시 관련 이벤트 출력
-    const formatEventArray = (dateStr:string) => {
+    const formatEventArray = (dateStr: string) => {
         reset();
         console.log(organize_eventarray)
-        const events = organizedOutputEventArray.filter((data:any) => {
-            
+        const events = organizedOutputEventArray.filter((data: any) => {
+
             if (data.date.includes(dateStr)) {
                 return data
             } else {
@@ -158,25 +158,25 @@ const MyCalendar = () => {
             }
 
         })
-        events.forEach((event_data:any) => {
+        events.forEach((event_data: any) => {
             if (event_data?.color === 'green') {
-                event_data?.title.forEach((data:any) => {
+                event_data?.title.forEach((data: any) => {
                     const work = data.substr(data.length - 2, 2);
                     if (work === '심기') {
-                        setPlantContentList((plant_content_list:any) => [...plant_content_list, data])
+                        setPlantContentList((plant_content_list: any) => [...plant_content_list, data])
                     } else if (work === '수확') {
-                        setHarvestContentList((harvest_content_list:any) => [...harvest_content_list, data])
+                        setHarvestContentList((harvest_content_list: any) => [...harvest_content_list, data])
                     } else if (work === '제거') {
-                        setRemoveContentList((remove_content_list:any) => [...remove_content_list, data])
+                        setRemoveContentList((remove_content_list: any) => [...remove_content_list, data])
                     } else {
-                        setManagementContentList((managemen_content_list:any) => [...managemen_content_list, data])
+                        setManagementContentList((managemen_content_list: any) => [...managemen_content_list, data])
                     }
                 })
             }
         })
     }
     //작물관리창 display변경 함수
-    const onHandlePlantList = (e:any) => {
+    const onHandlePlantList = (e: any) => {
         setPlantInputStatus('')
         if (e.target.value === 'none') {
             setPlantList('block')
@@ -187,7 +187,7 @@ const MyCalendar = () => {
             setPlantList('none')
         }
     }
-    const onHandleManagementList = (e:any) => {
+    const onHandleManagementList = (e: any) => {
         setPlantInputStatus('')
         if (e.target.value === 'none') {
             setPlantList('none')
@@ -198,7 +198,7 @@ const MyCalendar = () => {
             setManagementList('none')
         }
     }
-    const onHandleHarvestList = (e:any) => {
+    const onHandleHarvestList = (e: any) => {
         setPlantInputStatus('')
         if (e.target.value === 'none') {
             setPlantList('none')
@@ -209,7 +209,7 @@ const MyCalendar = () => {
             setHarvestList('none')
         }
     }
-    const onHandleRemoveList = (e:any) => {
+    const onHandleRemoveList = (e: any) => {
         setPlantInputStatus('')
         if (e.target.value === 'none') {
             setPlantList('none')
@@ -269,7 +269,7 @@ const MyCalendar = () => {
         , onCompleted: (data) => formatEventArray(select_full_date),
     })
     //작물작업 추가-작물심기
-    const onChangePlant = (e:any) => {
+    const onChangePlant = (e: any) => {
         setInputPlant(e.target.value)
     }
     const onClickPlant = () => {
@@ -277,18 +277,18 @@ const MyCalendar = () => {
         setInputPlant('')
     }
     //작물작업 추가-작물관리
-    const onHandleCheckBox = (id:any, checked:any) => {
+    const onHandleCheckBox = (id: any, checked: any) => {
         if (checked) {
             setCheckboxStatus([...checkbox_status, id])
         } else {
-            setCheckboxStatus(checkbox_status.filter((data:any)=> data !== id))
+            setCheckboxStatus(checkbox_status.filter((data: any) => data !== id))
         }
     }
-    const onHandleClickRadioButton = (radioBtnName:any) => {
+    const onHandleClickRadioButton = (radioBtnName: any) => {
         setPlantInputStatus(radioBtnName)
     }
     const onClickManageDateSave = () => {
-        let select_full_date_list:any = {
+        let select_full_date_list: any = {
             fertilizer: "",
             watering: "",
             weed: "",
@@ -325,7 +325,7 @@ const MyCalendar = () => {
                             <div className='plant-list'>
                                 <div className='detail-list'>
                                     {
-                                        Array.from(plant_content_list).map((data:any, index) => {
+                                        Array.from(plant_content_list).map((data: any, index) => {
                                             return <li key={index}>{data}</li>
                                         })
                                     }
@@ -347,7 +347,7 @@ const MyCalendar = () => {
                                 <div className='management-list'>
                                     <div className='detail-list'>
                                         {
-                                            Array.from(managemen_content_list).map((data:any, index) => {
+                                            Array.from(managemen_content_list).map((data: any, index) => {
                                                 return <li key={index}>{data}</li>
                                             })
                                         }
@@ -374,7 +374,7 @@ const MyCalendar = () => {
                                 <div className='harvest-list'>
                                     <div className='detail-list'>
                                         {
-                                            Array.from(harvest_content_list).map((data:any, index) => {
+                                            Array.from(harvest_content_list).map((data: any, index) => {
                                                 return <li key={index}>{data}</li>
                                             })
                                         }
@@ -387,7 +387,7 @@ const MyCalendar = () => {
                                             Array.from(harvestable_crops_array).map((data, index) => {
                                                 return (
                                                     <div key={index}>
-                                                        <label><input type='radio'  checked={plant_input_status === data} onChange={() => onHandleClickRadioButton(data)} />{data}</label>
+                                                        <label><input type='radio' checked={plant_input_status === data} onChange={() => onHandleClickRadioButton(data)} />{data}</label>
                                                     </div>
                                                 )
                                             })
@@ -406,7 +406,7 @@ const MyCalendar = () => {
                                 <div className='remove-list'>
                                     <div className='detail-list'>
                                         {
-                                            Array.from(remove_content_list).map((data:any, index) => {
+                                            Array.from(remove_content_list).map((data: any, index) => {
                                                 return <li key={index}>{data}</li>
                                             })
                                         }
@@ -445,7 +445,6 @@ const MyCalendar = () => {
                             }}
                         initialView="dayGridMonth"
                         events={
-                            //organize_eventarray
                             organizedOutputEventArray
                         }
                     />

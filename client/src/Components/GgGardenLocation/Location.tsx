@@ -1,9 +1,9 @@
-/*global kakao */
+
 import React, { useEffect } from 'react'
-declare let kakao:any;
+declare let kakao: any;
 //카카오맵으로 텃밭위치정보 제공
-export const Location = ({ address, logt, lat }:any) => {
-  const createmap = (_logt:any, _lat:any) => {
+export const Location = ({ address, logt, lat }: any) => {
+  const createmap = (_logt: any, _lat: any) => {
     var container = document.getElementById('map');
     var options = {
       center: new kakao.maps.LatLng(parseFloat(_lat), parseFloat(_logt)),

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {Header} from '../Common/Header'
+import { Header } from '../Common/Header'
 import { HeaderStyledContainer } from '../../css/Common/HeaderStyledContainer'
 import { useQuery } from '@apollo/client';
 import { FINDSEASON } from '../../Database/Graphql';
@@ -7,7 +7,7 @@ import { CropStyledContainer } from '../../css/CropRecommend/CropStyledContainer
 import { useHistory } from 'react-router-dom';
 //계절별 작물추천
 const Crops = () => {
-    const history=useHistory();
+    const history = useHistory();
     const cropsInfo = useQuery(FINDSEASON, { variables: { season: history.location.state } })
     const [cropInfo, setCropInfo] = useState({
         crops: '',
@@ -19,32 +19,32 @@ const Crops = () => {
         explain: '',
         harvest: '',
         harvestable_crops: '',
-        image:'',
+        image: '',
 
     })
 
-   useEffect(()=>{
-       if(cropsInfo.data && cropsInfo.loading===false)
-        setCropInfo({
-            crops:cropsInfo.data.findSeason[0].crops,
-            belong: cropsInfo.data.findSeason[0].belong,
-            interval: cropsInfo.data.findSeason[0].interval,
-            fixture: cropsInfo.data.findSeason[0].fixture,
-            water: cropsInfo.data.findSeason[0].water,
-            plant:cropsInfo.data.findSeason[0].plant,
-            explain:cropsInfo.data.findSeason[0].explain,
-            harvest: cropsInfo.data.findSeason[0].harvest,
-            harvestable_crops: cropsInfo.data.findSeason[0].harvestable_crops,
-            image:cropsInfo.data.findSeason[0].image,
-        })
-   },[cropsInfo])
+    useEffect(() => {
+        if (cropsInfo.data && cropsInfo.loading === false)
+            setCropInfo({
+                crops: cropsInfo.data.findSeason[0].crops,
+                belong: cropsInfo.data.findSeason[0].belong,
+                interval: cropsInfo.data.findSeason[0].interval,
+                fixture: cropsInfo.data.findSeason[0].fixture,
+                water: cropsInfo.data.findSeason[0].water,
+                plant: cropsInfo.data.findSeason[0].plant,
+                explain: cropsInfo.data.findSeason[0].explain,
+                harvest: cropsInfo.data.findSeason[0].harvest,
+                harvestable_crops: cropsInfo.data.findSeason[0].harvestable_crops,
+                image: cropsInfo.data.findSeason[0].image,
+            })
+    }, [cropsInfo])
 
-    const saveSelectedCropInfo = (e:React.MouseEvent<HTMLLabelElement>)=>{
-        let change_format_cropname=e.target as HTMLElement;
+    const saveSelectedCropInfo = (e: React.MouseEvent<HTMLLabelElement>) => {
+        let change_format_cropname = e.target as HTMLElement;
         let cropname = change_format_cropname.innerText.split("|")[0]
         for (let i = 0; i < cropsInfo.data.findSeason.length; i++) {
             if (cropsInfo.data.findSeason[i].crops === cropname) {
-                
+
                 setCropInfo({
                     crops: cropsInfo.data.findSeason[i].crops,
                     belong: cropsInfo.data.findSeason[i].belong,
@@ -55,22 +55,22 @@ const Crops = () => {
                     explain: cropsInfo.data.findSeason[i].explain,
                     harvest: cropsInfo.data.findSeason[i].harvest,
                     harvestable_crops: cropsInfo.data.findSeason[i].harvestable_crops,
-                    image:cropsInfo.data.findSeason[i].image
+                    image: cropsInfo.data.findSeason[i].image
                 })
             }
         }
 
-        
-        
+
+
     }
-    
+
     return (
         <div>
             <HeaderStyledContainer crop_recommend_fontweight>
-                <Header/>
+                <Header />
             </HeaderStyledContainer>
             <CropStyledContainer image={cropInfo.image} crop={cropInfo.crops}>
-                
+
                 <div className="main-form">
                     <div className="crop-img-form">
                         <div className="crop-img"></div>
@@ -78,7 +78,7 @@ const Crops = () => {
                     <div className="crop-info">
                         <div className="crop-name-list">
                             {cropsInfo.data && cropsInfo.data.findSeason.map(
-                                (info:any,key:any) =>
+                                (info: any, key: any) =>
                                     <label key={key} onClick={saveSelectedCropInfo} className={info.crops}>{info.crops + "|"}</label>)
                             }
                         </div>
@@ -110,7 +110,7 @@ const Crops = () => {
                         </div>
                     </div>
                 </div>
-              
+
             </CropStyledContainer>
         </div>
     )
