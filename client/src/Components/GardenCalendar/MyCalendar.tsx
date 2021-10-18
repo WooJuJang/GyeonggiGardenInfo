@@ -30,22 +30,37 @@ const MyCalendar = () => {
     const [removelist, setRemoveList] = useState('none');
 
     //사용자 작물관리 정보 변수
-    const [plant_content_list, setPlantContentList] = useState<any>([]);
-    const [managemen_content_list, setManagementContentList] = useState<any>([]);
-    const [harvest_content_list, setHarvestContentList] = useState<any>([]);
-    const [remove_content_list, setRemoveContentList] = useState<any>([]);
-    const [harvestable_crops_array, setHarvestableCropsArray] = useState<any>([]);
+    const [plant_content_list, setPlantContentList] = useState<string[] | string>([]);
+    const [managemen_content_list, setManagementContentList] = useState<string[] | string>([]);
+    const [harvest_content_list, setHarvestContentList] = useState<string[] | string>([]);
+    const [remove_content_list, setRemoveContentList] = useState<string[] | string>([]);
+    const [harvestable_crops_array, setHarvestableCropsArray] = useState<string[] | string>([]);
 
     //공휴일 api 가져오는 쿼리
     const findHoliday = useQuery(FINDHOLIDAY, { variables: { year: String(today.getFullYear()) } })
 
     //사용자 작물관리 정보 출력
-    const [organize_eventarray, setOrganizeEventarray] = useState<any[]>([]);
+    type oranizeEventType={
+        title:string[],
+        date:string,
+        color:string
+    }
+    const [organize_eventarray, setOrganizeEventarray] = useState<oranizeEventType[]>([]);
 
     //달력 이벤트
+    type eventType={
+        title:string,
+        date:string
+    }
     useEffect(() => {
-        let eventarray: any[] = [];
-        const manage_list: any = {
+        let eventarray: eventType[] = [];
+        type manageListType={
+            fertilizer: string,
+            watering: string,
+            weed: string,
+            fixture_install: string
+        }
+        const manage_list:manageListType = {
             fertilizer: "비료 주기",
             watering: "물 주기",
             weed: "잡초 뽑기",
@@ -86,11 +101,14 @@ const MyCalendar = () => {
             //사용자 작물관리 정보 이벤트배열에 추가
             const usermanageinfo = userManageInfo.data?.findUserManageInfo
             if (usermanageinfo) {
-                for (let prop in usermanageinfo) {
+                for (let prop in usermanageinfo ) {
+                    //prop값은 string이라는 타입의 이름으로 객체에 접근하기에 바로 사용하면 타입에러 뜸
                     if (prop !== '__typename') {
                         if (usermanageinfo[prop]) {
-                            usermanageinfo[prop].forEach((day: any) => {
-                                eventarray.push({ title: manage_list[prop], date: day })
+                            usermanageinfo[prop].forEach((day: string) => {
+                                //prop값은 무조건 4개의 키값중에만 있다라는 뜻
+                                let value=manage_list[prop as 'fertilizer'|'watering'|'weed'|'fixture_install']
+                                eventarray.push({ title: value, date: day })
                             })
                         }
 
@@ -98,9 +116,9 @@ const MyCalendar = () => {
                 }
             }
             //사용자 작물관리 정보 중복삭제 및 같은 날짜로 작업 묶기 
-            eventarray?.forEach((data) => {
-                let titlearray: any[] = [];
-                eventarray.forEach((a) => {
+            eventarray?.forEach((data:eventType) => {
+                let titlearray: string[] = [];
+                eventarray.forEach((a:eventType) => {
                     if (a.date === data.date) {
                         titlearray.push(a.title)
                     }
@@ -113,9 +131,9 @@ const MyCalendar = () => {
     }, [userPlantInfo, userManageInfo, findHoliday, userManageInfo.data?.findUserManageInfo, userPlantInfo.data?.findUserPlantInfo])
 
     //이벤트 배열 중복값 제거 => 최종 출력용 배열 생성
-    const [organizedOutputEventArray, setOrganizedOutputEventArray] = useState<any>([])
+    const [organizedOutputEventArray, setOrganizedOutputEventArray] = useState<any[]>([])
     useEffect(() => {
-        setOrganizedOutputEventArray(organize_eventarray.reduce((accumalator, current) => {
+        setOrganizedOutputEventArray(organize_eventarray.reduce((accumalator:oranizeEventType[], current:oranizeEventType):oranizeEventType[] => {
             if (!accumalator.some((item: any) => item.date === current.date && item.color === current.color)) {
                 accumalator.push(current)
             }
@@ -128,13 +146,13 @@ const MyCalendar = () => {
     const [select_full_date, setSelectFullDate] = useState('')
     const [day, setDay] = useState<any>(daylist[String(today).split(' ')[0]])
 
-    const handleDateClick = (dateStr: any, fulldate: any) => {
+    const handleDateClick = (dateStr: string, fulldate: string) => {
         setPlantList('none')
         setManagementList('none')
         setHarvestList('none')
         setRemoveList('none')
         setSelectFullDate(dateStr)
-        setSelectDate(dateStr.split('-')[2])
+        setSelectDate(Number(dateStr.split('-')[2]))
         setDay(daylist[String(fulldate).split(' ')[0]])
         formatEventArray(dateStr);
     }
@@ -435,12 +453,12 @@ const MyCalendar = () => {
                         plugins={[dayGridPlugin, interactionPlugin]}
                         eventClick={
                             function (arg) {
-                                handleDateClick(arg.event.startStr, arg.event.start)
+                                handleDateClick(arg.event.startStr, String(arg.event.start))
                             }
                         }
                         dateClick={
                             function (arg) {
-                                handleDateClick(arg.dateStr, arg.date)
+                                handleDateClick(arg.dateStr, String(arg.date))
                             }}
                         initialView="dayGridMonth"
                         events={

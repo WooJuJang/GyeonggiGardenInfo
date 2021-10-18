@@ -8,8 +8,8 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, pagenm }: any) => {
 
   let indexofLast = currentPage * perPage;
   let indexOfFirst = indexofLast - perPage;
-  const pageArray = [];
-  const pageNumbers = [];
+  const pageArray:number[] = [];
+  const pageNumbers:number[] = [];
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
     pageNumbers.push(i);
     if ((i - 1) % 5 === 0) {
@@ -19,12 +19,13 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, pagenm }: any) => {
   useEffect(() => {
     setCurrentPage(1)
   }, [pagenm])
-  const decreaseIndex = () => {
+
+  const decreaseIndex = ():void => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1)
     }
   }
-  const increaseIndex = () => {
+  const increaseIndex = ():void => {
     if (currentPage < pageArray.length) {
       setCurrentPage(currentPage + 1)
       pagenm++;

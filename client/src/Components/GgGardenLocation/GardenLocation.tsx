@@ -16,7 +16,17 @@ import { useHistory } from "react-router-dom";
 const GardenLocation = () => {
     const history = useHistory();
 
-    const [gardenDetailInfo, setGardenDetailInfo] = useState<any>({
+    type gardenDetailInfoType={
+        SG_NM: string,
+        OPERT_MAINBD_NM?: string,
+        KITGDN_NM?: string,
+        SUBFACLT_CONT?: string,
+        LOTOUT_PC_CONT?: string,
+        REFINE_LOTNO_ADDR: string,
+        REFINE_WGS84_LOGT: string | null,
+        REFINE_WGS84_LAT: string | null
+    }
+    const [gardenDetailInfo, setGardenDetailInfo] = useState<gardenDetailInfoType>({
         SG_NM: '',
         OPERT_MAINBD_NM: '',
         KITGDN_NM: '',
@@ -27,7 +37,7 @@ const GardenLocation = () => {
         REFINE_WGS84_LAT: '37.0035656380062'
     })
     const [input_area, setInput_area] = useState('')
-    const [gardenInfo, setGardenInfo] = useState<any>([''])
+    const [gardenInfo, setGardenInfo] = useState<any>([])
     const [gardenNmInfo, setGardenNmInfo] = useState<any>([''])
     const [findGardenNm] = useLazyQuery(FINDGARDENSGNM, { onCompleted: data => setGardenNmInfo(data) })
 
@@ -43,7 +53,7 @@ const GardenLocation = () => {
 
     const state = useStateContext();
 
-    const onHandleChange = (e: any) => {
+    const onHandleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setInput_area(e.target.value)
     }
 
@@ -55,11 +65,12 @@ const GardenLocation = () => {
     }
 
     /* 선택된 지역에 속한 농장 정보 출력 */
-    const onHandleSGNM = (e: any) => {
+    const onHandleSGNM = (e:React.MouseEvent<HTMLLIElement>) => {
         setCurrentPage(1)
-        setDetailInfo(e.target.innerText)
+        const value=e.target as HTMLElement
+        setDetailInfo(value.innerText)
         setGardenDetailInfo({
-            SG_NM: e.target.innerText,
+            SG_NM: value.innerText,
             REFINE_LOTNO_ADDR: '경기도 안성시 공도읍 275-17',
             REFINE_WGS84_LOGT: '127.165263172353',
             REFINE_WGS84_LAT: '37.0035656380062'
@@ -80,10 +91,15 @@ const GardenLocation = () => {
 
 
     //로그인 유저 정보 저장
-    const [userInfo, setUserInfo] = useState<any>({
+    type userInfoType={
+        id:string,
+        city:string,
+        garden_name:string
+    }
+    const [userInfo, setUserInfo] = useState<userInfoType>({
         id: '',
         city: '',
-        garden_nm: ''
+        garden_name: ''
     })
 
     useEffect(() => {
@@ -100,25 +116,15 @@ const GardenLocation = () => {
     const [popupOpen, setPopUpOpen] = useState(false)
     const openPopUp = () => {
         if (getCookie('refreshToken')) {
-
-            console.log(userInfo)
             if (!userInfo.garden_name) {
                 if (userInfo.city === gardenDetailInfo.SG_NM) {
-                    console.log(gardenDetailInfo)
                     setPopUpOpen(true)
-
-
-
                 } else {
-                    console.log(userInfo.city)
-                    console.log(gardenDetailInfo.SG_NM)
                     alert('거주지가 다릅니다.')
                 }
             } else {
                 alert('이미 텃밭을 신청했습니다.')
             }
-
-
         } else {
             history.push('/signin')
         }
@@ -135,20 +141,46 @@ const GardenLocation = () => {
     const indexOfLast = currentPage * postsPerPage;
     const indexOfFirst = indexOfLast - postsPerPage;
 
+    type currentPostsType={
+        ALL_AR_DESC: string
+        APLCATN_METH_CONT: string
+        HMPG_ADDR?: string | null
+        KITGDN_IDNTFY_NO: string
+        KITGDN_NM: string
+        LOTOUT_AR_DESC: string
+        LOTOUT_PC_CONT: string
+        OPERT_MAINBD_NM: string
+        RECRUT_PERD?: string | null
+        REFINE_LOTNO_ADDR: string
+        REFINE_ROADNM_ADDR?: string | null
+        REFINE_WGS84_LAT?: string | null
+        REFINE_WGS84_LOGT?: string | null
+        REFINE_ZIP_CD: string
+        REGIST_DE: string
+        SIGUN_CD: string
+        SIGUN_NM: string
+        SUBFACLT_CONT?: string | null
+        UPD_DE: string
+        __typename?:string
+    }
     function currentPosts(tmp: string) {
-        let currentPosts: any = [];
+        let currentPosts: currentPostsType[] = [];
         if (tmp) {
-            currentPosts = tmp.slice(indexOfFirst, indexOfLast);
+            let value:any
+            value = tmp.slice(indexOfFirst, indexOfLast);
+            currentPosts=value
             return currentPosts;
         }
+        
         return currentPosts;
     }
-    var garden_nm = '';
-    const [pagenm, setPageNm] = useState(true)
+   
+    let garden_nm = '';
+    const [pagenm, setPageNm] = useState<boolean>(true)
     const getGardenNM = (text: string): void => {
 
         garden_nm = text;
-
+        
         for (let i = 0; i < gardenInfo.findGardenDetailInfo.length; i++) {
             if (gardenInfo.findGardenDetailInfo[i].KITGDN_NM === garden_nm) {
 
@@ -166,17 +198,15 @@ const GardenLocation = () => {
                 if (!gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LOGT) {
                     findLogtLat.refetch({ variables: { address: gardenInfo.findGardenDetailInfo[i].REFINE_LOTNO_ADDR } }).then((res: any) => {
                         if (res.data.findLogtLat) {
-                            setGardenDetailInfo((prev: any) => ({
+                            setGardenDetailInfo((prev:gardenDetailInfoType) => ({
                                 ...prev,
                                 REFINE_WGS84_LOGT: res.data.findLogtLat[0],
                                 REFINE_WGS84_LAT: res.data.findLogtLat[1],
                             }))
                         }
-
-
                     }).catch((err) => {
                         console.log(err)
-                        setGardenDetailInfo((prev: any) => ({
+                        setGardenDetailInfo((prev: gardenDetailInfoType) => ({
                             ...prev,
                             REFINE_WGS84_LOGT: null,
                             REFINE_WGS84_LAT: null,
@@ -212,7 +242,7 @@ const GardenLocation = () => {
                         </div>
 
                         <div className='item__info'>
-                            <Posts posts={currentPosts(gardenInfo.findGardenDetailInfo)} loading={loading} getGardenNM={getGardenNM}></Posts>
+                            <Posts posts={currentPosts(gardenInfo.findGardenDetailInfo)} loading={loading} getGardenNM={getGardenNM} ></Posts>
                             <Pagination postsPerPage={postsPerPage} totalPosts={postsLenth} paginate={setCurrentPage} pagenm={pagenm}></Pagination>
                         </div>
 

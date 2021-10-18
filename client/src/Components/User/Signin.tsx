@@ -10,7 +10,11 @@ const Login = () => {
     const history = useHistory();
     const dispatch = useDispatchContext();
     const fulldaytime: number = 60 * 60;
-    const [loginInfo, setLoginInfo] = useState({
+    type loginInfoType={
+        id:string,
+        password:string
+    }
+    const [loginInfo, setLoginInfo] = useState<loginInfoType>({
         id: '',
         password: '',
     })

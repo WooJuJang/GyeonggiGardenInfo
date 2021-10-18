@@ -17,7 +17,7 @@ const TokenError = () => {
     const [removeRefreshToken] = useMutation(LOGOUT, { variables: { id: state.id } })
 
     //로그아웃 기능
-    const logout = (route: string) => {
+    const logout = (route: string):void => {
         removeCookie('refreshToken')
         removeRefreshToken()
         dispatch({ type: 'REMOVE_USER' })

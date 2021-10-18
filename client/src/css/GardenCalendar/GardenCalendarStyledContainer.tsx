@@ -2,10 +2,10 @@ import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled"
 
 type calendar={
-    plantlist?:any
-    managementlist?:any
-    harvestlist?:any
-    removelist?:any
+    plantlist?:string
+    managementlist?:string
+    harvestlist?:string
+    removelist?:string
 }
 
 const test='2021-08-16';

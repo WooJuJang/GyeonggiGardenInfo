@@ -1,7 +1,7 @@
 import Styled from '@emotion/styled'
 type crop={
-    image?:any
-    crop?:any
+    image?:string
+    crop?:string
 }
 export const CropStyledContainer=Styled.div<crop>`
 

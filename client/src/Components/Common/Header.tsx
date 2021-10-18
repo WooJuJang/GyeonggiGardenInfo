@@ -14,7 +14,7 @@ export const Header = () => {
     const [removeRefreshToken] = useMutation(LOGOUT, { variables: { id: state.id } })
 
     //로그아웃 기능
-    const logout = () => {
+    const logout = ():void => {
         removeCookie('refreshToken')
         removeCookie('timer')
         removeRefreshToken()
@@ -23,19 +23,19 @@ export const Header = () => {
     }
 
     //페이지 이동
-    const moveLogin = () => {
+    const moveLogin = ():void => {
         history.push("/signin")
     }
-    const moveUserInfo = () => {
+    const moveUserInfo = ():void => {
         history.push("/userinfo")
     }
-    const moveGardenLocation = () => {
+    const moveGardenLocation = ():void => {
         history.push("/gardenlocation")
     }
-    const moveCropRecommend = () => {
+    const moveCropRecommend = ():void => {
         history.push("/croprecommend")
     }
-    const moveMyGarden = () => {
+    const moveMyGarden = ():void => {
         if (state.id) {
             history.push("/mygarden")
 
@@ -43,7 +43,7 @@ export const Header = () => {
             alert('로그인이 필요한 서비스입니다.');
         }
     }
-    const moveGardenCalendar = () => {
+    const moveGardenCalendar = ():void => {
         if (state.id) {
             history.push("/gardencalendar")
         } else {

@@ -9,7 +9,7 @@ import { useHistory } from 'react-router-dom'
 const Croprecommend = () => {
     const history = useHistory();
     const state = useStateContext();
-    const moveCrops = (data: String) => {
+    const moveCrops = (data: String):void => {
         history.push({ pathname: "/crops", state: data })
     }
 

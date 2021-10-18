@@ -1,12 +1,12 @@
 import Styled from '@emotion/styled'
 
 type menu={
-    crop_recommend_fontweight?:any
-    garden_location_fontweight?:any
-    my_garden?:any
-    garden_calendar?:any
-    main?:any
-    state?:any
+    crop_recommend_fontweight?:boolean
+    garden_location_fontweight?:boolean
+    my_garden?:boolean
+    garden_calendar?:boolean
+    main?:boolean
+    state?:String
 }
 export const HeaderStyledContainer=Styled.div<menu>`
 .header-form{

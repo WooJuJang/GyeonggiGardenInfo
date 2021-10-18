@@ -21,7 +21,7 @@ const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     const state = useStateContext();
     const dispatch = useDispatchContext();
 
-    const [isIncrease, setIsIncrease] = useState(false)
+    const [isIncrease, setIsIncrease] = useState<boolean>(false)
     const [value, setValue] = useState<number>(getCookie('timer'));
     const [removeRefreshToken] = useMutation(LOGOUT, { variables: { id: state.id } })
 
@@ -41,7 +41,7 @@ const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     }, [dispatch, removeRefreshToken, tick])
 
     //타이머 작업선택
-    useEffect(() => {
+    useEffect(():any => {
         if (!isIncrease) return undefined;
         if (value) {
             if (value > 0 && isIncrease) {
@@ -58,7 +58,7 @@ const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     }, [value, isIncrease, tick, logout])
 
     
-    const reducer = (state: any, action: Action): void => {
+    const reducer = (state: void, action: Action): void => {
         switch (action.type) {
             case 'TIMER_START':
                 if (getCookie('timer')) {

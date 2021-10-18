@@ -17,7 +17,7 @@ type IDispatch = Dispatch<Action>;
 const dispatchContext = createContext<IDispatch | undefined>(undefined);
 
 
-const reducer = (state: any, action: Action): State => {
+const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'INSERT_USER':
       setCookie('id', action.id, {

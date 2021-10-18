@@ -6,7 +6,12 @@ import { useHistory } from 'react-router-dom'
 
 const Signup = () => {
     const history = useHistory();
-    const [userInfo, setUserInfo] = useState({
+    type userInfoType={
+        id:string,
+        password:string,
+        city:string,
+    }
+    const [userInfo, setUserInfo] = useState<userInfoType>({
         id: '',
         password: '',
         city: '',

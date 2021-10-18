@@ -11,7 +11,20 @@ const MyGarden = () => {
     const state = useStateContext();
     const findUserInfo = useQuery(FINDUSER, { errorPolicy: "all" })
     const userManageInfo = useQuery(FINDMANAGEINFO, { variables: { id: state.id } })
-    const [userInfo, setUserInfo] = useState({
+    type userInfoType={
+        id:string,
+        city:string,
+        garden_name:string,
+        garden_latitude?:number,
+        garden_longitude?:number,
+        moisture?:number | undefined,
+        nutrition?:number | undefined,
+        weed_quantity?:number | undefined,
+        watering?:string[] | undefined,
+        fertilizer?:string[] | undefined,
+        weed?:string[] | undefined
+    }
+    const [userInfo, setUserInfo] = useState<userInfoType>({
         id: '',
         city: '',
         garden_name: '',
@@ -46,13 +59,17 @@ const MyGarden = () => {
         findUserInfo.refetch(FINDUSER)
     }
 
-    //텃밭위치 기상정보 출력//
+    //텃밭위치 기상정보 출력
+    type forcastType={
+        category:string,
+        obsrValue:string
+    }
     const [date, setDate] = useState(new Date())
-    const [forecastdata, setForecastData] = useState<any[]>([]);
+    const [forecastdata, setForecastData] = useState<forcastType[]>([]);
     let year = date.getFullYear();
     let month = ('0' + (date.getMonth() + 1)).slice(-2)
     let day = ('0' + date.getDate()).slice(-2);
-    let hours: any;
+    let hours: string;
     let today_date = year + month + day;
     if (date.getMinutes() <= 40) {
         hours = ('0' + (date.getHours() - 1)).slice(-2)
@@ -67,7 +84,17 @@ const MyGarden = () => {
     let pty
     let wsd
     let rn1
-    const pty_list: any = {
+    type pty_listType={
+        [index:string]:string,
+        0:string,
+        1:string,
+        2:string,
+        3:string,
+        5:string,
+        6:string,
+        7:string
+    }
+    const pty_list:pty_listType = {
         0: '비/눈 없음',
         1: '비',
         2: '비/눈',
@@ -81,11 +108,12 @@ const MyGarden = () => {
         setDate(new Date());
         findForecast.refetch()
     }
+
     useEffect(() => {
         setForecastData([])
 
         if (findForecast.loading === false && findForecast.data) {
-            findForecast.data.findForecast.map((data: any) => {
+            findForecast.data.findForecast.map((data: forcastType) => {
                 return setForecastData((forecastdata) => [...forecastdata, { category: data.category, obsrValue: data.obsrValue }])
             })
         }
@@ -107,9 +135,9 @@ const MyGarden = () => {
     })
 
     //작물관리정보
-    const [fertilizer, setFertilizer] = useState<any>('');
-    const [watering, setWatering] = useState<any>('');
-    const [weed, setWeed] = useState<any>('');
+    const [fertilizer, setFertilizer] = useState<string[]>([]);
+    const [watering, setWatering] = useState<string[]>([]);
+    const [weed, setWeed] = useState<string[]>([]);
 
     const [insertMoisture] = useMutation(INSERTMOISTURE, {
         refetchQueries: [
@@ -137,7 +165,7 @@ const MyGarden = () => {
     }, [userManageInfo])
 
     //매 정각값 출력
-    const [sharp, setSharp] = useState<any>(new Date().getHours());
+    const [sharp, setSharp] = useState<number>(new Date().getHours());
     const time = () => {
         let d = new Date()
         let s = d.getMinutes();
@@ -149,21 +177,21 @@ const MyGarden = () => {
 
     //수분량,영양상태,잡초량 계산
     const landCalculation = useCallback(() => {
-        let datediff;
+        let datediff:number;
 
-        let sortedWatering: string;
-        let wateringPercent: any = 0;
+        let sortedWatering: string[];
+        let wateringPercent: number = 0;
 
-        let sortedWeed: string;
-        let weedPercent: any = 0;
+        let sortedWeed: string[];
+        let weedPercent: number = 0;
 
-        let sortedfertilizer: string;
-        let fertilizerPercent: any = 0;
+        let sortedfertilizer: string[];
+        let fertilizerPercent: number = 0;
 
         //수분량 계산
         if (watering.length > 0) {
             sortedWatering = watering.slice(0, watering.length).sort()
-            let temp_date: any = year.toString() + "-" + month.toString() + "-" + day.toString()
+            let temp_date: string = year.toString() + "-" + month.toString() + "-" + day.toString()
 
             datediff = (+new Date(temp_date) - (+new Date(sortedWatering[sortedWatering.length - 1]))) / (1000 * 3600 * 24)
             if (datediff > 5) {
@@ -211,7 +239,7 @@ const MyGarden = () => {
         //잡초량 계산
         if (weed.length > 0) {
             sortedWeed = weed.slice(0, weed.length).sort()
-            let temp_date = year.toString() + "-" + month.toString() + "-" + day.toString()
+            let temp_date:string = year.toString() + "-" + month.toString() + "-" + day.toString()
             datediff = (+new Date(temp_date) - (+new Date(sortedWeed[sortedWeed.length - 1]))) / (1000 * 3600 * 24)
             if (datediff > 3) {
                 insertWeedQuantity({ variables: { id: state.id, weed_quantity: 0 } })
@@ -233,7 +261,9 @@ const MyGarden = () => {
                         weedPercent = 100;
                         break;
                 }
-                if (+parseFloat(weedPercent + (sharp * 1.3)).toFixed(1) <= 100 && +parseFloat(weedPercent + (sharp * 1.3)).toFixed(1) > 0) {
+
+                let weedvalue:number=weedPercent + (sharp * 1.3)
+                if (+parseFloat(String(weedvalue)).toFixed(1) <= 100 && +parseFloat(String(weedvalue)).toFixed(1) > 0) {
                     insertWeedQuantity({ variables: { id: state.id, weed_quantity: parseFloat((weedPercent + (sharp * 1.3)).toFixed(1)) } })
                 } else if (parseFloat((weedPercent + (sharp * 1.3)).toFixed(1)) > 100) {
                     insertWeedQuantity({ variables: { id: state.id, weed_quantity: 100 } })
@@ -248,36 +278,41 @@ const MyGarden = () => {
         //영양상태 계산
         if (fertilizer.length > 0) {
             sortedfertilizer = fertilizer.slice(0, fertilizer.length).sort();
-            let temp_date = year.toString() + "-" + month.toString() + "-" + day.toString()
+            let temp_date:string = year.toString() + "-" + month.toString() + "-" + day.toString()
             datediff = (+new Date(temp_date) - (+new Date(sortedfertilizer[sortedfertilizer.length - 1]))) / (1000 * 3600 * 24)
-            fertilizerPercent = ((userInfo.moisture * 0.2) - (userInfo.weed_quantity * 0.3))
-            if (datediff >= 30) {
-                insertNutrition({ variables: { id: state.id, nutrition: (userInfo.moisture * 0.2) - (userInfo.weed_quantity * 0.3) } })
-            } else {
-                if (datediff >= 0 && datediff < 10) {
-                    fertilizerPercent += 100;
-                    weedPercent += 3;
-                } else if (datediff >= 10 && datediff < 20) {
-                    fertilizerPercent += 66.6;
-                    weedPercent += 6;
-                } else if (datediff >= 20 && datediff < 30) {
-                    fertilizerPercent += 33.3;
-                    weedPercent += 9;
+            if(userInfo.weed_quantity && userInfo.moisture){
+                fertilizerPercent = ((userInfo.moisture * 0.2) - (userInfo.weed_quantity * 0.3))
+                if (datediff >= 30) {
+                    insertNutrition({ variables: { id: state.id, nutrition: (userInfo.moisture * 0.2) - (userInfo.weed_quantity * 0.3) } })
+                } else {
+                    if (datediff >= 0 && datediff < 10) {
+                        fertilizerPercent += 100;
+                        weedPercent += 3;
+                    } else if (datediff >= 10 && datediff < 20) {
+                        fertilizerPercent += 66.6;
+                        weedPercent += 6;
+                    } else if (datediff >= 20 && datediff < 30) {
+                        fertilizerPercent += 33.3;
+                        weedPercent += 9;
+                    }
+                }
+    
+                if (parseFloat((fertilizerPercent.toFixed(1))) <= 100 && parseFloat((fertilizerPercent).toFixed(1)) > 0) {
+                    insertNutrition({ variables: { id: state.id, nutrition: parseFloat((fertilizerPercent).toFixed(1)) } })
+                } else if (parseFloat((fertilizerPercent).toFixed(1)) > 100) {
+                    insertNutrition({ variables: { id: state.id, nutrition: 100 } })
+                } else if (parseFloat((fertilizerPercent).toFixed(1)) <= 0) {
+                    insertNutrition({ variables: { id: state.id, nutrition: 0 } })
                 }
             }
 
-            if (parseFloat((fertilizerPercent.toFixed(1))) <= 100 && parseFloat((fertilizerPercent).toFixed(1)) > 0) {
-                insertNutrition({ variables: { id: state.id, nutrition: parseFloat((fertilizerPercent).toFixed(1)) } })
-            } else if (parseFloat((fertilizerPercent).toFixed(1)) > 100) {
-                insertNutrition({ variables: { id: state.id, nutrition: 100 } })
-            } else if (parseFloat((fertilizerPercent).toFixed(1)) <= 0) {
-                insertNutrition({ variables: { id: state.id, nutrition: 0 } })
-            }
         } else if (fertilizer.length === 0) {
-            if ((userInfo.moisture * 0.2) - (userInfo.weed_quantity * 0.3) >= 0) {
-                insertNutrition({ variables: { id: state.id, nutrition: parseFloat(((userInfo.moisture * 0.2) - (userInfo.weed_quantity * 0.3)).toFixed(1)) } })
-            } else {
-                insertNutrition({ variables: { id: state.id, nutrition: 0 } })
+            if(userInfo.moisture && userInfo.weed_quantity){
+                if ((userInfo.moisture * 0.2) - (userInfo.weed_quantity * 0.3) >= 0) {
+                    insertNutrition({ variables: { id: state.id, nutrition: parseFloat(((userInfo.moisture * 0.2) - (userInfo.weed_quantity * 0.3)).toFixed(1)) } })
+                } else {
+                    insertNutrition({ variables: { id: state.id, nutrition: 0 } })
+                }
             }
         }
     }, [day, fertilizer, insertMoisture, insertNutrition, insertWeedQuantity, month, sharp, state.id, watering, weed, year, userInfo.moisture, userInfo.weed_quantity])
