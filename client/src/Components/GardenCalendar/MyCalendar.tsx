@@ -13,7 +13,17 @@ const MyCalendar = () => {
     const userPlantInfo = useQuery(FINDUSERPLANTINFO, { variables: { id: state.id } })
     const userManageInfo = useQuery(FINDMANAGEINFO, { variables: { id: state.id } })
 
-    const daylist: any = {
+    type daylistType={
+        [index:string]:string,
+        Mon:string,
+        Tue:string,
+        Wed:string,
+        Thu:string,
+        Fri:string,
+        Sat:string,
+        Sun:string
+    }
+    const daylist: daylistType = {
         Mon: 'Monday',
         Tue: 'Tuesday',
         Wed: 'Wednesday',

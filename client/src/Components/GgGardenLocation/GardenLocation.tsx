@@ -23,8 +23,8 @@ const GardenLocation = () => {
         SUBFACLT_CONT?: string,
         LOTOUT_PC_CONT?: string,
         REFINE_LOTNO_ADDR: string,
-        REFINE_WGS84_LOGT: string | null,
-        REFINE_WGS84_LAT: string | null
+        REFINE_WGS84_LOGT: string | null |undefined,
+        REFINE_WGS84_LAT: string | null | undefined
     }
     const [gardenDetailInfo, setGardenDetailInfo] = useState<gardenDetailInfoType>({
         SG_NM: '',
@@ -113,6 +113,7 @@ const GardenLocation = () => {
     }, [findUserInfo])
 
     //텃밭신청 팝업
+
     const [popupOpen, setPopUpOpen] = useState(false)
     const openPopUp = () => {
         if (getCookie('refreshToken')) {
