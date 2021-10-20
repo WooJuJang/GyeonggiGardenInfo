@@ -41,7 +41,7 @@ const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     }, [dispatch, removeRefreshToken, tick])
 
     //타이머 작업선택
-    useEffect(():any => {
+    useEffect(() => {
         if (!isIncrease) return undefined;
         if (value) {
             if (value > 0 && isIncrease) {

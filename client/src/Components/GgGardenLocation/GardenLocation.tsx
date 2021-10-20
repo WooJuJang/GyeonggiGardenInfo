@@ -164,10 +164,10 @@ const GardenLocation = () => {
         UPD_DE: string
         __typename?:string
     }
-    function currentPosts(tmp: string) {
+    function currentPosts(tmp: currentPostsType[]) {
         let currentPosts: currentPostsType[] = [];
         if (tmp) {
-            let value:any
+            let value:currentPostsType[];
             value = tmp.slice(indexOfFirst, indexOfLast);
             currentPosts=value
             return currentPosts;
@@ -177,7 +177,7 @@ const GardenLocation = () => {
     }
    
     let garden_nm = '';
-    const [pagenm, setPageNm] = useState<boolean>(true)
+    const [pagenm, setPageNm] = useState(true)
     const getGardenNM = (text: string): void => {
 
         garden_nm = text;
@@ -185,7 +185,7 @@ const GardenLocation = () => {
         for (let i = 0; i < gardenInfo.findGardenDetailInfo.length; i++) {
             if (gardenInfo.findGardenDetailInfo[i].KITGDN_NM === garden_nm) {
 
-                setGardenDetailInfo((gardenDetailInfo: any) => ({
+                setGardenDetailInfo((gardenDetailInfo: gardenDetailInfoType ) => ({
                     ...gardenDetailInfo,
 
                     OPERT_MAINBD_NM: gardenInfo.findGardenDetailInfo[i].OPERT_MAINBD_NM,
@@ -196,8 +196,9 @@ const GardenLocation = () => {
                     REFINE_WGS84_LOGT: gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LOGT,
                     REFINE_WGS84_LAT: gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LAT
                 }))
+
                 if (!gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LOGT) {
-                    findLogtLat.refetch({ variables: { address: gardenInfo.findGardenDetailInfo[i].REFINE_LOTNO_ADDR } }).then((res: any) => {
+                    findLogtLat.refetch({ variables: { address: gardenInfo.findGardenDetailInfo[i].REFINE_LOTNO_ADDR } }).then((res:any) => {
                         if (res.data.findLogtLat) {
                             setGardenDetailInfo((prev:gardenDetailInfoType) => ({
                                 ...prev,
@@ -244,7 +245,7 @@ const GardenLocation = () => {
 
                         <div className='item__info'>
                             <Posts posts={currentPosts(gardenInfo.findGardenDetailInfo)} loading={loading} getGardenNM={getGardenNM} ></Posts>
-                            <Pagination postsPerPage={postsPerPage} totalPosts={postsLenth} paginate={setCurrentPage} pagenm={pagenm}></Pagination>
+                            <Pagination postsPerPage={postsPerPage} totalPosts={postsLenth} paginate={setCurrentPage} pagenm={pagenm} _currentPage={currentPage}></Pagination>
                         </div>
 
                         <div className='item__map' style={{ visibility: gardenDetailInfo.KITGDN_NM ? "visible" : "hidden" }}>

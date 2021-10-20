@@ -1,28 +1,34 @@
 import React from 'react';
 //지역별 텃밭 나열
-const Posts = ({ posts, loading, getGardenNM }: any) => {
-  type currentPostsType={
-    ALL_AR_DESC: string
-    APLCATN_METH_CONT: string
-    HMPG_ADDR?: string | null
-    KITGDN_IDNTFY_NO: string
-    KITGDN_NM: string
-    LOTOUT_AR_DESC: string
-    LOTOUT_PC_CONT: string
-    OPERT_MAINBD_NM: string
-    RECRUT_PERD?: string | null
-    REFINE_LOTNO_ADDR: string
-    REFINE_ROADNM_ADDR?: string | null
-    REFINE_WGS84_LAT?: string | null
-    REFINE_WGS84_LOGT?: string | null
-    REFINE_ZIP_CD: string
-    REGIST_DE: string
-    SIGUN_CD: string
-    SIGUN_NM: string
-    SUBFACLT_CONT?: string | null
-    UPD_DE: string
-    __typename?:string
+type currentPostsType={
+  ALL_AR_DESC: string
+  APLCATN_METH_CONT: string
+  HMPG_ADDR?: string | null
+  KITGDN_IDNTFY_NO: string
+  KITGDN_NM: string
+  LOTOUT_AR_DESC: string
+  LOTOUT_PC_CONT: string
+  OPERT_MAINBD_NM: string
+  RECRUT_PERD?: string | null
+  REFINE_LOTNO_ADDR: string
+  REFINE_ROADNM_ADDR?: string | null
+  REFINE_WGS84_LAT?: string | null
+  REFINE_WGS84_LOGT?: string | null
+  REFINE_ZIP_CD: string
+  REGIST_DE: string
+  SIGUN_CD: string
+  SIGUN_NM: string
+  SUBFACLT_CONT?: string | null
+  UPD_DE: string
+  __typename?:string
 }
+type propsType={
+  posts:currentPostsType[],
+  loading:boolean,
+  getGardenNM:(text:string)=>void
+}
+const Posts:React.FC<propsType> = ({ posts, loading, getGardenNM }) => {
+
   return (
     <>
       {loading &&

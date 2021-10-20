@@ -1,18 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { PageUl, PageLi, PageSpan } from '../../css/GgGardenLocation/PaginationStyledContainer'
 //페이징
-const Pagination = ({ postsPerPage, totalPosts, paginate, pagenm }: any) => {
+type propsType={
+  postsPerPage:number,
+  totalPosts:number,
+  paginate:React.Dispatch<React.SetStateAction<number>>,
+  pagenm:boolean,
+  _currentPage:number
+}
+const Pagination:React.FC<propsType> = ({ postsPerPage, totalPosts, paginate, pagenm,_currentPage }) => {
 
-  const perPage = 5;
-  const [currentPage, setCurrentPage] = useState(pagenm)
-
+  const perPage = 3;
+  const [currentPage, setCurrentPage] = useState(_currentPage)
+  
   let indexofLast = currentPage * perPage;
   let indexOfFirst = indexofLast - perPage;
+
   const pageArray:number[] = [];
   const pageNumbers:number[] = [];
+
   for (let i = 1; i <= Math.ceil(totalPosts / postsPerPage); i++) {
     pageNumbers.push(i);
-    if ((i - 1) % 5 === 0) {
+    if ((i - 1) % 3 === 0) {
       pageArray.push(i)
     }
   }
@@ -28,7 +37,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, pagenm }: any) => {
   const increaseIndex = ():void => {
     if (currentPage < pageArray.length) {
       setCurrentPage(currentPage + 1)
-      pagenm++;
+      _currentPage++;
     }
   }
 
@@ -49,8 +58,6 @@ const Pagination = ({ postsPerPage, totalPosts, paginate, pagenm }: any) => {
 
         <button onClick={increaseIndex} className='increaseBtn'> ▶️ </button>
       </PageUl>
-
-
     </div>
   );
 };

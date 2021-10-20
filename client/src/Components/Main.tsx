@@ -21,7 +21,7 @@ const Main=()=>{
             <div className='main-form'>
                 <div className='blackbox'>
                     <HeaderStyledContainer main state={state.id}>
-                    <Header/>
+                        <Header/>
                     </HeaderStyledContainer>
                     <div className='main-text-form'>
                     <label className='text'>Creating a healthy and prosperous world.</label>

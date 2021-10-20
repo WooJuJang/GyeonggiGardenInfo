@@ -1,7 +1,12 @@
 import React, { useEffect } from 'react'
 declare let kakao: any;
 //카카오맵으로 텃밭위치정보 제공
-export const Location = ({ address, logt, lat }:any) => {
+type propsType={
+  address:string,
+  logt?:string | null,
+  lat?:string | null
+}
+export const Location:React.FC<propsType> = ({ address, logt, lat }) => {
   const createmap = (_logt: string, _lat: string) => {
     var container = document.getElementById('map');
     var options = {
@@ -18,10 +23,11 @@ export const Location = ({ address, logt, lat }:any) => {
   }
 
   useEffect(() => {
-    kakao.maps.load(() => {
-      createmap(logt, lat)
-    })
-
+    if(logt && lat){
+      kakao.maps.load(() => {
+        createmap(logt, lat)
+      })
+    }
   }, [address, logt, lat])
 
   return (

@@ -10,6 +10,13 @@ import { useStateContext } from '../Common/UserInfoContext';
 const MyCalendar = () => {
     const state = useStateContext();
     const today = new Date();
+    type userPlantInfoType={
+        harvest_date:string[],
+        id:string,
+        plant_date:string[],
+        remove_date:string[],
+        user_crops:string
+    }
     const userPlantInfo = useQuery(FINDUSERPLANTINFO, { variables: { id: state.id } })
     const userManageInfo = useQuery(FINDMANAGEINFO, { variables: { id: state.id } })
 
@@ -47,6 +54,10 @@ const MyCalendar = () => {
     const [harvestable_crops_array, setHarvestableCropsArray] = useState<string[] | string>([]);
 
     //공휴일 api 가져오는 쿼리
+    type findHolidayType={
+        dateName:string,
+        locdate:number
+    }
     const findHoliday = useQuery(FINDHOLIDAY, { variables: { year: String(today.getFullYear()) } })
 
     //사용자 작물관리 정보 출력
@@ -80,31 +91,31 @@ const MyCalendar = () => {
         setHarvestableCropsArray([])
         //공휴일 데이터 정돈된 이벤트배열에 추가
         if (findHoliday.loading === false && findHoliday?.data) {
-            findHoliday.data.findHoliday.forEach((data: any) => {
+            findHoliday.data.findHoliday.forEach((data: findHolidayType) => {
                 let date = String(data.locdate)
                 setOrganizeEventarray(prev => [...prev, { title: [data.dateName], date: date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2), color: 'red' }])
             })
 
             //사용자 작물정보 이벤트배열에 추가
-            userPlantInfo.data?.findUserPlantInfo.forEach((data: any) => {
+            userPlantInfo.data?.findUserPlantInfo.forEach((data: userPlantInfoType) => {
 
                 if (data.plant_date) {
-                    data.plant_date.forEach((plant_day: any) => {
+                    data.plant_date.forEach((plant_day: string) => {
                         eventarray.push({ title: data.user_crops + '심기', date: plant_day })
                     })
                 }
                 if (data.harvest_date) {
-                    data.harvest_date.forEach((harvest_day: any) => {
+                    data.harvest_date.forEach((harvest_day: string) => {
                         eventarray.push({ title: data.user_crops + '수확', date: harvest_day })
                     })
                 }
                 if (data.remove_date) {
-                    data.remove_date.forEach((remove_day: any) => {
+                    data.remove_date.forEach((remove_day: string) => {
                         eventarray.push({ title: data.user_crops + '제거', date: remove_day })
                     })
                 }
                 if (!data.remove_date[0]) {
-                    setHarvestableCropsArray((harvestable_crops_array: any) => [...harvestable_crops_array, data.user_crops])
+                    setHarvestableCropsArray((harvestable_crops_array: string[]|string) => [...harvestable_crops_array, data.user_crops])
                 }
             })
 
@@ -144,7 +155,7 @@ const MyCalendar = () => {
     const [organizedOutputEventArray, setOrganizedOutputEventArray] = useState<any[]>([])
     useEffect(() => {
         setOrganizedOutputEventArray(organize_eventarray.reduce((accumalator:oranizeEventType[], current:oranizeEventType):oranizeEventType[] => {
-            if (!accumalator.some((item: any) => item.date === current.date && item.color === current.color)) {
+            if (!accumalator.some((item: oranizeEventType) => item.date === current.date && item.color === current.color)) {
                 accumalator.push(current)
             }
             return accumalator
@@ -154,7 +165,7 @@ const MyCalendar = () => {
     //날짜 클릭 이벤트
     const [selectDate, setSelectDate] = useState(today.getDate())
     const [select_full_date, setSelectFullDate] = useState('')
-    const [day, setDay] = useState<any>(daylist[String(today).split(' ')[0]])
+    const [day, setDay] = useState<string>(daylist[String(today).split(' ')[0]])
 
     const handleDateClick = (dateStr: string, fulldate: string) => {
         setPlantList('none')
@@ -176,7 +187,7 @@ const MyCalendar = () => {
     //날짜 클릭시 관련 이벤트 출력
     const formatEventArray = (dateStr: string) => {
         reset();
-        const events = organizedOutputEventArray.filter((data: any) => {
+        const events = organizedOutputEventArray.filter((data: oranizeEventType) => {
 
             if (data.date.includes(dateStr)) {
                 return data
@@ -185,27 +196,28 @@ const MyCalendar = () => {
             }
 
         })
-        events.forEach((event_data: any) => {
+        events.forEach((event_data: oranizeEventType) => {
             if (event_data?.color === 'green') {
-                event_data?.title.forEach((data: any) => {
+                event_data?.title.forEach((data: string) => {
                     const work = data.substr(data.length - 2, 2);
                     if (work === '심기') {
-                        setPlantContentList((plant_content_list: any) => [...plant_content_list, data])
+                        setPlantContentList((plant_content_list: string[]|string) => [...plant_content_list, data])
                     } else if (work === '수확') {
-                        setHarvestContentList((harvest_content_list: any) => [...harvest_content_list, data])
+                        setHarvestContentList((harvest_content_list: string[]|string) => [...harvest_content_list, data])
                     } else if (work === '제거') {
-                        setRemoveContentList((remove_content_list: any) => [...remove_content_list, data])
+                        setRemoveContentList((remove_content_list: string[]|string) => [...remove_content_list, data])
                     } else {
-                        setManagementContentList((managemen_content_list: any) => [...managemen_content_list, data])
+                        setManagementContentList((managemen_content_list: string[]|string) => [...managemen_content_list, data])
                     }
                 })
             }
         })
     }
     //작물관리창 display변경 함수
-    const onHandlePlantList = (e: any) => {
+    const onHandlePlantList = (e:React.MouseEvent<HTMLButtonElement>) => {
         setPlantInputStatus('')
-        if (e.target.value === 'none') {
+        const target=e.target as HTMLButtonElement
+        if (target.value === 'none') {
             setPlantList('block')
             setManagementList('none')
             setHarvestList('none')
@@ -214,9 +226,10 @@ const MyCalendar = () => {
             setPlantList('none')
         }
     }
-    const onHandleManagementList = (e: any) => {
+    const onHandleManagementList = (e:React.MouseEvent<HTMLButtonElement>) => {
         setPlantInputStatus('')
-        if (e.target.value === 'none') {
+        const target=e.target as HTMLButtonElement
+        if (target.value === 'none') {
             setPlantList('none')
             setManagementList('block')
             setHarvestList('none')
@@ -225,9 +238,10 @@ const MyCalendar = () => {
             setManagementList('none')
         }
     }
-    const onHandleHarvestList = (e: any) => {
+    const onHandleHarvestList = (e:React.MouseEvent<HTMLButtonElement>) => {
         setPlantInputStatus('')
-        if (e.target.value === 'none') {
+        const target=e.target as HTMLButtonElement
+        if (target.value === 'none') {
             setPlantList('none')
             setManagementList('none')
             setHarvestList('block')
@@ -236,9 +250,10 @@ const MyCalendar = () => {
             setHarvestList('none')
         }
     }
-    const onHandleRemoveList = (e: any) => {
+    const onHandleRemoveList = (e:React.MouseEvent<HTMLButtonElement>) => {
         setPlantInputStatus('')
-        if (e.target.value === 'none') {
+        const target=e.target as HTMLButtonElement
+        if (target.value === 'none') {
             setPlantList('none')
             setManagementList('none')
             setHarvestList('none')
@@ -251,7 +266,7 @@ const MyCalendar = () => {
     //작물작업 추가
     const [input_plant, setInputPlant] = useState('')
     const [plant_input_status, setPlantInputStatus] = useState('')
-    const [checkbox_status, setCheckboxStatus] = useState<any>([])
+    const [checkbox_status, setCheckboxStatus] = useState<string[]>([])
     const [insertUserCrops] = useMutation(INSERTUSERCROPS,
         {
             refetchQueries: [
@@ -296,7 +311,7 @@ const MyCalendar = () => {
         , onCompleted: (data) => formatEventArray(select_full_date),
     })
     //작물작업 추가-작물심기
-    const onChangePlant = (e: any) => {
+    const onChangePlant = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputPlant(e.target.value)
     }
     const onClickPlant = () => {
@@ -304,18 +319,25 @@ const MyCalendar = () => {
         setInputPlant('')
     }
     //작물작업 추가-작물관리
-    const onHandleCheckBox = (id: any, checked: any) => {
+    const onHandleCheckBox = (id: string, checked: boolean) => {
         if (checked) {
             setCheckboxStatus([...checkbox_status, id])
         } else {
-            setCheckboxStatus(checkbox_status.filter((data: any) => data !== id))
+            setCheckboxStatus(checkbox_status.filter((data: string) => data !== id))
         }
     }
-    const onHandleClickRadioButton = (radioBtnName: any) => {
+    const onHandleClickRadioButton = (radioBtnName: string) => {
         setPlantInputStatus(radioBtnName)
     }
+    type ManageDateSaveType={
+        [index:string]:string,
+        fertilizer: string,
+        watering: string,
+        weed: string,
+        fixture_install: string
+    }
     const onClickManageDateSave = () => {
-        let select_full_date_list: any = {
+        let select_full_date_list: ManageDateSaveType = {
             fertilizer: "",
             watering: "",
             weed: "",
@@ -352,7 +374,7 @@ const MyCalendar = () => {
                             <div className='plant-list'>
                                 <div className='detail-list'>
                                     {
-                                        Array.from(plant_content_list).map((data: any, index) => {
+                                        Array.from(plant_content_list).map((data:string, index:number) => {
                                             return <li key={index}>{data}</li>
                                         })
                                     }
@@ -374,7 +396,7 @@ const MyCalendar = () => {
                                 <div className='management-list'>
                                     <div className='detail-list'>
                                         {
-                                            Array.from(managemen_content_list).map((data: any, index) => {
+                                            Array.from(managemen_content_list).map((data:string, index:number) => {
                                                 return <li key={index}>{data}</li>
                                             })
                                         }
@@ -401,7 +423,7 @@ const MyCalendar = () => {
                                 <div className='harvest-list'>
                                     <div className='detail-list'>
                                         {
-                                            Array.from(harvest_content_list).map((data: any, index) => {
+                                            Array.from(harvest_content_list).map((data:string, index :number) => {
                                                 return <li key={index}>{data}</li>
                                             })
                                         }
@@ -411,7 +433,7 @@ const MyCalendar = () => {
                                 <div className='harvest-list'>
                                     <div className='detail-list'>
                                         {
-                                            Array.from(harvestable_crops_array).map((data, index) => {
+                                            Array.from(harvestable_crops_array).map((data : string, index :number) => {
                                                 return (
                                                     <div key={index}>
                                                         <label><input type='radio' checked={plant_input_status === data} onChange={() => onHandleClickRadioButton(data)} />{data}</label>
@@ -433,7 +455,7 @@ const MyCalendar = () => {
                                 <div className='remove-list'>
                                     <div className='detail-list'>
                                         {
-                                            Array.from(remove_content_list).map((data: any, index) => {
+                                            Array.from(remove_content_list).map((data: string, index:number) => {
                                                 return <li key={index}>{data}</li>
                                             })
                                         }
@@ -443,7 +465,7 @@ const MyCalendar = () => {
                                 <div className='remove-list'>
                                     <div className='detail-list'>
                                         {
-                                            Array.from(harvestable_crops_array).map((data, index) => {
+                                            Array.from(harvestable_crops_array).map((data:string, index:number) => {
                                                 return (
                                                     <div key={index}>
                                                         <label><input type='radio' checked={plant_input_status === data} onChange={() => onHandleClickRadioButton(data)} />{data}</label>

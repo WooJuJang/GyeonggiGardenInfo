@@ -9,7 +9,19 @@ import { useHistory } from 'react-router-dom';
 const Crops = () => {
     const history = useHistory();
     const cropsInfo = useQuery(FINDSEASON, { variables: { season: history.location.state } })
-    const [cropInfo, setCropInfo] = useState({
+    type cropInfoType={
+        crops:string,
+        belong:string,
+        interval:string,
+        fixture:string,
+        water:string,
+        plant:string,
+        explain:string,
+        harvest:string,
+        harvestable_crops:string,
+        image:string
+    }
+    const [cropInfo, setCropInfo] = useState<cropInfoType>({
         crops: '',
         belong: '',
         interval: '',
@@ -78,7 +90,7 @@ const Crops = () => {
                     <div className="crop-info">
                         <div className="crop-name-list">
                             {cropsInfo.data && cropsInfo.data.findSeason.map(
-                                (info: any, key: any) =>
+                                (info:cropInfoType, key: number) =>
                                     <label key={key} onClick={saveSelectedCropInfo} className={info.crops}>{info.crops + "|"}</label>)
                             }
                         </div>
