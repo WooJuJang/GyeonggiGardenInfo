@@ -3,23 +3,17 @@ import React, { useEffect, useState } from 'react'
 import { UserInfoStyledContainer } from '../../css/User/UserInfoStyledContainer'
 import { FINDUSER } from '../../Database/Graphql'
 import { useHistory } from 'react-router-dom'
-
+import type {userGardenInfoType,userGardenInfoData} from './UserType'
 const UserInfo = () => {
     const history = useHistory();
-    type userInfoType={
-        id:string,
-        city:string,
-        garden_name:string
-    }
-    const [userInfo, setUserInfo] = useState<userInfoType>({
+
+    const [userInfo, setUserInfo] = useState<userGardenInfoType>({
         id: '',
         city: '',
         garden_name: '',
     })
-    interface userInfoData{
-        findUser:userInfoType
-    }
-    const findUserInfo = useQuery<userInfoData>(FINDUSER, { errorPolicy: "all" })
+
+    const findUserInfo = useQuery<userGardenInfoData>(FINDUSER, { errorPolicy: "all" })
 
 
     useEffect(() => {

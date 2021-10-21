@@ -6,43 +6,15 @@ import { GardenCalendarStyledContainer } from '../../css/GardenCalendar/GardenCa
 import { useMutation, useQuery } from '@apollo/client';
 import { FINDUSERPLANTINFO, INSERTUSERCROPS, INSERTHARVESTDATE, INSERTREMOVEDATE, FINDMANAGEINFO, INSERTMANAGEDATE, FINDHOLIDAY } from '../../Database/Graphql';
 import { useStateContext } from '../Common/UserInfoContext';
+import type {userPlantInfoType,userPlantInfoData,manageListType,userManageInfoData,daylistType,findHolidayType,oranizeEventType,eventType,ManageDateSaveType} from './GardenCalendarType'
 //텃밭달력 
 const MyCalendar = () => {
     const state = useStateContext();
     const today = new Date();
-    type userPlantInfoType={
-        harvest_date:string[],
-        id:string,
-        plant_date:string[],
-        remove_date:string[],
-        user_crops:string
-    }
-    interface userPlantInfoData{
-        findUserPlantInfo:userPlantInfoType[]
-    }
+
     const userPlantInfo = useQuery<userPlantInfoData,{id:String}>(FINDUSERPLANTINFO, { variables: { id: state.id } })
-    type manageListType={
-        [index:string]:string,
-        fertilizer: string,
-        watering: string,
-        weed: string,
-        fixture_install: string
-    }
-    interface userManageInfoData{
-        findUserManageInfo:manageListType[]
-    }
     const userManageInfo = useQuery<userManageInfoData,{id:String}>(FINDMANAGEINFO, { variables: { id: state.id } })
 
-    type daylistType={
-        [index:string]:string,
-        Mon:string,
-        Tue:string,
-        Wed:string,
-        Thu:string,
-        Fri:string,
-        Sat:string,
-        Sun:string
-    }
     const daylist: daylistType = {
         Mon: 'Monday',
         Tue: 'Tuesday',
@@ -67,25 +39,12 @@ const MyCalendar = () => {
     const [harvestable_crops_array, setHarvestableCropsArray] = useState<string[] | string>([]);
 
     //공휴일 api 가져오는 쿼리
-    type findHolidayType={
-        dateName:string,
-        locdate:number
-    }
     const findHoliday = useQuery(FINDHOLIDAY, { variables: { year: String(today.getFullYear()) } })
 
     //사용자 작물관리 정보 출력
-    type oranizeEventType={
-        title:string[],
-        date:string,
-        color:string
-    }
     const [organize_eventarray, setOrganizeEventarray] = useState<oranizeEventType[]>([]);
 
     //달력 이벤트
-    type eventType={
-        title:string,
-        date:string
-    }
     useEffect(() => {
         let eventarray: eventType[] = [];
 
@@ -332,13 +291,7 @@ const MyCalendar = () => {
     const onHandleClickRadioButton = (radioBtnName: string) => {
         setPlantInputStatus(radioBtnName)
     }
-    type ManageDateSaveType={
-        [index:string]:string,
-        fertilizer: string,
-        watering: string,
-        weed: string,
-        fixture_install: string
-    }
+
     const onClickManageDateSave = () => {
         let select_full_date_list: ManageDateSaveType = {
             fertilizer: "",

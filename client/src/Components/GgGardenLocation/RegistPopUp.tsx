@@ -1,16 +1,8 @@
 import { useMutation } from '@apollo/client';
 import React from 'react';
 import { INSERTUSERGARDEN } from '../../Database/Graphql';
-type gardenDetailInfoType={
-    SG_NM?: string,
-    OPERT_MAINBD_NM?: string,
-    KITGDN_NM?: string,
-    SUBFACLT_CONT?: string,
-    LOTOUT_PC_CONT?: string,
-    REFINE_LOTNO_ADDR?: string,
-    REFINE_WGS84_LOGT?: string | null |undefined,
-    REFINE_WGS84_LAT?: string | null | undefined
-}
+import type {gardenDetailInfoType,inserUserGardenVar} from './GgGardenLocationType';
+
 type popUpType={
     open:boolean
     close:()=>void,
@@ -19,14 +11,6 @@ type popUpType={
 //텃밭 신청팝업
 const RegistPopUp:React.FC<popUpType> = ({open,close,data}) => {
 
-    interface inserUserGardenVar{
-        garden_name:string,
-        garden_latitude:number,
-        garden_longitude:number,
-        moisture:number,
-        nutrition:number,
-        weed_quantity:number
-    }
     const [insertUserGarden] = useMutation<inserUserGardenVar>(INSERTUSERGARDEN, {
         onCompleted: () => {
             close();

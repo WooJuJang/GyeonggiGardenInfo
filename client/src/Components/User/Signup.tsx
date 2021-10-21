@@ -3,23 +3,16 @@ import { SIGNUP } from '../../Database/Graphql'
 import { useMutation } from '@apollo/react-hooks'
 import { SignupStyleContainer } from '../../css/User/SigninStyleContainer'
 import { useHistory } from 'react-router-dom'
-
-const Signup = () => {
+import type {userInfoType,signupData} from './UserType'
+const Signup = () => { 
     const history = useHistory();
-    type userInfoType={
-        id:string,
-        password:string,
-        city:string,
-    }
+
     const [userInfo, setUserInfo] = useState<userInfoType>({
         id: '',
         password: '',
         city: '',
     })
 
-    interface signupData{
-        signup:userInfoType
-    }
     const [singup] = useMutation<signupData,{id:string,password:string,city:string}>(SIGNUP)
 
     //회원가입 input작업

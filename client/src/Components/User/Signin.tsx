@@ -5,22 +5,17 @@ import { SIGNIN } from '../../Database/Graphql'
 import { setCookie } from '../Auth/Cookis'
 import { useDispatchContext } from '../Common/UserInfoContext'
 import { useHistory } from 'react-router-dom'
-
+import type {loginInfoType,signinData} from './UserType'
 const Login = () => {
     const history = useHistory();
     const dispatch = useDispatchContext();
     const fulldaytime: number = 60 * 60;
-    type loginInfoType={
-        id:string,
-        password:string
-    }
+
     const [loginInfo, setLoginInfo] = useState<loginInfoType>({
         id: '',
         password: '',
     })
-    interface signinData{
-        signin:string
-    }
+
     const [signin, { error }] = useMutation<signinData,{id:string,password:string}>(SIGNIN, {
         errorPolicy: 'all', onCompleted: (data) => {
             setCookie('refreshToken', data.signin, {

@@ -12,20 +12,11 @@ import Posts from './Posts'
 import Pagination from './Pagination'
 import { useStateContext } from "../Common/UserInfoContext";
 import { useHistory } from "react-router-dom";
+import type {gardenDetailInfoType,currentPostsType,currentPostsData,findLogtLatData,LogtLatInventoryVars,userInfoType} from './GgGardenLocationType'
 //경기도 텃밭위치 
 const GardenLocation = () => {
     const history = useHistory();
 
-    type gardenDetailInfoType={
-        SG_NM: string,
-        OPERT_MAINBD_NM?: string,
-        KITGDN_NM?: string,
-        SUBFACLT_CONT?: string,
-        LOTOUT_PC_CONT?: string,
-        REFINE_LOTNO_ADDR: string,
-        REFINE_WGS84_LOGT: string | null |undefined,
-        REFINE_WGS84_LAT: string | null | undefined
-    }
     const [gardenDetailInfo, setGardenDetailInfo] = useState<gardenDetailInfoType>({
         SG_NM: '',
         OPERT_MAINBD_NM: '',
@@ -38,46 +29,13 @@ const GardenLocation = () => {
     })
     const [input_area, setInput_area] = useState('')
     const [gardenInfo, setGardenInfo] = useState<any>([])
+    console.log(gardenInfo)
     const [gardenNmInfo, setGardenNmInfo] = useState<any>([''])
     const [findGardenNm] = useLazyQuery<string[]>(FINDGARDENSGNM, { onCompleted: data => setGardenNmInfo(data) })
     const [detailInfo, setDetailInfo] = useState('')
 
-    type currentPostsType={
-        ALL_AR_DESC: string
-        APLCATN_METH_CONT: string
-        HMPG_ADDR?: string | null
-        KITGDN_IDNTFY_NO: string
-        KITGDN_NM: string
-        LOTOUT_AR_DESC: string
-        LOTOUT_PC_CONT: string
-        OPERT_MAINBD_NM: string
-        RECRUT_PERD?: string | null
-        REFINE_LOTNO_ADDR: string
-        REFINE_ROADNM_ADDR?: string | null
-        REFINE_WGS84_LAT?: string | null
-        REFINE_WGS84_LOGT?: string | null
-        REFINE_ZIP_CD: string
-        REGIST_DE: string
-        SIGUN_CD: string
-        SIGUN_NM: string
-        SUBFACLT_CONT?: string | null
-        UPD_DE: string
-        __typename?:string
-    }
-    interface currentPostsData{
-        findGardenDetailInfo:currentPostsType[]
-    }
     const findGardenDetailInfo = useQuery<currentPostsData,{area:string}>(FINDGARDENDETAILINFO, { variables: { area: detailInfo } })
-    type findLogtLatType={
-        Logt:number,
-        Lat:number
-    }
-    interface findLogtLatData{
-        findLogtLat:findLogtLatType[]
-    }
-    type LogtLatInventoryVars ={
-        address:string
-    }
+ 
     const findLogtLat = useQuery<findLogtLatData,LogtLatInventoryVars>(FINDLOGTLAT, { variables: { address: gardenDetailInfo.REFINE_LOTNO_ADDR } })
 
     const findUserInfo = useQuery(FINDUSER)
@@ -122,11 +80,6 @@ const GardenLocation = () => {
 
 
     //로그인 유저 정보 저장
-    type userInfoType={
-        id:string,
-        city:string,
-        garden_name:string
-    }
     const [userInfo, setUserInfo] = useState<userInfoType>({
         id: '',
         city: '',

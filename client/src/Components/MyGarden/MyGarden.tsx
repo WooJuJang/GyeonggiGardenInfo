@@ -6,35 +6,11 @@ import { FINDFORECAST, FINDMANAGEINFO, FINDUSER, INSERTMOISTURE, INSERTNUTRITION
 import { useStateContext } from '../Common/UserInfoContext';
 import { Header } from '../Common/Header'
 import { PieChart } from "react-minimal-pie-chart";
+import type {userInfoType,userInfoData,userManageInfoData,forcastType,forcastData,pty_listType} from './MyGardenType'
 //내텃밭위치 날씨 및 현재 토양상태 그래프 출력
 const MyGarden = () => {
     const state = useStateContext();
-    type userInfoType={
-        id:string,
-        city:string,
-        garden_name:string,
-        garden_latitude?:number,
-        garden_longitude?:number,
-        moisture?:number | undefined,
-        nutrition?:number | undefined,
-        weed_quantity?:number | undefined,
-        watering?:string[] | undefined,
-        fertilizer?:string[] | undefined,
-        weed?:string[] | undefined
-    }
-    interface userInfoData{
-        findUser:userInfoType
-    }
     const findUserInfo = useQuery<userInfoData>(FINDUSER, { errorPolicy: "all" })
-    type userManageInfoType={
-        fertilizer?:string[],
-        watering?:string[],
-        weed?:string[],
-        fixture_install?:string[]
-    }
-    interface userManageInfoData{
-        findUserManageInfo:userManageInfoType
-    }
     const userManageInfo = useQuery<userManageInfoData,{id:String}>(FINDMANAGEINFO, { variables: { id: state.id } })
 
     const [userInfo, setUserInfo] = useState<userInfoType>({
@@ -73,13 +49,6 @@ const MyGarden = () => {
     }
 
     //텃밭위치 기상정보 출력
-    type forcastType={
-        category:string,
-        obsrValue:string
-    }
-    interface forcastData{
-        findForecast:forcastType[]
-    }
     const [date, setDate] = useState(new Date())
     const [forecastdata, setForecastData] = useState<forcastType[]>([]);
     let year = date.getFullYear();
@@ -100,16 +69,7 @@ const MyGarden = () => {
     let pty
     let wsd
     let rn1
-    type pty_listType={
-        [index:string]:string,
-        0:string,
-        1:string,
-        2:string,
-        3:string,
-        5:string,
-        6:string,
-        7:string
-    }
+
     const pty_list:pty_listType = {
         0: '비/눈 없음',
         1: '비',

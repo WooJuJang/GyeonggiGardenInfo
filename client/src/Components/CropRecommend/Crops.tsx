@@ -5,24 +5,11 @@ import { useQuery } from '@apollo/client';
 import { FINDSEASON } from '../../Database/Graphql';
 import { CropStyledContainer } from '../../css/CropRecommend/CropStyledContainer';
 import { useHistory } from 'react-router-dom';
+import type {cropInfoType,cropsInfoData} from './CropRecommendType'
 //계절별 작물추천
 const Crops = () => {
     const history = useHistory();
-type cropInfoType={
-        crops:string,
-        belong:string,
-        interval:string,
-        fixture:string,
-        water:string,
-        plant:string,
-        explain:string,
-        harvest:string,
-        harvestable_crops:string,
-        image:string
-    }
-    interface cropsInfoData{
-        findSeason:cropInfoType[]
-    }
+
     const cropsInfo = useQuery<cropsInfoData,{season: String |unknown}>(FINDSEASON, { variables: { season: history.location.state } })
     
     const [cropInfo, setCropInfo] = useState<cropInfoType>(
