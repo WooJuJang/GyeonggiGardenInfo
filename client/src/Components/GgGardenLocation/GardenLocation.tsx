@@ -39,15 +39,46 @@ const GardenLocation = () => {
     const [input_area, setInput_area] = useState('')
     const [gardenInfo, setGardenInfo] = useState<any>([])
     const [gardenNmInfo, setGardenNmInfo] = useState<any>([''])
-    const [findGardenNm] = useLazyQuery(FINDGARDENSGNM, { onCompleted: data => setGardenNmInfo(data) })
-
+    const [findGardenNm] = useLazyQuery<string[]>(FINDGARDENSGNM, { onCompleted: data => setGardenNmInfo(data) })
     const [detailInfo, setDetailInfo] = useState('')
-    const findGardenDetailInfo = useQuery(FINDGARDENDETAILINFO, { variables: { area: detailInfo } })
 
-    interface LogtLatInventoryVars {
-        address: string;
+    type currentPostsType={
+        ALL_AR_DESC: string
+        APLCATN_METH_CONT: string
+        HMPG_ADDR?: string | null
+        KITGDN_IDNTFY_NO: string
+        KITGDN_NM: string
+        LOTOUT_AR_DESC: string
+        LOTOUT_PC_CONT: string
+        OPERT_MAINBD_NM: string
+        RECRUT_PERD?: string | null
+        REFINE_LOTNO_ADDR: string
+        REFINE_ROADNM_ADDR?: string | null
+        REFINE_WGS84_LAT?: string | null
+        REFINE_WGS84_LOGT?: string | null
+        REFINE_ZIP_CD: string
+        REGIST_DE: string
+        SIGUN_CD: string
+        SIGUN_NM: string
+        SUBFACLT_CONT?: string | null
+        UPD_DE: string
+        __typename?:string
     }
-    const findLogtLat = useQuery<LogtLatInventoryVars>(FINDLOGTLAT, { variables: { address: gardenDetailInfo.REFINE_LOTNO_ADDR } })
+    interface currentPostsData{
+        findGardenDetailInfo:currentPostsType[]
+    }
+    const findGardenDetailInfo = useQuery<currentPostsData,{area:string}>(FINDGARDENDETAILINFO, { variables: { area: detailInfo } })
+    type findLogtLatType={
+        Logt:number,
+        Lat:number
+    }
+    interface findLogtLatData{
+        findLogtLat:findLogtLatType[]
+    }
+    type LogtLatInventoryVars ={
+        address:string
+    }
+    const findLogtLat = useQuery<findLogtLatData,LogtLatInventoryVars>(FINDLOGTLAT, { variables: { address: gardenDetailInfo.REFINE_LOTNO_ADDR } })
 
     const findUserInfo = useQuery(FINDUSER)
 
@@ -142,28 +173,7 @@ const GardenLocation = () => {
     const indexOfLast = currentPage * postsPerPage;
     const indexOfFirst = indexOfLast - postsPerPage;
 
-    type currentPostsType={
-        ALL_AR_DESC: string
-        APLCATN_METH_CONT: string
-        HMPG_ADDR?: string | null
-        KITGDN_IDNTFY_NO: string
-        KITGDN_NM: string
-        LOTOUT_AR_DESC: string
-        LOTOUT_PC_CONT: string
-        OPERT_MAINBD_NM: string
-        RECRUT_PERD?: string | null
-        REFINE_LOTNO_ADDR: string
-        REFINE_ROADNM_ADDR?: string | null
-        REFINE_WGS84_LAT?: string | null
-        REFINE_WGS84_LOGT?: string | null
-        REFINE_ZIP_CD: string
-        REGIST_DE: string
-        SIGUN_CD: string
-        SIGUN_NM: string
-        SUBFACLT_CONT?: string | null
-        UPD_DE: string
-        __typename?:string
-    }
+
     function currentPosts(tmp: currentPostsType[]) {
         let currentPosts: currentPostsType[] = [];
         if (tmp) {
@@ -198,7 +208,8 @@ const GardenLocation = () => {
                 }))
 
                 if (!gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LOGT) {
-                    findLogtLat.refetch({ variables: { address: gardenInfo.findGardenDetailInfo[i].REFINE_LOTNO_ADDR } }).then((res:any) => {
+                    
+                    findLogtLat.refetch({ address: gardenInfo.findGardenDetailInfo[i].REFINE_LOTNO_ADDR }).then((res:any) => {
                         if (res.data.findLogtLat) {
                             setGardenDetailInfo((prev:gardenDetailInfoType) => ({
                                 ...prev,

@@ -16,7 +16,10 @@ const UserInfo = () => {
         city: '',
         garden_name: '',
     })
-    const findUserInfo = useQuery(FINDUSER, { errorPolicy: "all" })
+    interface userInfoData{
+        findUser:userInfoType
+    }
+    const findUserInfo = useQuery<userInfoData>(FINDUSER, { errorPolicy: "all" })
 
 
     useEffect(() => {

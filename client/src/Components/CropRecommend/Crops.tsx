@@ -8,8 +8,7 @@ import { useHistory } from 'react-router-dom';
 //계절별 작물추천
 const Crops = () => {
     const history = useHistory();
-    const cropsInfo = useQuery(FINDSEASON, { variables: { season: history.location.state } })
-    type cropInfoType={
+type cropInfoType={
         crops:string,
         belong:string,
         interval:string,
@@ -21,58 +20,67 @@ const Crops = () => {
         harvestable_crops:string,
         image:string
     }
-    const [cropInfo, setCropInfo] = useState<cropInfoType>({
-        crops: '',
-        belong: '',
-        interval: '',
-        fixture: '',
-        water: '',
-        plant: '',
-        explain: '',
-        harvest: '',
-        harvestable_crops: '',
-        image: '',
-
+    interface cropsInfoData{
+        findSeason:cropInfoType[]
+    }
+    const cropsInfo = useQuery<cropsInfoData,{season: String |unknown}>(FINDSEASON, { variables: { season: history.location.state } })
+    
+    const [cropInfo, setCropInfo] = useState<cropInfoType>(
+        {
+            crops: '',
+            belong: '',
+            interval: '',
+            fixture: '',
+            water: '',
+            plant: '',
+            explain: '',
+            harvest: '',
+            harvestable_crops: '',
+            image: '',
     })
 
     useEffect(() => {
-        if (cropsInfo.data && cropsInfo.loading === false)
-            setCropInfo({
-                crops: cropsInfo.data.findSeason[0].crops,
-                belong: cropsInfo.data.findSeason[0].belong,
-                interval: cropsInfo.data.findSeason[0].interval,
-                fixture: cropsInfo.data.findSeason[0].fixture,
-                water: cropsInfo.data.findSeason[0].water,
-                plant: cropsInfo.data.findSeason[0].plant,
-                explain: cropsInfo.data.findSeason[0].explain,
-                harvest: cropsInfo.data.findSeason[0].harvest,
-                harvestable_crops: cropsInfo.data.findSeason[0].harvestable_crops,
-                image: cropsInfo.data.findSeason[0].image,
-            })
-    }, [cropsInfo])
+        if (cropsInfo.data?.findSeason && cropsInfo.loading === false)
+            {
+                setCropInfo({
+                    crops: cropsInfo.data.findSeason[0].crops,
+                    belong: cropsInfo.data.findSeason[0].belong,
+                    interval: cropsInfo.data.findSeason[0].interval,
+                    fixture: cropsInfo.data.findSeason[0].fixture,
+                    water: cropsInfo.data.findSeason[0].water,
+                    plant: cropsInfo.data.findSeason[0].plant,
+                    explain: cropsInfo.data.findSeason[0].explain,
+                    harvest: cropsInfo.data.findSeason[0].harvest,
+                    harvestable_crops: cropsInfo.data.findSeason[0].harvestable_crops,
+                    image: cropsInfo.data.findSeason[0].image,
+                })
+            }
+
+    
+    }, [cropsInfo.data,cropsInfo.loading])
 
     const saveSelectedCropInfo = (e: React.MouseEvent<HTMLLabelElement>) => {
         let change_format_cropname = e.target as HTMLElement;
         let cropname = change_format_cropname.innerText.split("|")[0]
-        for (let i = 0; i < cropsInfo.data.findSeason.length; i++) {
-            if (cropsInfo.data.findSeason[i].crops === cropname) {
-
-                setCropInfo({
-                    crops: cropsInfo.data.findSeason[i].crops,
-                    belong: cropsInfo.data.findSeason[i].belong,
-                    interval: cropsInfo.data.findSeason[i].interval,
-                    fixture: cropsInfo.data.findSeason[i].fixture,
-                    water: cropsInfo.data.findSeason[i].water,
-                    plant: cropsInfo.data.findSeason[i].plant,
-                    explain: cropsInfo.data.findSeason[i].explain,
-                    harvest: cropsInfo.data.findSeason[i].harvest,
-                    harvestable_crops: cropsInfo.data.findSeason[i].harvestable_crops,
-                    image: cropsInfo.data.findSeason[i].image
-                })
+        if(cropsInfo.data){
+            for (let i = 0; i < cropsInfo.data.findSeason.length; i++) {
+                if (cropsInfo.data.findSeason[i].crops === cropname) {
+    
+                    setCropInfo({
+                        crops: cropsInfo.data.findSeason[i].crops,
+                        belong: cropsInfo.data.findSeason[i].belong,
+                        interval: cropsInfo.data.findSeason[i].interval,
+                        fixture: cropsInfo.data.findSeason[i].fixture,
+                        water: cropsInfo.data.findSeason[i].water,
+                        plant: cropsInfo.data.findSeason[i].plant,
+                        explain: cropsInfo.data.findSeason[i].explain,
+                        harvest: cropsInfo.data.findSeason[i].harvest,
+                        harvestable_crops: cropsInfo.data.findSeason[i].harvestable_crops,
+                        image: cropsInfo.data.findSeason[i].image
+                    })
+                }
             }
         }
-
-
 
     }
 

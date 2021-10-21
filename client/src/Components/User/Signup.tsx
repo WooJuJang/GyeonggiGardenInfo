@@ -16,7 +16,11 @@ const Signup = () => {
         password: '',
         city: '',
     })
-    const [singup] = useMutation(SIGNUP)
+
+    interface signupData{
+        signup:userInfoType
+    }
+    const [singup] = useMutation<signupData,{id:string,password:string,city:string}>(SIGNUP)
 
     //회원가입 input작업
     const onChangeUserInfo = (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,12 +37,14 @@ const Signup = () => {
     const onHandleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         singup({ variables: { id: userInfo.id, password: userInfo.password, city: userInfo.city } }).then((res) => {
-            if (res.data.signup === null) {
-                return (
-                    alert('The Same Id already exits :(')
-                )
-            } else {
-                history.push('/signin')
+            if(res.data){
+                if (res.data.signup === null) {
+                    return (
+                        alert('The Same Id already exits :(')
+                    )
+                } else {
+                    history.push('/signin')
+                }
             }
         });
     }

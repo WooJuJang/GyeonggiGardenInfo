@@ -9,8 +9,6 @@ import { PieChart } from "react-minimal-pie-chart";
 //내텃밭위치 날씨 및 현재 토양상태 그래프 출력
 const MyGarden = () => {
     const state = useStateContext();
-    const findUserInfo = useQuery(FINDUSER, { errorPolicy: "all" })
-    const userManageInfo = useQuery(FINDMANAGEINFO, { variables: { id: state.id } })
     type userInfoType={
         id:string,
         city:string,
@@ -24,6 +22,21 @@ const MyGarden = () => {
         fertilizer?:string[] | undefined,
         weed?:string[] | undefined
     }
+    interface userInfoData{
+        findUser:userInfoType
+    }
+    const findUserInfo = useQuery<userInfoData>(FINDUSER, { errorPolicy: "all" })
+    type userManageInfoType={
+        fertilizer?:string[],
+        watering?:string[],
+        weed?:string[],
+        fixture_install?:string[]
+    }
+    interface userManageInfoData{
+        findUserManageInfo:userManageInfoType
+    }
+    const userManageInfo = useQuery<userManageInfoData,{id:String}>(FINDMANAGEINFO, { variables: { id: state.id } })
+
     const [userInfo, setUserInfo] = useState<userInfoType>({
         id: '',
         city: '',
@@ -64,6 +77,9 @@ const MyGarden = () => {
         category:string,
         obsrValue:string
     }
+    interface forcastData{
+        findForecast:forcastType[]
+    }
     const [date, setDate] = useState(new Date())
     const [forecastdata, setForecastData] = useState<forcastType[]>([]);
     let year = date.getFullYear();
@@ -76,7 +92,7 @@ const MyGarden = () => {
     } else {
         hours = ('0' + date.getHours()).slice(-2)
     }
-    const findForecast = useQuery(FINDFORECAST, { variables: { lat: userInfo.garden_latitude, long: userInfo.garden_longitude, date: today_date, time: hours + "00" } })
+    const findForecast = useQuery<forcastData,{lat?:number,long?:number,date?:string,time?:string}>(FINDFORECAST, { variables: { lat: userInfo.garden_latitude, long: userInfo.garden_longitude, date: today_date, time: hours + "00" } })
 
     //기상관측 데이터
     let temp
@@ -135,22 +151,22 @@ const MyGarden = () => {
     })
 
     //작물관리정보
-    const [fertilizer, setFertilizer] = useState<string[]>([]);
-    const [watering, setWatering] = useState<string[]>([]);
-    const [weed, setWeed] = useState<string[]>([]);
+    const [fertilizer, setFertilizer] = useState<string[] | undefined>([]);
+    const [watering, setWatering] = useState<string[] | undefined>([]);
+    const [weed, setWeed] = useState<string[] |undefined>([]);
 
-    const [insertMoisture] = useMutation(INSERTMOISTURE, {
+    const [insertMoisture] = useMutation<userManageInfoData,{id:String,moisture:number}>(INSERTMOISTURE, {
         refetchQueries: [
             { query: FINDUSER }
         ],
     })
-    const [insertWeedQuantity] = useMutation(INSERTWEEDQUANTITY, {
+    const [insertWeedQuantity] = useMutation<userManageInfoData,{id:String,weed_quantity:number}>(INSERTWEEDQUANTITY, {
         refetchQueries: [
             { query: FINDUSER }
         ],
         awaitRefetchQueries: true
     })
-    const [insertNutrition] = useMutation(INSERTNUTRITION, {
+    const [insertNutrition] = useMutation<userManageInfoData,{id:String,nutrition:number}>(INSERTNUTRITION, {
         refetchQueries: [
             { query: FINDUSER }
         ],
@@ -189,53 +205,56 @@ const MyGarden = () => {
         let fertilizerPercent: number = 0;
 
         //수분량 계산
-        if (watering.length > 0) {
-            sortedWatering = watering.slice(0, watering.length).sort()
-            let temp_date: string = year.toString() + "-" + month.toString() + "-" + day.toString()
-
-            datediff = (+new Date(temp_date) - (+new Date(sortedWatering[sortedWatering.length - 1]))) / (1000 * 3600 * 24)
-            if (datediff > 5) {
-                insertMoisture({ variables: { id: state.id, moisture: 0 } })
-            } else {
-                switch (datediff) {
-                    case 0:
-                        wateringPercent = 100;
-                        weedPercent = 10;
-                        break;
-                    case 1:
-                        wateringPercent = 76;
-                        weedPercent = 10;
-                        break;
-                    case 2:
-                        wateringPercent = 52;
-                        weedPercent = 10;
-                        break;
-                    case 3:
-                        wateringPercent = 28;
-                        weedPercent = 10;
-                        break;
-                    case 4:
-                        wateringPercent = 4;
-                        break;
-                    default:
-                        wateringPercent = 0;
-                        break;
-                }
-
-                if (wateringPercent - sharp <= 100 && wateringPercent - sharp > 0) {
-                    insertMoisture({ variables: { id: state.id, moisture: wateringPercent - sharp } })
-                } else if (wateringPercent - sharp <= 0) {
+        if(watering){
+            if (watering.length > 0) {
+                sortedWatering = watering.slice(0, watering.length).sort()
+                let temp_date: string = year.toString() + "-" + month.toString() + "-" + day.toString()
+    
+                datediff = (+new Date(temp_date) - (+new Date(sortedWatering[sortedWatering.length - 1]))) / (1000 * 3600 * 24)
+                if (datediff > 5) {
                     insertMoisture({ variables: { id: state.id, moisture: 0 } })
+                } else {
+                    switch (datediff) {
+                        case 0:
+                            wateringPercent = 100;
+                            weedPercent = 10;
+                            break;
+                        case 1:
+                            wateringPercent = 76;
+                            weedPercent = 10;
+                            break;
+                        case 2:
+                            wateringPercent = 52;
+                            weedPercent = 10;
+                            break;
+                        case 3:
+                            wateringPercent = 28;
+                            weedPercent = 10;
+                            break;
+                        case 4:
+                            wateringPercent = 4;
+                            break;
+                        default:
+                            wateringPercent = 0;
+                            break;
+                    }
+    
+                    if (wateringPercent - sharp <= 100 && wateringPercent - sharp > 0) {
+                        insertMoisture({ variables: { id: state.id, moisture: wateringPercent - sharp } })
+                    } else if (wateringPercent - sharp <= 0) {
+                        insertMoisture({ variables: { id: state.id, moisture: 0 } })
+                    }
+                    else if (wateringPercent - sharp > 100) {
+                        insertMoisture({ variables: { id: state.id, moisture: 100 } })
+                    }
+    
                 }
-                else if (wateringPercent - sharp > 100) {
-                    insertMoisture({ variables: { id: state.id, moisture: 100 } })
-                }
-
+            } else if (watering.length === 0) {
+                insertMoisture({ variables: { id: state.id, moisture: 0 } })
             }
-        } else if (watering.length === 0) {
-            insertMoisture({ variables: { id: state.id, moisture: 0 } })
         }
 
+        if(weed){
         //잡초량 계산
         if (weed.length > 0) {
             sortedWeed = weed.slice(0, weed.length).sort()
@@ -275,6 +294,8 @@ const MyGarden = () => {
         } else if (weed.length === 0) {//잡초를 한번도 안 뽑은경우
             insertWeedQuantity({ variables: { id: state.id, weed_quantity: 100 } })
         }
+        }
+        if(fertilizer){
         //영양상태 계산
         if (fertilizer.length > 0) {
             sortedfertilizer = fertilizer.slice(0, fertilizer.length).sort();
@@ -315,6 +336,8 @@ const MyGarden = () => {
                 }
             }
         }
+        }
+
     }, [day, fertilizer, insertMoisture, insertNutrition, insertWeedQuantity, month, sharp, state.id, watering, weed, year, userInfo.moisture, userInfo.weed_quantity])
 
     useEffect(() => {

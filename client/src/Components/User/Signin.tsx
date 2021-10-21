@@ -18,8 +18,10 @@ const Login = () => {
         id: '',
         password: '',
     })
-
-    const [signin, { error }] = useMutation(SIGNIN, {
+    interface signinData{
+        signin:string
+    }
+    const [signin, { error }] = useMutation<signinData,{id:string,password:string}>(SIGNIN, {
         errorPolicy: 'all', onCompleted: (data) => {
             setCookie('refreshToken', data.signin, {
                 path: "/",

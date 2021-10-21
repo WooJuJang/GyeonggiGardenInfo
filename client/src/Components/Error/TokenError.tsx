@@ -14,7 +14,7 @@ const TokenError = () => {
     const state = useStateContext();
     const dispatch = useDispatchContext();
 
-    const [removeRefreshToken] = useMutation(LOGOUT, { variables: { id: state.id } })
+    const [removeRefreshToken] = useMutation<boolean,{id:String}>(LOGOUT, { variables: { id: state.id } })
 
     //로그아웃 기능
     const logout = (route: string):void => {

@@ -23,7 +23,7 @@ const TimerProvider = ({ children }: { children: React.ReactNode }) => {
 
     const [isIncrease, setIsIncrease] = useState<boolean>(false)
     const [value, setValue] = useState<number>(getCookie('timer'));
-    const [removeRefreshToken] = useMutation(LOGOUT, { variables: { id: state.id } })
+    const [removeRefreshToken] = useMutation<boolean,{id:String}>(LOGOUT, { variables: { id: state.id } })
 
     //타이머 시간감소
     let tick: NodeJS.Timeout =

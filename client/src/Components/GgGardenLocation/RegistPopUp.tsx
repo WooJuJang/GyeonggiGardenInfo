@@ -14,12 +14,20 @@ type gardenDetailInfoType={
 type popUpType={
     open:boolean
     close:()=>void,
-    data:gardenDetailInfoType
+    data:gardenDetailInfoType,
 }
 //텃밭 신청팝업
 const RegistPopUp:React.FC<popUpType> = ({open,close,data}) => {
 
-    const [insertUserGarden] = useMutation(INSERTUSERGARDEN, {
+    interface inserUserGardenVar{
+        garden_name:string,
+        garden_latitude:number,
+        garden_longitude:number,
+        moisture:number,
+        nutrition:number,
+        weed_quantity:number
+    }
+    const [insertUserGarden] = useMutation<inserUserGardenVar>(INSERTUSERGARDEN, {
         onCompleted: () => {
             close();
         }

@@ -17,8 +17,21 @@ const MyCalendar = () => {
         remove_date:string[],
         user_crops:string
     }
-    const userPlantInfo = useQuery(FINDUSERPLANTINFO, { variables: { id: state.id } })
-    const userManageInfo = useQuery(FINDMANAGEINFO, { variables: { id: state.id } })
+    interface userPlantInfoData{
+        findUserPlantInfo:userPlantInfoType[]
+    }
+    const userPlantInfo = useQuery<userPlantInfoData,{id:String}>(FINDUSERPLANTINFO, { variables: { id: state.id } })
+    type manageListType={
+        [index:string]:string,
+        fertilizer: string,
+        watering: string,
+        weed: string,
+        fixture_install: string
+    }
+    interface userManageInfoData{
+        findUserManageInfo:manageListType[]
+    }
+    const userManageInfo = useQuery<userManageInfoData,{id:String}>(FINDMANAGEINFO, { variables: { id: state.id } })
 
     type daylistType={
         [index:string]:string,
@@ -75,13 +88,8 @@ const MyCalendar = () => {
     }
     useEffect(() => {
         let eventarray: eventType[] = [];
-        type manageListType={
-            fertilizer: string,
-            watering: string,
-            weed: string,
-            fixture_install: string
-        }
-        const manage_list:manageListType = {
+
+        const manage_list:any = {
             fertilizer: "비료 주기",
             watering: "물 주기",
             weed: "잡초 뽑기",
@@ -120,19 +128,16 @@ const MyCalendar = () => {
             })
 
             //사용자 작물관리 정보 이벤트배열에 추가
-            const usermanageinfo = userManageInfo.data?.findUserManageInfo
+            const usermanageinfo:manageListType[] | undefined= userManageInfo.data?.findUserManageInfo
             if (usermanageinfo) {
                 for (let prop in usermanageinfo ) {
                     //prop값은 string이라는 타입의 이름으로 객체에 접근하기에 바로 사용하면 타입에러 뜸
                     if (prop !== '__typename') {
                         if (usermanageinfo[prop]) {
-                            usermanageinfo[prop].forEach((day: string) => {
-                                //prop값은 무조건 4개의 키값중에만 있다라는 뜻
-                                let value=manage_list[prop as 'fertilizer'|'watering'|'weed'|'fixture_install']
-                                eventarray.push({ title: value, date: day })
-                            })
+                            for(let i=0;i<Number(usermanageinfo[prop].length);i++){
+                                eventarray.push({title:manage_list[prop],date:usermanageinfo[prop][i]})
+                            }
                         }
-
                     }
                 }
             }
@@ -144,10 +149,8 @@ const MyCalendar = () => {
                         titlearray.push(a.title)
                     }
                 })
-
                 setOrganizeEventarray((prev) => ([...prev, { title: titlearray, date: data.date, color: 'green' }]))
             })
-
         }
     }, [userPlantInfo, userManageInfo, findHoliday, userManageInfo.data?.findUserManageInfo, userPlantInfo.data?.findUserPlantInfo])
 

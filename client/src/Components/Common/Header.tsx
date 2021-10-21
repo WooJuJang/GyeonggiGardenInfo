@@ -11,7 +11,7 @@ export const Header = () => {
     const state = useStateContext();
     const dispatch = useDispatchContext();
     const timer = useContext(timerDispatchContext);
-    const [removeRefreshToken] = useMutation(LOGOUT, { variables: { id: state.id } })
+    const [removeRefreshToken] = useMutation<{id:string}>(LOGOUT, { variables: { id: state.id } })
 
     //로그아웃 기능
     const logout = ():void => {
