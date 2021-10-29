@@ -28,10 +28,16 @@ const GardenLocation = () => {
         REFINE_WGS84_LAT: '37.0035656380062'
     })
     const [input_area, setInput_area] = useState('')
-    const [gardenInfo, setGardenInfo] = useState<any>([])
-    console.log(gardenInfo)
-    const [gardenNmInfo, setGardenNmInfo] = useState<any>([''])
-    const [findGardenNm] = useLazyQuery<string[]>(FINDGARDENSGNM, { onCompleted: data => setGardenNmInfo(data) })
+    const [gardenInfo, setGardenInfo] = useState<currentPostsData>()
+    
+
+    interface gardenNmInfoData{
+        findGardenSGNM:string[]
+    }
+    const [gardenNmInfo, setGardenNmInfo] = useState<gardenNmInfoData>({findGardenSGNM:[]})
+
+    const [findGardenNm] = useLazyQuery<gardenNmInfoData>(FINDGARDENSGNM, { onCompleted: data => setGardenNmInfo(data) })
+ 
     const [detailInfo, setDetailInfo] = useState('')
 
     const findGardenDetailInfo = useQuery<currentPostsData,{area:string}>(FINDGARDENDETAILINFO, { variables: { area: detailInfo } })
@@ -144,43 +150,45 @@ const GardenLocation = () => {
     const getGardenNM = (text: string): void => {
 
         garden_nm = text;
-        
-        for (let i = 0; i < gardenInfo.findGardenDetailInfo.length; i++) {
-            if (gardenInfo.findGardenDetailInfo[i].KITGDN_NM === garden_nm) {
-
-                setGardenDetailInfo((gardenDetailInfo: gardenDetailInfoType ) => ({
-                    ...gardenDetailInfo,
-
-                    OPERT_MAINBD_NM: gardenInfo.findGardenDetailInfo[i].OPERT_MAINBD_NM,
-                    KITGDN_NM: gardenInfo.findGardenDetailInfo[i].KITGDN_NM,
-                    SUBFACLT_CONT: gardenInfo.findGardenDetailInfo[i].SUBFACLT_CONT,
-                    LOTOUT_PC_CONT: gardenInfo.findGardenDetailInfo[i].LOTOUT_PC_CONT,
-                    REFINE_LOTNO_ADDR: gardenInfo.findGardenDetailInfo[i].REFINE_LOTNO_ADDR,
-                    REFINE_WGS84_LOGT: gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LOGT,
-                    REFINE_WGS84_LAT: gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LAT
-                }))
-
-                if (!gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LOGT) {
-                    
-                    findLogtLat.refetch({ address: gardenInfo.findGardenDetailInfo[i].REFINE_LOTNO_ADDR }).then((res:any) => {
-                        if (res.data.findLogtLat) {
-                            setGardenDetailInfo((prev:gardenDetailInfoType) => ({
+        if(gardenInfo){
+            for (let i = 0; i < gardenInfo.findGardenDetailInfo.length; i++) {
+                if (gardenInfo.findGardenDetailInfo[i].KITGDN_NM === garden_nm) {
+    
+                    setGardenDetailInfo((gardenDetailInfo: any ) => ({
+                        ...gardenDetailInfo,
+    
+                        OPERT_MAINBD_NM: gardenInfo.findGardenDetailInfo[i].OPERT_MAINBD_NM,
+                        KITGDN_NM: gardenInfo.findGardenDetailInfo[i].KITGDN_NM,
+                        SUBFACLT_CONT: gardenInfo.findGardenDetailInfo[i].SUBFACLT_CONT,
+                        LOTOUT_PC_CONT: gardenInfo.findGardenDetailInfo[i].LOTOUT_PC_CONT,
+                        REFINE_LOTNO_ADDR: gardenInfo.findGardenDetailInfo[i].REFINE_LOTNO_ADDR,
+                        REFINE_WGS84_LOGT: gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LOGT,
+                        REFINE_WGS84_LAT: gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LAT
+                    }))
+    
+                    if (!gardenInfo.findGardenDetailInfo[i].REFINE_WGS84_LOGT) {
+                        
+                        findLogtLat.refetch({ address: gardenInfo.findGardenDetailInfo[i].REFINE_LOTNO_ADDR }).then((res:any) => {
+                            if (res.data.findLogtLat) {
+                                setGardenDetailInfo((prev:gardenDetailInfoType) => ({
+                                    ...prev,
+                                    REFINE_WGS84_LOGT: res.data.findLogtLat[0],
+                                    REFINE_WGS84_LAT: res.data.findLogtLat[1],
+                                }))
+                            }
+                        }).catch((err) => {
+                            console.log(err)
+                            setGardenDetailInfo((prev: gardenDetailInfoType) => ({
                                 ...prev,
-                                REFINE_WGS84_LOGT: res.data.findLogtLat[0],
-                                REFINE_WGS84_LAT: res.data.findLogtLat[1],
+                                REFINE_WGS84_LOGT: null,
+                                REFINE_WGS84_LAT: null,
                             }))
-                        }
-                    }).catch((err) => {
-                        console.log(err)
-                        setGardenDetailInfo((prev: gardenDetailInfoType) => ({
-                            ...prev,
-                            REFINE_WGS84_LOGT: null,
-                            REFINE_WGS84_LAT: null,
-                        }))
-                    })
+                        })
+                    }
                 }
             }
         }
+
 
     }
     useEffect(() => {
@@ -208,8 +216,12 @@ const GardenLocation = () => {
                         </div>
 
                         <div className='item__info'>
+                            {gardenInfo?
+                            <>
                             <Posts posts={currentPosts(gardenInfo.findGardenDetailInfo)} loading={loading} getGardenNM={getGardenNM} ></Posts>
                             <Pagination postsPerPage={postsPerPage} totalPosts={postsLenth} paginate={setCurrentPage} pagenm={pagenm} _currentPage={currentPage}></Pagination>
+                            </>
+                            :<></>}   
                         </div>
 
                         <div className='item__map' style={{ visibility: gardenDetailInfo.KITGDN_NM ? "visible" : "hidden" }}>

@@ -38,6 +38,9 @@ export type oranizeEventType={
     date:string,
     color:string
 }
+export interface EventSourceInput{
+    EventSourceInput:oranizeEventType[]
+}
 export type eventType={
     title:string,
     date:string

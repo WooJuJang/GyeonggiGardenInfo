@@ -6,7 +6,7 @@ import { GardenCalendarStyledContainer } from '../../css/GardenCalendar/GardenCa
 import { useMutation, useQuery } from '@apollo/client';
 import { FINDUSERPLANTINFO, INSERTUSERCROPS, INSERTHARVESTDATE, INSERTREMOVEDATE, FINDMANAGEINFO, INSERTMANAGEDATE, FINDHOLIDAY } from '../../Database/Graphql';
 import { useStateContext } from '../Common/UserInfoContext';
-import type {userPlantInfoType,userPlantInfoData,manageListType,userManageInfoData,daylistType,findHolidayType,oranizeEventType,eventType,ManageDateSaveType} from './GardenCalendarType'
+import type {userPlantInfoType,userPlantInfoData,manageListType,userManageInfoData,daylistType,findHolidayType,oranizeEventType,eventType,ManageDateSaveType,EventSourceInput} from './GardenCalendarType'
 //텃밭달력 
 const MyCalendar = () => {
     const state = useStateContext();
@@ -42,13 +42,13 @@ const MyCalendar = () => {
     const findHoliday = useQuery(FINDHOLIDAY, { variables: { year: String(today.getFullYear()) } })
 
     //사용자 작물관리 정보 출력
-    const [organize_eventarray, setOrganizeEventarray] = useState<oranizeEventType[]>([]);
+    const [organize_eventarray, setOrganizeEventarray] = useState<EventSourceInput[]>([]);
 
     //달력 이벤트
     useEffect(() => {
         let eventarray: eventType[] = [];
 
-        const manage_list:any = {
+        const manage_list:manageListType = {
             fertilizer: "비료 주기",
             watering: "물 주기",
             weed: "잡초 뽑기",
@@ -60,7 +60,7 @@ const MyCalendar = () => {
         if (findHoliday.loading === false && findHoliday?.data) {
             findHoliday.data.findHoliday.forEach((data: findHolidayType) => {
                 let date = String(data.locdate)
-                setOrganizeEventarray(prev => [...prev, { title: [data.dateName], date: date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2), color: 'red' }])
+                setOrganizeEventarray((prev:any) => [...prev, { title: [data.dateName], date: date.substr(0, 4) + '-' + date.substr(4, 2) + '-' + date.substr(6, 2), color: 'red' }])
             })
 
             //사용자 작물정보 이벤트배열에 추가
@@ -108,21 +108,30 @@ const MyCalendar = () => {
                         titlearray.push(a.title)
                     }
                 })
-                setOrganizeEventarray((prev) => ([...prev, { title: titlearray, date: data.date, color: 'green' }]))
+                setOrganizeEventarray((prev:any) => ([...prev, { title: titlearray, date: data.date, color: 'green' }]))
             })
+
+            if(organize_eventarray){
+                setOrganizeEventarray((prev:any) => (Array.from(new Set(prev.map(JSON.stringify)))).map((data:any)=>JSON.parse(data)))  
+            }
         }
     }, [userPlantInfo, userManageInfo, findHoliday, userManageInfo.data?.findUserManageInfo, userPlantInfo.data?.findUserPlantInfo])
 
     //이벤트 배열 중복값 제거 => 최종 출력용 배열 생성
+    type EventInput={
+        title:string[],
+        date:string,
+        color:string
+    }
     const [organizedOutputEventArray, setOrganizedOutputEventArray] = useState<any[]>([])
-    useEffect(() => {
-        setOrganizedOutputEventArray(organize_eventarray.reduce((accumalator:oranizeEventType[], current:oranizeEventType):oranizeEventType[] => {
-            if (!accumalator.some((item: oranizeEventType) => item.date === current.date && item.color === current.color)) {
-                accumalator.push(current)
-            }
-            return accumalator
-        }, []))
-    }, [organize_eventarray])
+    // useEffect(() => {
+    //     setOrganizedOutputEventArray(organize_eventarray.reduce((accumalator:oranizeEventType[], current:oranizeEventType):oranizeEventType[] => {
+    //         if (!accumalator.some((item: oranizeEventType) => item.date === current.date && item.color === current.color)) {
+    //             accumalator.push(current)
+    //         }
+    //         return accumalator
+    //     }, []))
+    // }, [organize_eventarray])
 
     //날짜 클릭 이벤트
     const [selectDate, setSelectDate] = useState(today.getDate())
@@ -450,7 +459,8 @@ const MyCalendar = () => {
                             }}
                         initialView="dayGridMonth"
                         events={
-                            organizedOutputEventArray
+                            //organizedOutputEventArray
+                            organize_eventarray
                         }
                     />
                 </div>

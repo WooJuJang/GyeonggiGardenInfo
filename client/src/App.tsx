@@ -12,23 +12,23 @@ import GardenCalendar from './Components/GardenCalendar/GardenCalendar';
 import MyGarden from './Components/MyGarden/MyGarden';
 
 
-function App() {
+const App =()=>{
   return (
     <div className="App">
-          <BrowserRouter>
+           <BrowserRouter>
            
-            <Route path="/" exact component={Main}/>
+             <Route path="/" exact component={Main}/>
             <Route path="/signin" component={Signin}/>
-            <Route path="/signup" component={Signup}/>
-            <Route path="/userinfo" component={UserInfo}/>
-            <Route path="/tokenerror" component={TokenError}/>
-            <Route path="/gardenlocation" component={GardenLocation}/>
-            <Route path="/croprecommend" component={CropRecommend}/>
-            <Route path="/crops" component={Crops}/>
+             <Route path="/signup" component={Signup}/>
+             <Route path="/userinfo" component={UserInfo}/>
+             <Route path="/tokenerror" component={TokenError}/>
+             <Route path="/gardenlocation" component={GardenLocation}/>
+             <Route path="/croprecommend" component={CropRecommend}/>
+             <Route path="/crops" component={Crops}/>
             <Route path="/gardencalendar" component={GardenCalendar}/>
-            <Route path="/mygarden" component={MyGarden}/>
-          
-          </BrowserRouter>
+             <Route path="/mygarden" component={MyGarden}/>
+
+           </BrowserRouter>
     </div>
   );
 }
